@@ -42,6 +42,34 @@ SciViews::R("ts")
 
 <!--% Ajoutez le nombre de chunks que vous souhaitez. Répartissez-vous le travail correctement. Structurez la section en partie avec des titres explicites de niveau trois.-->
 
+```{r}
+# Importation 
+mobility  <- suppressMessages(read("data/mobility_wallonia.rds"))
+
+```
+
+```{r}
+# Remomer les colonnes
+mobil <- mobility %>%
+  rename(
+    retail = retail_and_recreation_percent_change_from_baseline,
+    grocery = grocery_and_pharmacy_percent_change_from_baseline,
+    parks = parks_percent_change_from_baseline,
+    transir = transit_stations_percent_change_from_baseline,
+    workplaces = workplaces_percent_change_from_baseline,
+    residential = residential_percent_change_from_baseline)
+```
+
+### Richard code
+
+```{r}
+# Conversion en ts
+(mobil_ts1 <- ts(mobil$workplaces, start = c(2020,46), frequency = 365)) # c(2020,46), le deuxième nombre correspond au n jour par rapport à la fréquence, Attention 2020 est année bissextile donc 29 jours en juin donc decallage de 1 jour aprés le 29/02/2020
+# Graphique de l'objet ts
+plot(mobil_ts1,
+  xlab = "Temps [année]", ylab = "?")
+```
+
 ## Conclusion
 
 <!--% Lorsque toutes les analyses sont réalisées, terminez ce bloc-notes avec 3 à 6 phrases de conclusion en rapport avec ce que vous avez observé dans vos analyses. Quels sont les éléments les plus pertinents que vous retenez ? -->
