@@ -38,6 +38,7 @@ if (!"tools:tests" %in% search())
   source(here::here("tests/tools_tests.R"), attach(NULL, name = "tools:tests"))
 # Configuration de l'environnement
 SciViews::R("ts")
+library(zoo)
 ```
 
 <!--% Ajoutez le nombre de chunks que vous souhaitez. Répartissez-vous le travail correctement. Structurez la section en partie avec des titres explicites de niveau trois.-->
@@ -60,14 +61,85 @@ mobil <- mobility %>%
     residential = residential_percent_change_from_baseline)
 ```
 
+```{r}
+#Création de mobil sans les Week-ends 
+
+# Copie du data.frame source
+mobil_nwe <- mobil
+
+# S'assurer que la colonne date est de type Date
+mobil_nwe$date <- as.Date(mobil_nwe$date)
+
+# Jour de la semaine (1 = lundi, ..., 7 = dimanche)
+mobil_nwe$wday <- as.integer(format(mobil_nwe$date, "%u"))
+
+# Colonnes numériques à nettoyer
+numeric_cols <- names(mobil_nwe)[vapply(mobil_nwe, is.numeric, logical(1))]
+numeric_cols <- setdiff(numeric_cols, "wday")
+numeric_cols <- setdiff(numeric_cols, "date")
+
+# Remplacement des valeurs des week-ends par NA
+mobil_nwe[mobil_nwe$wday %in% c(6, 7), numeric_cols] <- NA
+
+```
+
 ### Richard code
 
 ```{r}
-# Conversion en ts
-(mobil_ts1 <- ts(mobil$workplaces, start = c(2020,46), frequency = 365)) # c(2020,46), le deuxième nombre correspond au n jour par rapport à la fréquence, Attention 2020 est année bissextile donc 29 jours en juin donc decallage de 1 jour aprés le 29/02/2020
+# Conversion en ts de mobil
+mobil_ts1 <- ts(mobil$workplaces, start = c(2020, 46), frequency = 365)
+
+# c(2020,46), le deuxième nombre correspond au n jour par rapport à la fréquence, Attention 2020 est année bissextile donc 29 jours en juin donc décalage de 1 jour après le 29/02/2020
+
 # Graphique de l'objet ts
-plot(mobil_ts1,
-  xlab = "Temps [année]", ylab = "?")
+plot(mobil_ts1, xlab = "Temps [année]", ylab = "workplaces (%)")
+```
+
+```{r}
+mobil_nwe_ts1 <- ts(mobil_nwe$workplaces,start = c(2020, 46),frequency = 365)
+
+plot(mobil_nwe_ts1, 
+     main = "Série journalière (week-ends = NA)", xlab = "Temps [année]",
+     ylab = "workplaces (%)")
+
+# Aggrégation par moyenne des valeurs par semaine
+mobil_nwe_ts1b <- aggregate(mobil_nwe_ts1, 52, FUN = collapse::fmean, ts.eps = 1/52)
+
+plot(mobil_nwe_ts1b, 
+     main = "Série journalière (week-ends = NA)", xlab = "Temps [année]",
+     ylab = "workplaces (%)")
+```
+
+```{r}
+mobil_sl1 <- stat.slide(time(mobil_nwe_ts1), mobil_nwe_ts1, xmin = 2020, deltat = 0.5)
+# Graphique des statistiques glissantes
+plot(mobil_sl1, xlab = "Temps [année]", ylab = "?")
+legend(2020.2, 5, c("serie","médian"), col = 1:2, lty = 1)
+```
+
+```{r}
+set.seed(20010309)
+mobil_trend1 <- trend.test(mobil_nwe_ts1, R= 500)
+plot(mobil_trend1)
+```
+
+```{r}
+# Extraction de la série différenciée (lag = 6, order = 1)
+mobil_stat1 <- extract(decdiff(mobil_ts1, lag = 6, order = 1), components = 1)
+
+# Représentation graphique
+plot(mobil_stat1, ylab = "Série mobil1 stationnarisée")
+
+# Analyse spectrale
+Mspec <- spectrum(mobil_stat1, spans = c(5, 7))
+
+# Périodogramme cumulatif
+cpgram(mobil_stat1)
+```
+
+```{r}
+#mobil_stat1_cycle <- cycle(mobil_stat1)
+#mobil_stat1_bpl <- boxplot(split(mobil_stat1, mobil_stat1_cycle), names = month.abb, col = "cornsilk")
 ```
 
 ## Conclusion
