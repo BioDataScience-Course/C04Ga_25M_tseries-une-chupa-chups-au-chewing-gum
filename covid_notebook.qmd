@@ -45,7 +45,7 @@ library(zoo)
 
 ```{r}
 # Importation 
-mobility  <- suppressMessages(read("data/mobility_wallonia.rds"))
+mobility  <- read("data/mobility_wallonia.rds")
 
 ```
 
@@ -92,54 +92,91 @@ mobil_ts1 <- ts(mobil$workplaces, start = c(2020, 46), frequency = 365)
 # c(2020,46), le deuxième nombre correspond au n jour par rapport à la fréquence, Attention 2020 est année bissextile donc 29 jours en juin donc décalage de 1 jour après le 29/02/2020
 
 # Graphique de l'objet ts
-plot(mobil_ts1, xlab = "Temps [année]", ylab = "workplaces (%)")
+plot(mobil_ts1, xlab = "Temps [année]", ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)")
 ```
+
+Les weekend-ends, la plupart des gens ne travail pas, cela rajoute un fort bruit de fond en augmentant la proportion de gens qui vont travaillés par rapport a la référence, nous les supprimons en les transformant en NA et les collapsons pour unifier la séries.
+
 
 ```{r}
 mobil_nwe_ts1 <- ts(mobil_nwe$workplaces,start = c(2020, 46),frequency = 365)
 
 plot(mobil_nwe_ts1, 
      main = "Série journalière (week-ends = NA)", xlab = "Temps [année]",
-     ylab = "workplaces (%)")
+     ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)")
 
 # Aggrégation par moyenne des valeurs par semaine
 mobil_nwe_ts1b <- aggregate(mobil_nwe_ts1, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
 plot(mobil_nwe_ts1b, 
-     main = "Série journalière (week-ends = NA)", xlab = "Temps [année]",
-     ylab = "workplaces (%)")
+     main = "Série journalière aggrégée (week-ends = NA)", xlab = "Temps [année]",
+     ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)")
 ```
 
+Pour validée notre choix nous visualisions la séries original et la série modifier superposées.
+
+
 ```{r}
-mobil_sl1 <- stat.slide(time(mobil_nwe_ts1), mobil_nwe_ts1, xmin = 2020, deltat = 0.5)
-# Graphique des statistiques glissantes
-plot(mobil_sl1, xlab = "Temps [année]", ylab = "?")
-legend(2020.2, 5, c("serie","médian"), col = 1:2, lty = 1)
+# Premier graphique : série originale
+plot(mobil_ts1, 
+     xlab = "Temps [année]", 
+     ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)", 
+     main = "Superposition de séries", col = rgb(0, 0, 0, alpha = 0.1))
+
+# Ajouter la deuxième série : week-ends supprimés
+lines(mobil_nwe_ts1b, col = "red")
+
+# Optionnel : ajouter une légende
+legend("topright", 
+       legend = c("Série originale", "Série journalière aggrégée (week-ends = NA)"), 
+       col = c("black", "red"), 
+       lty = 1)
 ```
+
+
+
+
+```{r}
+mobil_sl1 <- stat.slide(time(mobil_nwe_ts1b), mobil_nwe_ts1b, xmin = 2020, deltat = 0.2)
+# Graphique des statistiques glissantes
+plot(mobil_sl1, xlab = "Temps [année]", ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)")
+legend(2020.2, 5, c("serie","médian"), col = 1:2, lty = 1)
+
+```
+
+
+
+```{r}
+acf <- acf(mobil_nwe_ts1b)
+```
+
+
+```{r}
+loc <- local.trend(mobil_nwe_ts1b)
+```
+
+
 
 ```{r}
 set.seed(20010309)
-mobil_trend1 <- trend.test(mobil_nwe_ts1, R= 500)
+mobil_trend1 <- trend.test(mobil_nwe_ts1b, R= 1000)
 plot(mobil_trend1)
 ```
 
+f
+
 ```{r}
-# Extraction de la série différenciée (lag = 6, order = 1)
-mobil_stat1 <- extract(decdiff(mobil_ts1, lag = 6, order = 1), components = 1)
-
-# Représentation graphique
-plot(mobil_stat1, ylab = "Série mobil1 stationnarisée")
-
+# !!!! Besoins de correction
 # Analyse spectrale
-Mspec <- spectrum(mobil_stat1, spans = c(5, 7))
+Mspec <- spectrum(mobil_nwe_ts1b, spans = c(3, 5))
 
 # Périodogramme cumulatif
-cpgram(mobil_stat1)
+cpgram(mobil_nwe_ts1b)
 ```
 
 ```{r}
-#mobil_stat1_cycle <- cycle(mobil_stat1)
-#mobil_stat1_bpl <- boxplot(split(mobil_stat1, mobil_stat1_cycle), names = month.abb, col = "cornsilk")
+(mobil_stat1.cycle <- cycle(mobil_nwe_ts1b))
+boxplot(split(mobil_nwe_ts1b, mobil_stat1.cycle), col = "cornsilk")
 ```
 
 ## Conclusion
