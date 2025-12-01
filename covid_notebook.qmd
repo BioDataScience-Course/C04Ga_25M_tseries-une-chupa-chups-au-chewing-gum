@@ -1,6 +1,6 @@
 ---
 title: "___"
-author: "___"
+author: "Amazone Pouillard, Hugo De Smet, Richard Dumont, Solène Joris "
 format:
   html:
     code-fold: true
@@ -97,7 +97,6 @@ plot(mobil_ts1, xlab = "Temps [année]", ylab = "Mobilité vers les lieux de tra
 
 Les weekend-ends, la plupart des gens ne travail pas, cela rajoute un fort bruit de fond en augmentant la proportion de gens qui vont travaillés par rapport a la référence, nous les supprimons en les transformant en NA et les collapsons pour unifier la séries.
 
-
 ```{r}
 mobil_nwe_ts1 <- ts(mobil_nwe$workplaces,start = c(2020, 46),frequency = 365)
 
@@ -114,7 +113,6 @@ plot(mobil_nwe_ts1b,
 ```
 
 Pour validée notre choix nous visualisions la séries original et la série modifier superposées.
-
 
 ```{r}
 # Premier graphique : série originale
@@ -133,9 +131,6 @@ legend("topright",
        lty = 1)
 ```
 
-
-
-
 ```{r}
 mobil_sl1 <- stat.slide(time(mobil_nwe_ts1b), mobil_nwe_ts1b, xmin = 2020, deltat = 0.2)
 # Graphique des statistiques glissantes
@@ -144,18 +139,13 @@ legend(2020.2, 5, c("serie","médian"), col = 1:2, lty = 1)
 
 ```
 
-
-
 ```{r}
 acf <- acf(mobil_nwe_ts1b)
 ```
 
-
 ```{r}
 loc <- local.trend(mobil_nwe_ts1b)
 ```
-
-
 
 ```{r}
 set.seed(20010309)
