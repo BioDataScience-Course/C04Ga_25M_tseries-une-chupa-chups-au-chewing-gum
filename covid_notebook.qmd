@@ -169,6 +169,16 @@ cpgram(mobil_nwe_ts1b)
 boxplot(split(mobil_nwe_ts1b, mobil_stat1.cycle), col = "cornsilk")
 ```
 
+### Solène
+
+```{r}
+
+```
+
+### Amazone
+
+### Hugo
+
 ## Conclusion
 
 <!--% Lorsque toutes les analyses sont réalisées, terminez ce bloc-notes avec 3 à 6 phrases de conclusion en rapport avec ce que vous avez observé dans vos analyses. Quels sont les éléments les plus pertinents que vous retenez ? -->
