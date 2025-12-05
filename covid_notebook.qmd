@@ -226,19 +226,36 @@ plot(mobil_nwe_ts2b,
 ```
 
 ```{r}
+mobil_nw_ts2 <- ts(mobil_nw$retail,start = c(2020, 46),frequency = 365)
+
+plot(mobil_nw_ts2, 
+     main = "Série journalière (week-ends = NA)", xlab = "Temps [année]",
+     ylab = "Commerces et loisirs (% par rapport à la référence)")
+
+# Aggrégation par moyenne des valeurs par semaine
+
+mobil_nw_ts2b <- aggregate(mobil_nw_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
+
+plot(mobil_nw_ts2b, 
+     main = "Série journalière aggrégée (week-ends = NA)", xlab = "Temps [année]",
+     ylab = "Commerces et loisirs (% par rapport à la référence)")
+```
+
+```{r}
 # Premier graphique : série originale
-plot(mobil_ts2, ylim = c(-95, 105),
+plot(mobil_ts2, ylim = c(-95, 120),
      xlab = "Temps [année]", 
      ylab = "Commerces et loisirs (% par rapport à la référence)", 
      main = "Superposition de séries", col = rgb(0, 0, 0, alpha = 0.1))
 
 # Ajouter la deuxième série : week-ends supprimés
 lines(mobil_nwe_ts2b, col = "red")
+lines(mobil_nw_ts2b, col = "blue")
 
 # Optionnel : ajouter une légende
 legend("topleft", 
-       c("Série originale", "Série journalière aggrégée (week-ends = NA)"), 
-       col = c("grey", "red"), 
+       c("Série originale", "Série journalière aggrégée (week-ends = NA)", "Série journalière aggrégée (week = NA)"), 
+       col = c("grey", "red", "blue"), 
   lty=1)
 ```
 
