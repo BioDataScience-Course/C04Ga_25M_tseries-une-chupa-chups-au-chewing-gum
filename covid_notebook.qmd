@@ -83,6 +83,10 @@ mobil_nwe[mobil_nwe$wday %in% c(6, 7), numeric_cols] <- NA
 
 ```
 
+```{r}
+
+```
+
 ### Richard code
 
 ```{r}
