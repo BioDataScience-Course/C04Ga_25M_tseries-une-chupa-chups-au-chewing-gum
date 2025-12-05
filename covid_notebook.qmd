@@ -89,8 +89,6 @@ mobil_nwe[mobil_nwe$wday %in% c(6, 7), numeric_cols] <- NA
 # Conversion en ts de mobil
 mobil_ts1 <- ts(mobil$workplaces, start = c(2020, 46), frequency = 365)
 
-# c(2020,46), le deuxième nombre correspond au n jour par rapport à la fréquence, Attention 2020 est année bissextile donc 29 jours en juin donc décalage de 1 jour après le 29/02/2020
-
 # Graphique de l'objet ts
 plot(mobil_ts1, xlab = "Temps [année]", ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)")
 ```
@@ -127,8 +125,7 @@ lines(mobil_nwe_ts1b, col = "red")
 # Optionnel : ajouter une légende
 legend("topright", 
        legend = c("Série originale", "Série journalière aggrégée (week-ends = NA)"), 
-       col = c("black", "red"), 
-       lty = 1)
+       col = c("black", "red"))
 ```
 
 ```{r}
@@ -168,6 +165,23 @@ cpgram(mobil_nwe_ts1b)
 (mobil_stat1.cycle <- cycle(mobil_nwe_ts1b))
 boxplot(split(mobil_nwe_ts1b, mobil_stat1.cycle), col = "cornsilk")
 ```
+
+```{r}
+mobil_tsd <- tsd(mobil_ts1, method = "loess", s.window = 9, trend = TRUE, t.window = 31)
+plot(mobil_tsd, col = c(1:3))
+```
+
+
+```{r}
+tsp(mobil_nwe_ts1b)
+mobil_nwe_ts1bb <- tsd(mobil_nwe_ts1b, method = "median", order = 4, times = 5)
+class(mobil_nwe_ts1bb)
+plot(mobil_nwe_ts1bb, col = c(1:3))
+
+loc <- local.trend(mobil_nwe_ts1b)
+```
+
+
 
 ## Conclusion
 
