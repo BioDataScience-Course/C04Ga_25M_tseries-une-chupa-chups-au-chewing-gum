@@ -150,7 +150,7 @@ mobil_trend1 <- trend.test(mobil_nwe_ts1b, R= 1000)
 plot(mobil_trend1)
 ```
 
-f
+
 
 ```{r}
 # !!!! Besoins de correction
@@ -166,7 +166,7 @@ cpgram(mobil_nwe_ts1b)
 boxplot(split(mobil_nwe_ts1b, mobil_stat1.cycle), col = "cornsilk")
 ```
 
-<<<<<<< HEAD
+
 ```{r}
 mobil_tsd <- tsd(mobil_ts1, method = "loess", s.window = 9, trend = TRUE, t.window = 31)
 plot(mobil_tsd, col = c(1:3))
@@ -183,7 +183,7 @@ loc <- local.trend(mobil_nwe_ts1b)
 ```
 
 
-=======
+
 ### Solène
 
 ```{r}
@@ -240,7 +240,7 @@ plot(retail_smooth, col = c(1:3))
 ### Amazone
 
 ### Hugo
->>>>>>> 7ee395c313b90d3709b32d399221f61f7d364b14
+
 
 ## Conclusion
 
