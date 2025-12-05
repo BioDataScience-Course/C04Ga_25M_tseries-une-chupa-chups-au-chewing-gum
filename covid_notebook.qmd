@@ -83,6 +83,27 @@ mobil_nwe[mobil_nwe$wday %in% c(6, 7), numeric_cols] <- NA
 
 ```
 
+```{r}
+#Création de mobil sans les Week-ends 
+
+# Copie du data.frame source
+mobil_nw <- mobil
+
+# S'assurer que la colonne date est de type Date
+mobil_nw$date <- as.Date(mobil_nw$date)
+
+# Jour de la semaine (1 = lundi, ..., 7 = dimanche)
+mobil_nw$wday <- as.integer(format(mobil_nw$date, "%u"))
+
+# Colonnes numériques à nettoyer
+numeric_cols <- names(mobil_nw)[vapply(mobil_nw, is.numeric, logical(1))]
+numeric_cols <- setdiff(numeric_cols, "wday")
+numeric_cols <- setdiff(numeric_cols, "date")
+
+# Remplacement des valeurs des week-ends par NA
+mobil_nw[mobil_nw$wday %in% c(1:5), numeric_cols] <- NA
+```
+
 ### Richard code
 
 ```{r}
@@ -150,8 +171,6 @@ mobil_trend1 <- trend.test(mobil_nwe_ts1b, R= 1000)
 plot(mobil_trend1)
 ```
 
-
-
 ```{r}
 # !!!! Besoins de correction
 # Analyse spectrale
@@ -166,12 +185,10 @@ cpgram(mobil_nwe_ts1b)
 boxplot(split(mobil_nwe_ts1b, mobil_stat1.cycle), col = "cornsilk")
 ```
 
-
 ```{r}
 mobil_tsd <- tsd(mobil_ts1, method = "loess", s.window = 9, trend = TRUE, t.window = 31)
 plot(mobil_tsd, col = c(1:3))
 ```
-
 
 ```{r}
 tsp(mobil_nwe_ts1b)
@@ -181,8 +198,6 @@ plot(mobil_nwe_ts1bb, col = c(1:3))
 
 loc <- local.trend(mobil_nwe_ts1b)
 ```
-
-
 
 ### Solène
 
@@ -256,7 +271,6 @@ plot(retail_smooth, col = c(1:3))
 ### Amazone
 
 ### Hugo
-
 
 ## Conclusion
 
