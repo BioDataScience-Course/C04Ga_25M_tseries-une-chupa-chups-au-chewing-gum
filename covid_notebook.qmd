@@ -209,6 +209,22 @@ plot(mobil_nwe_ts2b,
      main = "Série journalière aggrégée (week-ends = NA)", xlab = "Temps [année]",
      ylab = "Commerces et loisirs (% par rapport à la référence)")
 ```
+```{r}
+mobil_nw_ts2 <- ts(mobil_nw$retail,start = c(2020, 46),frequency = 365)
+
+plot(mobil_nw_ts2, 
+     main = "Série journalière (week-ends = NA)", xlab = "Temps [année]",
+     ylab = "Commerces et loisirs (% par rapport à la référence)")
+
+# Aggrégation par moyenne des valeurs par semaine
+
+mobil_nw_ts2b <- aggregate(mobil_nw_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
+
+plot(mobil_nw_ts2b, 
+     main = "Série journalière aggrégée (week-ends = NA)", xlab = "Temps [année]",
+     ylab = "Commerces et loisirs (% par rapport à la référence)")
+```
+
 
 ```{r}
 # Premier graphique : série originale
