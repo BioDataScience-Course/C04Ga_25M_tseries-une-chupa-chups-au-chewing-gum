@@ -213,12 +213,12 @@ legend("topleft",
 ```
 
 ```{r}
-retail_loess <- tsd(mobil_ts2, method = "loess", s.window = "periodic",  s.degree = 1, trend = TRUE, t.window = 60)
+retail_loess <- tsd(mobil_nwe_ts2b, method = "loess", s.window = "periodic",  s.degree = 1, trend = TRUE, t.window = 7)
 plot(retail_loess, col = 1:3)
 ```
 
 ```{r}
-retail_smooth <- tsd(mobil_nwe_ts2, method = "median", order = 3, times = 3)
+retail_smooth <- tsd(mobil_nwe_ts2b, method = "median", order = 3, times = 3)
 plot(retail_smooth, col = c(1:3))
 ```
 
