@@ -84,7 +84,7 @@ mobil_nwe[mobil_nwe$wday %in% c(6, 7), numeric_cols] <- NA
 ```
 
 ```{r}
-#Création de mobil sans les Week-ends 
+#Création de mobil sans les Week 
 
 # Copie du data.frame source
 mobil_nw <- mobil
@@ -100,7 +100,7 @@ numeric_cols <- names(mobil_nw)[vapply(mobil_nw, is.numeric, logical(1))]
 numeric_cols <- setdiff(numeric_cols, "wday")
 numeric_cols <- setdiff(numeric_cols, "date")
 
-# Remplacement des valeurs des week-ends par NA
+# Remplacement des valeurs des week par NA
 mobil_nw[mobil_nw$wday %in% c(1:5), numeric_cols] <- NA
 ```
 
@@ -117,10 +117,28 @@ plot(mobil_ts1, xlab = "Temps [année]", ylab = "Mobilité vers les lieux de tra
 Les weekend-ends, la plupart des gens ne travail pas, cela rajoute un fort bruit de fond en augmentant la proportion de gens qui vont travaillés par rapport a la référence, nous les supprimons en les transformant en NA et les collapsons pour unifier la séries.
 
 ```{r}
+mobil_nw_ts1 <- ts(mobil_nw$workplaces,start = c(2020, 46),frequency = 365)
+
+plot(mobil_nw_ts1, 
+     main = "Série journalière (week-ends = NA)", xlab = "Temps [année]",
+     ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)")
+
+# Aggrégation par moyenne des valeurs par semaine
+mobil_nw_ts1b <- aggregate(mobil_nw_ts1, 52, FUN = collapse::fmean, ts.eps = 1/52)
+
+plot(mobil_nw_ts1b, 
+     main = "Série journalière aggrégée (week) = NA)", xlab = "Temps [année]",
+     ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)")
+```
+
+
+
+
+```{r}
 mobil_nwe_ts1 <- ts(mobil_nwe$workplaces,start = c(2020, 46),frequency = 365)
 
 plot(mobil_nwe_ts1, 
-     main = "Série journalière (week-ends = NA)", xlab = "Temps [année]",
+     main = "Série journalière (week = NA)", xlab = "Temps [année]",
      ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)")
 
 # Aggrégation par moyenne des valeurs par semaine
@@ -136,6 +154,7 @@ Pour validée notre choix nous visualisions la séries original et la série mod
 ```{r}
 # Premier graphique : série originale
 plot(mobil_ts1, 
+  ylim = c(-95, 60),
      xlab = "Temps [année]", 
      ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)", 
      main = "Superposition de séries", col = rgb(0, 0, 0, alpha = 0.1))
@@ -143,10 +162,12 @@ plot(mobil_ts1,
 # Ajouter la deuxième série : week-ends supprimés
 lines(mobil_nwe_ts1b, col = "red")
 
+lines(mobil_nw_ts1b, col = "blue")
+
 # Optionnel : ajouter une légende
 legend("topright", 
-       legend = c("Série originale", "Série journalière aggrégée (week-ends = NA)"), 
-       col = c("black", "red"))
+       legend = c("Série originale", "Série journalière aggrégée (week-ends = NA)", "Série journalière aggrégée (week = NA)" ), 
+       col = c("gray", "red", "blue"), lty=1)
 ```
 
 ```{r}
