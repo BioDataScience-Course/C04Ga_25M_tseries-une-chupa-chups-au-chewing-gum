@@ -118,10 +118,10 @@ mobil_nw[mobil_nw$wday %in% c(1:5), numeric_cols] <- NA
 
 ```{r}
 # Conversion en ts de mobil
-mobil_ts1 <- ts(mobil$workplaces, start = c(2020, 46), frequency = 365)
+work_ts1 <- ts(mobil$workplaces, start = c(2020, 46), frequency = 365)
 
 # Graphique de l'objet ts
-plot(mobil_ts1, xlab = "Temps [année]", ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)")
+plot(work_ts1, xlab = "Temps [année]", ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)")
 ```
 
 Une tendance, un cycle hebdomadaire et annuelle sont deviné, ceux-ci doives être isolée.
@@ -136,7 +136,7 @@ On met en évidences :
 
 ```{r}
 # Graphique de l'objet ts
-plot(mobil_ts1, xlab = "Temps [année]", ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)",
+plot(work_ts1, xlab = "Temps [année]", ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)",
   ylim = c(-95, 120))
 # Ajouter une ligne verticale pour les confinements
 # Convertir la date en position sur l'axe x (fraction de l'année)
@@ -268,9 +268,9 @@ Nous allons donc divisé notre analyses en 3 courbes:
 
 ```{r}
 # convertir en série temporelle journalière
-ts_daily <- ts(mobil_ts1, frequency = 7)
+work_ts1_daily <- ts(work_ts1, frequency = 7)
 
-decomp_work <- tsd(ts_daily, s.window = 7, trend = TRUE, t.window = 7)
+decomp_work <- tsd(work_ts1_daily, s.window = 7, trend = TRUE, t.window = 7)
 plot(decomp_work, col = 1:4)
 
 
@@ -287,10 +287,10 @@ Il est donc pertinent de travailler trois sous-séries distinctes : l’ensemble
 
 ```{r}
 # Aggrégation par moyenne des valeurs par semaine
-mobil_ts1_ag <- aggregate(mobil_ts1, 52, FUN = collapse::fmean, ts.eps = 1/52)
+work_ts1_ag <- aggregate(work_ts1, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
 
-plot(mobil_ts1_ag, 
+plot(work_ts1_ag, 
      main = "Série journalière aggrégée ", xlab = "Temps [année]",
      ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)", ylim = c(-60, 80))
 # Ajouter une ligne verticale pour le 18 mars 2020
@@ -372,17 +372,17 @@ legend("topright",
 
 
 ```{r}
-mobil_nw_ts1 <- ts(mobil_nw$workplaces,start = c(2020, 46),frequency = 365)
+work_nw_ts1 <- ts(mobil_nw$workplaces,start = c(2020, 46),frequency = 365)
 
 #graphique avec NA
-plot(mobil_nw_ts1, 
+plot(work_nw_ts1, 
      main = "Série journalière sans les jours de la semaines (lundi-vendredi)", xlab = "Temps [année]",
      ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)")
 
 # Aggrégation par moyenne des valeurs par semaine et suppression des NA
-mobil_nw_ts1b <- aggregate(mobil_nw_ts1, 52, FUN = collapse::fmean, ts.eps = 1/52)
+work_nw_ts1b <- aggregate(work_nw_ts1, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
-plot(mobil_nw_ts1b, 
+plot(work_nw_ts1b, 
      main = "Série journalière aggrégée sans les jours de la semaines", xlab = "Temps [année]",
      ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)", ylim = c(-95, 100))
 # Ajouter une ligne verticale pour le 18 mars 2020
@@ -464,16 +464,16 @@ Aprés le 1er confinement, le déplacement vers le lieux de travail est proches 
 La variation en fonction des vacance de la fréquentation du lieu de travail est beaucoup moins marqué sur les week-ends, mais visible.
 
 ```{r}
-mobil_nwe_ts1 <- ts(mobil_nwe$workplaces,start = c(2020, 46),frequency = 365)
+work_nwe_ts1 <- ts(mobil_nwe$workplaces,start = c(2020, 46),frequency = 365)
 
-plot(mobil_nwe_ts1, 
+plot(work_nwe_ts1, 
      main = "Série journalière sans week-ends", xlab = "Temps [année]",
      ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)")
 
 # Aggrégation par moyenne des valeurs par semaine
-mobil_nwe_ts1b <- aggregate(mobil_nwe_ts1, 52, FUN = collapse::fmean, ts.eps = 1/52)
+work_nwe_ts1b <- aggregate(work_nwe_ts1, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
-plot(mobil_nwe_ts1b, 
+plot(work_nwe_ts1b, 
      main = "Série journalière aggrégée sans week-ends", xlab = "Temps [année]",
      ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)", ylim = c(-95, 100))
 # Ajouter une ligne verticale pour le 18 mars 2020
@@ -557,18 +557,18 @@ La variation en fonction des vacance de la frequentation du lieu de travail est 
 ```{r}
 
 # Premier graphique : série originale
-plot(mobil_ts1, 
+plot(work_ts1, 
   ylim = c(-95, 65),
      xlab = "Temps [année]", 
      ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)", 
      main = "Superposition de la séries but et des series aggrégées", col = rgb(0, 0, 0, alpha = 0.1))
 
 # Ajouter la deuxième série : week-ends supprimés
-lines(mobil_nwe_ts1b, col = "red")
+lines(work_nwe_ts1b, col = "red")
 
-lines(mobil_nw_ts1b, col = "blue")
+lines(work_nw_ts1b, col = "blue")
 
-lines(mobil_ts1_ag, col = rgb(0, 1, 0, 0.5))
+lines(work_ts1_ag, col = rgb(0, 1, 0, 0.5))
 
 # Optionnel : ajouter une légende
 legend("topright", 
@@ -588,25 +588,25 @@ Les week-ends sont moins sujets a une diminution du déplacement sur le lieux de
 Nous extrayons le cycle annuelle sur la semaine car les weekend-ends sont peut marqué par ce cycle et donc vont étouffer les résultats. ( /!\ les valeurs numérique par rapport a la références ne sont donc plus indicatrices, nous regardons donc uniquement les allures générales des courbes et les dates)
 
 ```{r}
-mobil_nwe_ts1_nona <- na.approx(mobil_nwe_ts1)
-mobil_nwe_tsd1 <- tsd(mobil_nwe_ts1_nona, s.window = 365, trend = TRUE, t.window = 185)
-plot(mobil_nwe_tsd1, col = 1:4)
+work_nwe_ts1_nona <- na.approx(work_nwe_ts1)
+work_nwe_tsd1 <- tsd(work_nwe_ts1_nona, s.window = 365, trend = TRUE, t.window = 185)
+plot(work_nwe_tsd1, col = 1:4)
 
 ```
 La tendance génrales de la mobilité au travail va vers une augmentation, apres le confinement du 18 mars 2020. Un cycles annuels à bien été extrait mais le premier confinement a un trop grand effet sur le cycles durant fin hiver et printemps (comme le montre les résiduts) il faut donc isolée celui-ci pour avoir un cycles annuels de références.  
 
 ```{r}
 # commence en juillet 2020
-mobil_nwe_ts1_nona_b <-window(mobil_nwe_ts1_nona, start = c(2020, 183))
-mobil_nwe_tsd1_b <- tsd(mobil_nwe_ts1_nona_b, s.window = 365, trend = TRUE, t.window = 185)
-plot(mobil_nwe_tsd1_b, col = 1:4)
+work_nwe_ts1_nona_b <-window(work_nwe_ts1_nona, start = c(2020, 183))
+work_nwe_tsd1_b <- tsd(work_nwe_ts1_nona_b, s.window = 365, trend = TRUE, t.window = 185)
+plot(work_nwe_tsd1_b, col = 1:4)
 
 # Extraction du cycle annuel
-cycle_annuel_mobil_nwe_b <- extract(mobil_nwe_tsd1_b, components = "seasonal")
+cycle_annuel_work_nwe_b <- extract(work_nwe_tsd1_b, components = "seasonal")
 
-mobil_sl1_b <- stat.slide(time(cycle_annuel_mobil_nwe_b), cycle_annuel_mobil_nwe_b, xmin = 2020, deltat = 1/24)
+work_sl1_b <- stat.slide(time(cycle_annuel_work_nwe_b), cycle_annuel_work_nwe_b, xmin = 2020, deltat = 1/24)
 # Graphique des statistiques glissantes
-plot(mobil_sl1_b, main = "Statistiques glissante de 2 semaines
+plot(work_sl1_b, main = "Statistiques glissante de 2 semaines
   sur le cycle annuelle (sans les week-ends)", xlab = "Temps [année]", ylab = "Mobilité vers les lieux de travail 
   (% par rapport à la référence)", col = c(rgb(0, 0, 0,0.2),rgb(1, 0, 0,1)),   ylim = c(-50, 50))
 
@@ -690,11 +690,11 @@ On voit que c'est clairement les vacances scolaires qui dirige le cycle annuels 
 Notons donc que la références médiane des cinq semaines du 3 janvier au 6 février 2020 de base est peut être sou évaluer car elle commences en comptent 3 jours pendants les vacances d'hiver.
 
 ```{r}
-acf <- acf(mobil_nwe_ts1_nona)
+acf <- acf(work_nwe_ts1_nona)
 ```
 
 ```{r}
-loc <- local.trend(mobil_nwe_ts1_nona, ylim = c(-3500, 1050))
+loc <- local.trend(work_nwe_ts1_nona, ylim = c(-3500, 1050))
 abline(v = x_vert, col = "red", lwd = 2, lty = 2)
 abline(v = x_blue, col = "blue", lwd = 2, lty = 2)
 legend("topright", 
