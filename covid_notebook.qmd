@@ -563,7 +563,7 @@ legend("topright",
        bg = "white")
 ```
 
-La variation en fonction des vacance de la frequentation du lieu de travail est beaucoup plus marqué sur la semaine sans prendre en compte les week-ends, mais visible.
+La variation en fonction des vacance de la fréquentation du lieu de travail est beaucoup plus marqué sur la semaine sans prendre en compte les week-ends.
 
 ```{r}
 
@@ -593,7 +593,7 @@ Notons qu'avant le premier confinement du 18 mars 2020 et 2-3 semaines après ce
 
 #### Extraction du cycle annuelle (vacance)
 
-Nous extrayons le cycle annuelle sur la semaine car les weekend-ends sont peut marqué par ce cycle et donc vont étouffer les résultats. ( /! les valeurs numérique par rapport a la références ne sont donc plus indicatrices, nous regardons donc uniquement les allures générales des courbes et les dates)
+Nous extrayons le cycle annuelle a partir de la série agrégé.
 
 ```{r}
 work_tsd_weekly <- tsd(work_ts1_ag, s.window = 52, 
@@ -611,7 +611,8 @@ abline(v = seq(0, 100, by = 1), col = "grey90")
 
 ```
 
-La tendance génrales de la mobilité au travail va vers une augmentation, apres le confinement du 18 mars 2020. Un cycles annuels à bien été extrait mais le premier confinement a un trop grand effet sur le cycles durant la fin hiver et printemps (comme le montre les résidus) il faut donc isolée celui-ci pour avoir un cycles annuels de références.
+La tendance générale de la mobilité au travail va vers une augmentation, après le confinement du 18 mars 2020. 
+Un cycles annuels à bien été extrait mais le premier confinement a un trop grand effet sur le cycles durant la fin hiver et printemps (comme le montre les résidus) il faut donc isolée celui-ci pour avoir un cycles annuels de références.
 
 ```{r}
 # commence en juillet 2020
@@ -701,11 +702,11 @@ legend("topright",
        bg = "white")
 ```
 
-Le faible signal dans les residuts nous indique que le cycle annuel à été relativement bien extrait, bien qu'une composante cyclique annuelle semble toujours être identifiables mais nettement moins importantes que précédemment.
+Le faible signal dans les residuts nous indique que le cycle annuel à été relativement bien extrait, bien qu'une composante cyclique annuelle semble toujours être identifiables dans les residuts mais nettement moins importantes que précédemment.
 
 On voit que c'est clairement les vacances scolaires qui dirige le cycle annuels de la fréquentation des lieux de travail en semaines.
 
-Notons donc que la références médiane des cinq semaines du 3 janvier au 6 février 2020 de base est peut être sou évaluer car elle commences en comptent 3 jours pendants les vacances d'hiver.
+Notons donc que la références médiane des cinq semaines du 3 janvier au 6 février 2020 de base est peut être sou-évaluer car elle prends en comptent 3 jours pendants les vacances d'hiver.
 
 ```{r}
 acf <- acf(cycle_annuel_work_b)
