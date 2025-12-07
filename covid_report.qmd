@@ -7,6 +7,8 @@ format:
     toc: true
 editor: visual
 lang: fr
+bibliography: references.bib
+link-citations: true
 ---
 
 <!--# Ce travail doit faire entre 15 et 20 pages.-->
@@ -15,7 +17,9 @@ lang: fr
 
 ## Introduction
 
-<!--% Rédigez l'introduction de ce rapport.-->
+Au début de l’année 2020, la Belgique et le reste du monde furent confrontés à une situation sanitaire sans précédent. En Belgique, le pays passa pour la première fois, en temps de paix moderne, par un confinement quasi total des infrastructures non essentielles. Les premières mesures furent annoncées le 12 mars 2020, mais c’est le **18 mars 2020** que le gouvernement décréta un **confinement généralisé**, toutes les activités non essentielles furent fermées, les déplacements limités aux motifs essentiels (achats alimentaires, soins, urgences, ...), et le télétravail rendu prioritaire [@unric_belgique_confinement_2020; @rtbf_confinement_2020].
+
+À l’automne, la deuxième vague pandémique toucha le pays, entraînant le **2 novembre 2020** l’instauration d’un **confinement renforcé**, plus souple que celui du printemps [@rtbf_reconfinement_2020]. Les mesures **restrictives furent maintenues jusqu’au fin-printemps 2021**, avec un allègement progressif selon l’évolution de la situation sanitaire et l’état de vaccination de la population.
 
 ## But
 
