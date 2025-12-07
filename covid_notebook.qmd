@@ -597,7 +597,7 @@ La tendance génrales de la mobilité au travail va vers une augmentation, apres
 
 ```{r}
 # commence en juillet 2020
-work_nwe_ts1_nona_b <-window(work_nwe_ts1_nona, start = c(2020, 183))
+work_nwe_ts1_nona_b <-window(work_nwe_ts1_nona, start = c(2020, 183), end = c(2022,288))
 work_nwe_tsd1_b <- tsd(work_nwe_ts1_nona_b, s.window = 365, trend = TRUE, t.window = 185)
 plot(work_nwe_tsd1_b, col = 1:4)
 
