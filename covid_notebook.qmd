@@ -270,14 +270,27 @@ Nous allons donc divisé notre analyses en 3 courbes:
 # convertir en série temporelle journalière
 work_ts1_daily <- ts(work_ts1, frequency = 7)
 
+
 decomp_work <- tsd(work_ts1_daily, s.window = 7, trend = TRUE, t.window = 7)
+
 plot(decomp_work, col = 1:4)
 
+cycle_hebdo_work <- extract(decomp_work, components = "seasonal")
 
+
+plot(window(cycle_hebdo_work, start = 46, end = 98))
+abline(v = seq(0, 200, by = 1), col = "grey90")
+
+spectrum(cycle_hebdo_work, spans = c(5, 7), col = "aquamarine3")
+abline(v = seq(0, 200, by = 1), col = "grey90")
+abline(h = seq(0, 10000, by = 250), col = "grey80")
+
+cpgram(cycle_hebdo_work) 
+abline(v = seq(0, 200, by = 1), col = "grey90")
 
 ```
-Le cycle hebdomadaire et la tendances génrals ont été extrait, nous pouvons maintenant essayer d'extraire le cycle des vacances dans les résidus.
 
+Le cycle hebdomadaire et la tendances générale ont été extrait. Le cycles hebdomadaire et de 3.5 jours (peut etre le mercredi) sont observées de manières significative.
 
 Le cycle semaine / week-ends exerce une influence marquée sur la série. Étant donné que la référence correspond à la **médiane des cinq semaines du 3 janvier au 6 février 2020**, pour chaque jour de la semaine, les week-ends peuvent apparaître « surdimensionnés » (et inversement les jours de semaine sous-dimensionnés) (@google_documentation).
 
@@ -369,8 +382,6 @@ legend("topright",
        bg = "white")
 ```
 
-
-
 ```{r}
 work_nw_ts1 <- ts(mobil_nw$workplaces,start = c(2020, 46),frequency = 365)
 
@@ -460,8 +471,8 @@ legend("topright",
        bty = "o",
        bg = "white")
 ```
-Aprés le 1er confinement, le déplacement vers le lieux de travail est proches de celui de la référence et est même plus haut que celle-ci quelque semaine après le confinement total du 18 mars 2020 (peut être car on a essayer de repartir les travailleurs pour éviter les contacts ?) 
-La variation en fonction des vacance de la fréquentation du lieu de travail est beaucoup moins marqué sur les week-ends, mais visible.
+
+Aprés le 1er confinement, le déplacement vers le lieux de travail est proches de celui de la référence et est même plus haut que celle-ci quelque semaine après le confinement total du 18 mars 2020 (peut être car on a essayer de repartir les travailleurs pour éviter les contacts ?) La variation en fonction des vacance de la fréquentation du lieu de travail est beaucoup moins marqué sur les week-ends, mais visible.
 
 ```{r}
 work_nwe_ts1 <- ts(mobil_nwe$workplaces,start = c(2020, 46),frequency = 365)
@@ -576,39 +587,46 @@ legend("topright",
        col = c("gray", rgb(0, 1, 0, 0.5), "red", "blue"), lty=1)
 ```
 
-La courbes des semaines (sans week-end) suit assez bien la courbes générale agrégées bien quelle soit a la baisse par rapport a celle-ci. 
+La courbes des semaines (sans week-end) suit assez bien la courbes générale agrégées bien quelle soit a la baisse par rapport a celle-ci.
 
-Notons qu'avant le premier confinement du 18 mars 2020 et 2-3 semaines après celui-ci, les courbes sont assez proche (une différences de seulement max 20% entre la courbe week-end et semaines sans week-end ). C'est en été que la differences entre les deux courbes est la plus marquantes.
-Les week-ends sont moins sujets a une diminution du déplacement sur le lieux de travail.
+Notons qu'avant le premier confinement du 18 mars 2020 et 2-3 semaines après celui-ci, les courbes sont assez proche (une différences de seulement max 20% entre la courbe week-end et semaines sans week-end ). C'est en été que la différences entre les deux courbes est la plus marquantes. Les week-ends sont moins sujets a une diminution du déplacement sur le lieux de travail.
 
+#### Extraction du cycle annuelle (vacance)
 
-##### Extraction du cycle annuelle (vacance) sur la semaine uniquemenet
-
-
-Nous extrayons le cycle annuelle sur la semaine car les weekend-ends sont peut marqué par ce cycle et donc vont étouffer les résultats. ( /!\ les valeurs numérique par rapport a la références ne sont donc plus indicatrices, nous regardons donc uniquement les allures générales des courbes et les dates)
+Nous extrayons le cycle annuelle sur la semaine car les weekend-ends sont peut marqué par ce cycle et donc vont étouffer les résultats. ( /! les valeurs numérique par rapport a la références ne sont donc plus indicatrices, nous regardons donc uniquement les allures générales des courbes et les dates)
 
 ```{r}
-work_nwe_ts1_nona <- na.approx(work_nwe_ts1)
-work_nwe_tsd1 <- tsd(work_nwe_ts1_nona, s.window = 365, trend = TRUE, t.window = 185)
-plot(work_nwe_tsd1, col = 1:4)
+work_tsd_weekly <- tsd(work_ts1_ag, s.window = 52, 
+  trend = TRUE, t.window = 13)
+plot(work_tsd_weekly, col = 1:4)
+
+cycle_annuel_work <- extract(work_tsd_weekly, components = "seasonal")
+plot(cycle_annuel_work, col = "blue")
+spectrum(cycle_annuel_work, spans = c(3,5))
+abline(v = seq(0, 100, by = 1), col = "grey90")
+abline(h = seq(0, 100, by = 1), col = "grey80")
+
+cpgram(cycle_annuel_work)
+abline(v = seq(0, 100, by = 1), col = "grey90")
 
 ```
-La tendance génrales de la mobilité au travail va vers une augmentation, apres le confinement du 18 mars 2020. Un cycles annuels à bien été extrait mais le premier confinement a un trop grand effet sur le cycles durant fin hiver et printemps (comme le montre les résiduts) il faut donc isolée celui-ci pour avoir un cycles annuels de références.  
+
+La tendance génrales de la mobilité au travail va vers une augmentation, apres le confinement du 18 mars 2020. Un cycles annuels à bien été extrait mais le premier confinement a un trop grand effet sur le cycles durant la fin hiver et printemps (comme le montre les résidus) il faut donc isolée celui-ci pour avoir un cycles annuels de références.
 
 ```{r}
 # commence en juillet 2020
-work_nwe_ts1_nona_b <-window(work_nwe_ts1_nona, start = c(2020, 183), end = c(2022,288))
-work_nwe_tsd1_b <- tsd(work_nwe_ts1_nona_b, s.window = 365, trend = TRUE, t.window = 185)
-plot(work_nwe_tsd1_b, col = 1:4)
+work_ts1_nona_b <- window(work_ts1_ag, start = c(2020, 27), end = c(2022,39))
+work_tsd1_b <- tsd(work_ts1_nona_b, s.window = 52, trend = TRUE, t.window = 13)
+plot(work_tsd1_b, col = 1:4)
 
 # Extraction du cycle annuel
-cycle_annuel_work_nwe_b <- extract(work_nwe_tsd1_b, components = "seasonal")
+cycle_annuel_work_b <- extract(work_tsd1_b, components = "seasonal")
 
-work_sl1_b <- stat.slide(time(cycle_annuel_work_nwe_b), cycle_annuel_work_nwe_b, xmin = 2020, deltat = 1/24)
+work_sl1_b <- stat.slide(time(cycle_annuel_work_b), cycle_annuel_work_b, xmin = 2020, deltat = 1/24)
 # Graphique des statistiques glissantes
 plot(work_sl1_b, main = "Statistiques glissante de 2 semaines
-  sur le cycle annuelle (sans les week-ends)", xlab = "Temps [année]", ylab = "Mobilité vers les lieux de travail 
-  (% par rapport à la référence)", col = c(rgb(0, 0, 0,0.2),rgb(1, 0, 0,1)),   ylim = c(-50, 50))
+  sur le cycle annuelle", xlab = "Temps [année]", ylab = "Mobilité vers les lieux de travail 
+  (% par rapport à la référence)", col = c(rgb(0, 0, 0,0.2),rgb(1, 0, 0,1)),   ylim = c(-35, 45))
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -690,18 +708,19 @@ On voit que c'est clairement les vacances scolaires qui dirige le cycle annuels 
 Notons donc que la références médiane des cinq semaines du 3 janvier au 6 février 2020 de base est peut être sou évaluer car elle commences en comptent 3 jours pendants les vacances d'hiver.
 
 ```{r}
-acf <- acf(work_nwe_ts1_nona)
+acf <- acf(cycle_annuel_work_b)
 ```
 
+#### Analyse de la tendance local
+
 ```{r}
-loc <- local.trend(work_nwe_ts1_nona, ylim = c(-3500, 1050))
+loc <- local.trend(work_ts1_ag, ylim = c(-470, 200))
 abline(v = x_vert, col = "red", lwd = 2, lty = 2)
 abline(v = x_blue, col = "blue", lwd = 2, lty = 2)
 legend("topright", 
        legend = c("Courbe", "Tendance local", "Confinement du 18 mars 2020", "Confinement du 02 novembre 2020"),
        col = c("black", "red", "red", "blue"), lty = c(3, 1, 2,2), cex = 0.5)
 ```
-
 
 ### Solène
 
@@ -812,7 +831,6 @@ legend(2020.8, 220, c("serie","médian"), col = 1:2, lty = 1)
 <!--% Lorsque toutes les analyses sont réalisées, terminez ce bloc-notes avec 3 à 6 phrases de conclusion en rapport avec ce que vous avez observé dans vos analyses. Quels sont les éléments les plus pertinents que vous retenez ? -->
 
 ...vos conclusions ici...
-
 
 ## Commentaire
 
