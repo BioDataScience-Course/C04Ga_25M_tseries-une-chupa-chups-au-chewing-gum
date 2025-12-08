@@ -722,7 +722,7 @@ legend("topright",
        col = c("black", "red", "red", "blue"), lty = c(3, 1, 2,2), cex = 0.5)
 ```
 
-### Solène
+### Évolution de la mobilité dans les commerces et loisirs (Solene)
 
 ```{r}
 # Conversion en ts de mobil
@@ -731,6 +731,548 @@ mobil_ts2 <- ts(mobil$retail, start = c(2020, 46), frequency = 365)
 # Graphique de l'objet ts
 plot(mobil_ts2, xlab = "Temps [année]", ylab = "Commerces et loisirs (% par rapport à la référence)")
 ```
+
+**1. Une chute massive au début de la série (printemps 2020)**
+
+On observe une **baisse brutale et immédiate** sous la référence (jusqu’à –80 % environ). Cela correspond très clairement au **premier confinement COVID** où les commerces et activités de loisirs ont été fermés, entraînant une chute extrêmement forte de la mobilité.Cela correspond très clairement au **premier confinement COVID** où les commerces et activités de loisirs ont été fermés, entraînant une chute extrêmement forte de la mobilité.
+
+**2. 2020–2021 : mobilité très fluctuante, cycles visibles**
+
+Après cette chute initiale, la mobilité **reste en dessous de 0 % tout au long de 2020 et d’une grande partie de 2021**, avec :
+
+-   des **oscillations régulières** (effet saisonnier + week-ends),
+
+-   des **creux très marqués** (probables mesures sanitaires successives : confinement 2, fermeture horeca, restrictions locales).
+
+3.  **2021–2022 : remontée progressive**
+
+Fin 2021 et début 2022, la mobilité :
+
+-   **remonte vers 0**, puis
+
+-   **dépasse régulièrement la référence** historique,
+
+-   mais reste **irrégulière** avec de fortes variations quotidiennes.
+
+Ceci correspond à la **réouverture progressive des commerces et loisirs** et à un **retour à la normale**, mais pas uniforme.
+
+**4. Un pic négatif très abrupt en 2022**
+
+On voit un **creux extrêmement marqué**, très isolé, en 2022 (valeur très basse).
+
+Cela correspond à une **erreur de mesure** ou un jour spécifique de fermeture généralisée (ex : jour férié, bug du capteur de données Google Mobility).
+
+Ce genre de point atypique (outlier) est fréquent dans les données Google.
+
+**5. Fin 2022 : stabilisation au-dessus ou autour de la référence**
+
+La mobilité semble se stabiliser **entre 0 et +30 %**, ce qui suggère :
+
+-   un retour complet à la normale,
+
+-   voire une **mobilité supérieure à la période de référence** (comportements post-pandémie, rattrapage).
+
+#### Conclusion :
+
+La mobilité dans les commerces et loisirs chute de façon spectaculaire au début de 2020, correspondant aux premiers confinements. Elle reste longtemps inférieure à la référence, avec des fluctuations liées aux différentes mesures sanitaires. À partir de 2022, la mobilité se stabilise et revient autour ou au-dessus du niveau pré-pandémique.
+
+```{r}
+# Graphique de l'objet ts
+plot(mobil_ts2, xlab = "Temps [année]", ylab = "Commerces et loisirs (% par rapport à la référence)",
+  ylim = c(-120, 250))
+# Ajouter une ligne verticale pour les confinements
+# Convertir la date en position sur l'axe x (fraction de l'année)
+x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
+abline(v = x_vert, col = "red", lwd = 2, lty = 2)
+x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
+abline(v = x_blue, col = "blue", lwd = 2, lty = 2)
+
+# Périodes des vacances pour Wallonie (2020‑2022) (@VacancesScolaires)
+
+vacances_hiver <- data.frame(
+  start = as.Date(c("2020-12-21", "2021-12-27")),
+  end   = as.Date(c("2021-01-01", "2022-01-09"))
+)
+
+vacances_ete <- data.frame(
+  start = as.Date(c("2020-07-01", "2021-07-01", "2022-07-01")),
+  end   = as.Date(c("2020-08-31", "2021-08-31", "2022-08-31"))
+)
+
+vacances_paques <- data.frame(
+  start = as.Date(c("2020-04-06","2021-04-05", "2022-04-04")),
+  end   = as.Date(c("2020-04-19","2021-04-16", "2022-04-15"))
+)
+
+vacances_carnaval <- data.frame(
+  start = as.Date(c("2020-02-24","2021-02-15", "2022-02-28")),
+  end   = as.Date(c("2020-03-01","2021-02-19", "2022-03-04"))
+)
+
+vacances_toussaint <- data.frame(
+  start = as.Date(c("2020-11-02", "2021-11-01")),
+  end   = as.Date(c("2020-11-06", "2021-11-05"))
+)
+
+
+# Ajouter un encadrement pour les vacances hiver
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_hiver)){
+  x_start <- 2020 + as.numeric(vacances_hiver$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_hiver$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.4,0.6,0.9,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances été
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_ete)){
+  x_start <- 2020 + as.numeric(vacances_ete$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_ete$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(1,0.7,0.3,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances paque
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_paques)){
+  x_start <- 2020 + as.numeric(vacances_paques$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_paques$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(1,0.5,0.5,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances carnaval
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_carnaval)){
+  x_start <- 2020 + as.numeric(vacances_carnaval$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_carnaval$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.4,0.8,0.4,0.3), border = NA)
+}
+
+
+# Ajouter un encadrement pour les vacances toussaint
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_toussaint)){
+  x_start <- 2020 + as.numeric(vacances_toussaint$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_toussaint$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.7,0.4,0.8,0.5), border = NA)
+}
+
+#legend
+legend("topright", 
+       legend = c("Confinement du 18 mars 2020",
+         "Confinement du 02 novembre 2020",
+                  "Vacances hiver", 
+                  "Vacances carnaval", 
+                  "Vacances Pâques", 
+                  "Vacances été", 
+                  "Vacances Toussaint"),
+       col = c("red", "blue",
+                 rgb(0.4,0.6,0.9,0.5),
+               rgb(0.4,0.8,0.5,0.5),
+               rgb(1,0.5,0.5,0.5),
+               rgb(1,0.7,0.3,0.5),
+               rgb(0.7,0.4,0.8,0.5)),
+       lty = c(2,2, NA, NA, NA, NA, NA),
+       pch = c(NA,NA, 15, 15, 15, 15, 15),
+       pt.cex = 1.2,
+       cex = 0.8,
+       bty = "o",
+       bg = "white")
+
+```
+
+#### **1. Confinement 1 (mars 2020) : effondrement brutal de la mobilité**
+
+La ligne rouge (18 mars 2020) marque le début du premier confinement.
+
+Juste après, on observe une **chute immédiate à environ –80 %**, parfaitement cohérente avec la fermeture complète des commerces et activités de loisirs.
+
+La mobilité reste très basse pendant les semaines suivantes malgré les vacances de Pâques (zone rose), ce qui montre que **les congés n’ont eu aucun effet amortisseur** → *les mesures sanitaires dominent totalement*.
+
+#### **2. Périodes de vacances 2020 : légère amélioration mais toujours négative**
+
+Les plages colorées (été, Toussaint, hiver) montrent :
+
+-   une **remontée progressive** durant l’été 2020,
+
+-   un niveau encore **négatif et très fluctuant**.
+
+Cela montre que la mobilité est encore largement contrainte, mais **les vacances produisent déjà un petit rebond**, en particulier l’été (orange).
+
+#### **3. Confinement 2 (novembre 2020) : baisse nette mais moins profonde**
+
+La ligne bleue (2 novembre 2020) correspond au deuxième confinement.
+
+On voit une **baisse du niveau de mobilité**, mais moins spectaculaire que la première (-30 à -40 %).\
+Cela s’explique par des restrictions plus ciblées et une adaptation des comportements (click & collect, commerce essentiel, etc.).
+
+#### **4. 2021 : un schéma clair apparaît → les vacances augmentent la mobilité**
+
+À partir de 2021, chaque période de vacances produit un **pic positif relatif** :
+
+-   Vacances d'hiver : hausse visible
+
+-   Carnaval : petite hausse
+
+-   Pâques : nette augmentation
+
+-   Été : **maximum annuel**
+
+-   Toussaint : hausse locale
+
+On voit clairement que **la mobilité liée aux commerces/loisirs est très sensible aux congés scolaires** dès que les restrictions COVID disparaissent.
+
+Les périodes hors congés reviennent systématiquement vers un niveau plus bas → *effet structurel de la saisonnalité sociale*.
+
+#### **5. 2022 : normalisation + reprise forte durant l’été**
+
+En 2022 :
+
+-   la mobilité oscille autour de 0 % (retour vers les niveaux pré-pandémiques),
+
+-   les vacances génèrent toujours des hausses très nettes,
+
+-   l’été 2022 correspond à **une des plus fortes augmentations de toute la série**.
+
+Cela montre un **effet de rattrapage post-pandémie**, les activités de loisirs ayant explosé à nouveau.
+
+#### Conclusion
+
+L’ajout des périodes de vacances montre que :
+
+-   **Avant 2021**, les confinements dominent totalement la mobilité et les vacances n’ont presque aucun effet.
+
+-   **À partir de 2021**, les vacances deviennent des périodes systématiquement associées à une augmentation de la mobilité dans les commerces et loisirs.
+
+-   **En 2022**, la mobilité revient à la normale et les vacances — en particulier l’été — deviennent les moments clés où la fréquentation dépasse le niveau de référence.
+
+### Cycle hebdomadaire
+
+```{r}
+# convertir en série temporelle journalière
+retail_ts2_daily <- ts(mobil_ts2, frequency = 7)
+
+
+decomp_retail <- tsd(retail_ts2_daily, s.window = 7, trend = TRUE, t.window = 7)
+
+plot(decomp_work, col = 1:4)
+```
+
+#### Extraction des données : 
+
+##### **Composante saisonnière hebdomadaire extraite** de la série *Commerces et Loisirs*, observée sur environ 50 jours (≈ 7 semaines).
+
+```{r}
+cycle_hebdo_retail <- extract(decomp_retail, components = "seasonal")
+
+
+plot(window(cycle_hebdo_retail, start = 46, end = 98))
+abline(v = seq(0, 200, by = 1), col = "grey90")
+
+```
+
+La composante saisonnière montre un cycle hebdomadaire régulier, caractérisé par une forte fréquentation des commerces et loisirs durant les week-ends et une baisse marquée en début de semaine. Bien que la forme du cycle reste stable, son amplitude varie au cours du temps, traduisant des fluctuations saisonnières ou des variations contextuelles. Ces résultats confirment que la saisonnalité hebdomadaire constitue un déterminant majeur de la dynamique du secteur retail.
+
+```{r}
+spectrum(cycle_hebdo_retail, spans = c(5, 7), col = "aquamarine3")
+abline(v = 1:3, col = "grey90")
+abline(h = c(1e-5, 1e-3, 1e-1, 1e+1), col = "grey80")
+```
+
+Le périodogramme lissé révèle un pic dominant à la fréquence 1, indiquant un cycle hebdomadaire marqué dans la fréquentation des commerces et loisirs. Un second pic à la fréquence 2 met en évidence un cycle intra-hebdomadaire d’environ 3,5 jours, probablement lié aux variations du comportement de sortie en milieu de semaine. Un troisième pic à la fréquence 3 correspond à une harmonique du cycle de 7 jours, reflétant l’importance relative de certains jours comme les week-ends. Ces résultats confirment que la saisonnalité hebdomadaire constitue la structure principale de la série.
+
+```{r}
+cpgram(cycle_hebdo_retail) 
+abline(v = 1:3, col = "grey90")
+```
+
+Le cumulative periodogram met en évidence trois ruptures nettes dans la pente, dépassant largement l’enveloppe théorique du bruit blanc. Une première rupture apparaît autour de la fréquence 1, confirmant un cycle hebdomadaire dominant (7 jours). Une seconde rupture autour de la fréquence 2 suggère un cycle secondaire d’environ 3,5 jours, probablement lié à des variations intra-semaine spécifiques au commerce et aux loisirs. Enfin, un pic harmonique autour de la fréquence 3 renforce la présence d’un cycle hebdomadaire structurant.
+
+### Aggrégation des jours en semaine : 
+
+#### Semaine + week-end 
+
+```{r}
+# Aggrégation par moyenne des valeurs par semaine
+retail_ts2_ag <- aggregate(mobil_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
+
+
+plot(retail_ts2_ag, 
+     main = "Série journalière aggrégée ", xlab = "Temps [année]",
+     ylab = "Commerces et loisirs (% par rapport à la référence)", ylim = c(-90, 140))
+# Ajouter une ligne verticale pour le 18 mars 2020
+abline(v = x_vert, col = "red", lwd = 2, lty = 2)
+
+# Ajouter un encadrement pour les vacances hiver
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_hiver)){
+  x_start <- 2020 + as.numeric(vacances_hiver$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_hiver$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.4,0.6,0.9,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances été
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_ete)){
+  x_start <- 2020 + as.numeric(vacances_ete$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_ete$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(1,0.7,0.3,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances paque
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_paques)){
+  x_start <- 2020 + as.numeric(vacances_paques$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_paques$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(1,0.5,0.5,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances carnaval
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_carnaval)){
+  x_start <- 2020 + as.numeric(vacances_carnaval$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_carnaval$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.4,0.8,0.4,0.3), border = NA)
+}
+
+
+# Ajouter un encadrement pour les vacances toussaint
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_toussaint)){
+  x_start <- 2020 + as.numeric(vacances_toussaint$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_toussaint$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.7,0.4,0.8,0.5), border = NA)
+}
+
+#legend
+legend("topright", 
+       legend = c("Confinement du 18 mars 2020", 
+                  "Vacances hiver", 
+                  "Vacances carnaval", 
+                  "Vacances Pâques", 
+                  "Vacances été", 
+                  "Vacances Toussaint"),
+       col = c("red", 
+                 rgb(0.4,0.6,0.9,0.5),
+               rgb(0.4,0.8,0.5,0.5),
+               rgb(1,0.5,0.5,0.5),
+               rgb(1,0.7,0.3,0.5),
+               rgb(0.7,0.4,0.8,0.5)),
+       lty = c(2, NA, NA, NA, NA, NA),
+       pch = c(NA, 15, 15, 15, 15, 15),
+       pt.cex = 1.2,
+       cex = 0.8,
+       bty = "o",
+       bg = "white")
+```
+
+Après une chute massive liée au confinement de mars 2020, la mobilité vers les commerces et loisirs remonte progressivement mais reste inférieure à la référence pendant plus d’un an. Les différentes périodes de vacances scolaires (été, hiver, Pâques, carnaval) génèrent systématiquement des hausses, révélant leur influence majeure sur cette catégorie de mobilité. À partir de 2022, la tendance se stabilise autour de valeurs proches ou supérieures à zéro, marquant un retour aux niveaux pré-pandémiques. L’analyse agrégée met ainsi en évidence l’effet combiné du confinement, des vagues COVID successives et des périodes de vacances sur la dynamique de fréquentation des commerces.
+
+#### Weekend seuls
+
+```{r}
+retail_nw_ts2 <- ts(mobil_nw$retail,start = c(2020, 46),frequency = 365)
+
+#graphique avec NA
+plot(retail_nw_ts2, 
+     main = "Série journalière sans les jours de la semaine (lundi-vendredi)", xlab = "Temps [année]",
+     ylab = "Commerces et loisirs (% par rapport à la référence)")
+
+# Aggrégation par moyenne des valeurs par semaine et suppression des NA
+retail_nw_ts2b  <- aggregate(retail_nw_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
+
+plot(work_nw_ts1b, 
+     main = "Série journalière aggrégée sans les jours de la semaines", xlab = "Temps [année]",
+     ylab = "Commerces et loisirs (% par rapport à la référence)", ylim = c(-95, 160))
+# Ajouter une ligne verticale pour le 18 mars 2020
+abline(v = x_vert, col = "red", lwd = 2, lty = 2)
+
+# Ajouter un encadrement pour les vacances hiver
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_hiver)){
+  x_start <- 2020 + as.numeric(vacances_hiver$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_hiver$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.4,0.6,0.9,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances été
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_ete)){
+  x_start <- 2020 + as.numeric(vacances_ete$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_ete$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(1,0.7,0.3,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances paque
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_paques)){
+  x_start <- 2020 + as.numeric(vacances_paques$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_paques$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(1,0.5,0.5,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances carnaval
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_carnaval)){
+  x_start <- 2020 + as.numeric(vacances_carnaval$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_carnaval$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.4,0.8,0.4,0.3), border = NA)
+}
+
+
+# Ajouter un encadrement pour les vacances toussaint
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_toussaint)){
+  x_start <- 2020 + as.numeric(vacances_toussaint$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_toussaint$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.7,0.4,0.8,0.5), border = NA)
+}
+
+#legend
+legend("topright", 
+       legend = c("Confinement du 18 mars 2020", 
+                  "Vacances hiver", 
+                  "Vacances carnaval", 
+                  "Vacances Pâques", 
+                  "Vacances été", 
+                  "Vacances Toussaint"),
+       col = c("red", 
+                 rgb(0.4,0.6,0.9,0.5),
+               rgb(0.4,0.8,0.5,0.5),
+               rgb(1,0.5,0.5,0.5),
+               rgb(1,0.7,0.3,0.5),
+               rgb(0.7,0.4,0.8,0.5)),
+       lty = c(2, NA, NA, NA, NA, NA),
+       pch = c(NA, 15, 15, 15, 15, 15),
+       pt.cex = 1.2,
+       cex = 0.8,
+       bty = "o",
+       bg = "white")
+```
+
+La série agrégée sans les jours de semaine révèle l’évolution spécifique de la fréquentation des commerces durant les week-ends, période la plus sensible aux mesures sanitaires et aux rythmes de loisirs. Après une chute quasi totale lors du confinement de mars 2020, la mobilité remonte nettement durant l’été 2020 puis oscille fortement en 2021 au gré des vagues COVID et des restrictions. En 2022, malgré un creux ponctuel en début d’année, la mobilité des week-ends retrouve rapidement des niveaux proches ou supérieurs à la référence, notamment durant les vacances d’été, confirmant un retour complet aux activités de loisir.
+
+#### Semaine seule 
+
+```{r}
+retail_nwe_ts2 <- ts(mobil_nwe$retail,start = c(2020, 46),frequency = 365)
+
+plot(retail_nwe_ts2, 
+     main = "Série journalière sans week-end", xlab = "Temps [année]",
+     ylab = "Commerces et loisirs (% par rapport à la référence)")
+
+# Aggrégation par moyenne des valeurs par semaine
+retail_nwe_ts2b <- aggregate(retail_nwe_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
+
+plot(retail_nwe_ts2b, 
+     main = "Série journalière aggrégée sans week-end", xlab = "Temps [année]",
+     ylab = "Commerces et loisirs (% par rapport à la référence)", ylim = c(-95, 140))
+# Ajouter une ligne verticale pour le 18 mars 2020
+abline(v = x_vert, col = "red", lwd = 2, lty = 2)
+
+# Ajouter un encadrement pour les vacances hiver
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_hiver)){
+  x_start <- 2020 + as.numeric(vacances_hiver$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_hiver$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.4,0.6,0.9,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances été
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_ete)){
+  x_start <- 2020 + as.numeric(vacances_ete$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_ete$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(1,0.7,0.3,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances paque
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_paques)){
+  x_start <- 2020 + as.numeric(vacances_paques$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_paques$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(1,0.5,0.5,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances carnaval
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_carnaval)){
+  x_start <- 2020 + as.numeric(vacances_carnaval$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_carnaval$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.4,0.8,0.4,0.3), border = NA)
+}
+
+
+# Ajouter un encadrement pour les vacances toussaint
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_toussaint)){
+  x_start <- 2020 + as.numeric(vacances_toussaint$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_toussaint$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.7,0.4,0.8,0.5), border = NA)
+}
+
+#legend
+legend("topright", 
+       legend = c("Confinement du 18 mars 2020", 
+                  "Vacances hiver", 
+                  "Vacances carnaval", 
+                  "Vacances Pâques", 
+                  "Vacances été", 
+                  "Vacances Toussaint"),
+       col = c("red", 
+                 rgb(0.4,0.6,0.9,0.5),
+               rgb(0.4,0.8,0.5,0.5),
+               rgb(1,0.5,0.5,0.5),
+               rgb(1,0.7,0.3,0.5),
+               rgb(0.7,0.4,0.8,0.5)),
+       lty = c(2, NA, NA, NA, NA, NA),
+       pch = c(NA, 15, 15, 15, 15, 15),
+       pt.cex = 1.2,
+       cex = 0.8,
+       bty = "o",
+       bg = "white")
+```
+
+En retirant les week-ends, la série agrégée révèle plus clairement la dynamique des commerces en semaine. Après la chute massive liée au confinement de mars 2020, la mobilité remonte progressivement durant l’été 2020 et se stabilise autour de valeurs légèrement négatives en 2021. L’année 2022 marque une reprise nette, avec des niveaux de fréquentation en semaine proches ou supérieurs à la référence pré-pandémique. Les vacances scolaires influencent la mobilité mais de manière plus modérée que pour les week-ends. Cette série met en évidence la normalisation progressive des comportements d’achat en semaine.
 
 ```{r}
 mobil_nwe_ts2 <- ts(mobil_nwe$retail,start = c(2020, 46),frequency = 365)
@@ -774,22 +1316,62 @@ plot(mobil_ts2, ylim = c(-95, 120),
 # Ajouter la deuxième série : week-ends supprimés
 lines(mobil_nwe_ts2b, col = "red")
 lines(mobil_nw_ts2b, col = "blue")
+lines(work_ts1_ag, col = "green")
 
 # Optionnel : ajouter une légende
 legend("topleft", 
        c("Série originale", "Série journalière aggrégée (week-ends = NA)", "Série journalière aggrégée (week = NA)"), 
-       col = c("grey", "red", "blue"), 
+       col = c("grey", "green", "red", "blue"), 
   lty=1)
+
 ```
+
+#### **1. La série originale est très bruitée**
+
+La courbe grise montre :
+
+-   une forte **variabilité quotidienne**,
+
+-   un cycle hebdomadaire très marqué (hausses le week-end, creux en semaine),
+
+-    rendant difficile l’interprétation directe à long terme.
+
+#### **2. La série “sans week-ends” (verte) décrit la fréquentation *en semaine***
+
+Cette courbe est **plus basse** que la série week-end (normal : les achats et loisirs sont plus faibles en semaine), présente une variabilité modérée, reflète surtout la fréquentation “pratique” ou “nécessaire” du commerce (achats alimentaires, courses régulières).
+
+#### **3. La série “week-ends uniquement” (rouge) est systématiquement plus élevée**
+
+Cette courbe reflète la fréquentation liée aux achats de loisir, aux sorties, aux centres commerciaux, aux activités en famille.
+
+Elle est **plus élevée que la série sans week-end**. **Plus volatile**, car le week-end est plus sensible aux contraintes sanitaires et aux comportements sociaux et **plus proche de la série originale** (puisque ce sont les week-ends qui génèrent les maxima).
+
+### Points remarquables :
+
+-   Été 2020 → **fort rebond**, les loisirs reprennent plus vite
+
+```{=html}
+<!-- -->
+```
+-   2021 → variations fortes selon les vagues COVID
+
+-   2022 → **dépasse régulièrement +20 %**, signe d’un rattrapage post-pandémie
+
+**Le week-end pilote les pics de la mobilité commerciale.**
+
+#### Conclusion : 
+
+La superposition des séries montre clairement que la fréquentation des commerces suit deux dynamiques distinctes : une tendance modérée et relativement stable les jours de semaine, et une activité beaucoup plus élevée mais plus volatile durant les week-ends. Les week-ends expliquent l’essentiel des pics et des fluctuations de la série originale, tandis que les jours de semaine reflètent la tendance lente et structurelle de la fréquentation. Après le confinement de mars 2020, la reprise est plus rapide les week-ends que durant la semaine, et en 2022 la fréquentation du week-end dépasse régulièrement les niveaux pré-pandémiques, traduisant un rattrapage marqué des activités de loisirs.
 
 ```{r}
 retail_loess <- tsd(mobil_nwe_ts2b, method = "loess", s.window = "periodic",  s.degree = 1, trend = TRUE, t.window = 7)
-plot(retail_loess, col = 1:3)
+plot(retail_loess, col = 1:3
 ```
 
 ```{r}
 retail_smooth <- tsd(mobil_nwe_ts2b, method = "median", order = 3, times = 3)
 plot(retail_smooth, col = c(1:3))
+
 ```
 
 ### Évolution de la mobilité dans les parcs nationaux, plages et jardins publics (code Amazone)
