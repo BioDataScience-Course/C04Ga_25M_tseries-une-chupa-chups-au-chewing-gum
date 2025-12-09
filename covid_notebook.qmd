@@ -1499,10 +1499,10 @@ legend("topright",
 ```
 
 ```{r}
-parks_sl <- stat.slide(time(parks_nwe_agr), parks_nwe_agr, xmin = 2020, deltat = 0.2)
+#parks_sl <- stat.slide(time(parks_nwe_agr), parks_nwe_agr, xmin = 2020, deltat = 0.2)
 # Graphique des statistiques glissantes
-plot(parks_sl, ylim=c(-50,220), xlab = "Temps [année]", ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)")
-legend(2020.8, 220, c("serie","médian"), col = 1:2, lty = 1)
+#plot(parks_sl, ylim=c(-50,220), xlab = "Temps [année]", ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)")
+#legend(2020.8, 220, c("serie","médian"), col = 1:2, lty = 1)
 ```
 
 ```{r}
