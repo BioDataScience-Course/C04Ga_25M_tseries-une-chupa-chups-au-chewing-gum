@@ -734,45 +734,29 @@ plot(mobil_ts2, xlab = "Temps [année]", ylab = "Commerces et loisirs (% par rap
 
 **1. Une chute massive au début de la série (printemps 2020)**
 
-On observe une **baisse brutale et immédiate** sous la référence (jusqu’à –80 % environ). Cela correspond très clairement au **premier confinement COVID** où les commerces et activités de loisirs ont été fermés, entraînant une chute extrêmement forte de la mobilité.Cela correspond très clairement au **premier confinement COVID** où les commerces et activités de loisirs ont été fermés, entraînant une chute extrêmement forte de la mobilité.
+On observe une baisse brutale et immédiate sous la référence (jusqu’à –80 % environ). Cela correspond très clairement au premier confinement COVID où les commerces et activités de loisirs ont été fermés, entraînant une chute extrêmement forte de la mobilité.Cela correspond très clairement au premier confinement COVID où les commerces et activités de loisirs ont été fermés, entraînant une chute extrêmement forte de la mobilité.
 
 **2. 2020–2021 : mobilité très fluctuante, cycles visibles**
 
-Après cette chute initiale, la mobilité **reste en dessous de 0 % tout au long de 2020 et d’une grande partie de 2021**, avec :
+Après cette chute initiale, la mobilité reste en dessous de 0 % tout au long de 2020 et d’une grande partie de 2021, avec :
 
--   des **oscillations régulières** (effet saisonnier + week-ends),
+-   des oscillations régulières (effet saisonnier + week-ends),
 
--   des **creux très marqués** (probables mesures sanitaires successives : confinement 2, fermeture horeca, restrictions locales).
+-   des creux très marqués (probables mesures sanitaires successives : confinement 2, fermeture horeca, restrictions locales).
 
 3.  **2021–2022 : remontée progressive**
 
-Fin 2021 et début 2022, la mobilité :
-
--   **remonte vers 0**, puis
-
--   **dépasse régulièrement la référence** historique,
-
--   mais reste **irrégulière** avec de fortes variations quotidiennes.
-
-Ceci correspond à la **réouverture progressive des commerces et loisirs** et à un **retour à la normale**, mais pas uniforme.
+Fin 2021 et début 2022, la mobilité remonte vers 0, puis dépasse régulièrement la référence historique mais reste irrégulière avec de fortes variations quotidiennes. Ceci correspond à la réouverture progressive des commerces et loisirs et à un retour à la normale, mais pas uniforme.
 
 **4. Un pic négatif très abrupt en 2022**
 
-On voit un **creux extrêmement marqué**, très isolé, en 2022 (valeur très basse).
-
-Cela correspond à une **erreur de mesure** ou un jour spécifique de fermeture généralisée (ex : jour férié, bug du capteur de données Google Mobility).
-
-Ce genre de point atypique (outlier) est fréquent dans les données Google.
+On voit un creux extrêmement marqué, très isolé, en 2022 (valeur très basse). Cela correspond à une erreur de mesure ou un jour spécifique de fermeture généralisée (ex : jour).
 
 **5. Fin 2022 : stabilisation au-dessus ou autour de la référence**
 
-La mobilité semble se stabiliser **entre 0 et +30 %**, ce qui suggère :
+La mobilité semble se stabiliser entre 0 et +30 %, ce qui suggère un retour complet à la normale, voire une mobilité supérieure à la période de référence (comportements post-pandémie, rattrapage).
 
--   un retour complet à la normale,
-
--   voire une **mobilité supérieure à la période de référence** (comportements post-pandémie, rattrapage).
-
-#### Conclusion :
+**Conclusion :**
 
 La mobilité dans les commerces et loisirs chute de façon spectaculaire au début de 2020, correspondant aux premiers confinements. Elle reste longtemps inférieure à la référence, avec des fluctuations liées aux différentes mesures sanitaires. À partir de 2022, la mobilité se stabilise et revient autour ou au-dessus du niveau pré-pandémique.
 
@@ -890,70 +874,39 @@ legend("topright",
 
 ```
 
-#### **1. Confinement 1 (mars 2020) : effondrement brutal de la mobilité**
+**1. Confinement 1 (mars 2020) : effondrement brutal de la mobilité.**
 
-La ligne rouge (18 mars 2020) marque le début du premier confinement.
+La ligne rouge (18 mars 2020) marque le début du premier confinement. Juste après, on observe une chute immédiate à environ –80 %, parfaitement cohérente avec la fermeture complète des commerces et activités de loisirs.
 
-Juste après, on observe une **chute immédiate à environ –80 %**, parfaitement cohérente avec la fermeture complète des commerces et activités de loisirs.
+La mobilité reste très basse pendant les semaines suivantes malgré les vacances de Pâques (zone rose), ce qui montre que les congés n’ont eu aucun effet amortisseur → les mesures sanitaires dominent totalement.
 
-La mobilité reste très basse pendant les semaines suivantes malgré les vacances de Pâques (zone rose), ce qui montre que **les congés n’ont eu aucun effet amortisseur** → *les mesures sanitaires dominent totalement*.
+**2. Périodes de vacances 2020 : légère amélioration mais toujours négative**
 
-#### **2. Périodes de vacances 2020 : légère amélioration mais toujours négative**
+Les plages colorées (été, Toussaint, hiver) montrent une remontée progressive durant l’été 2020, un niveau encore négatif et très fluctuant.
 
-Les plages colorées (été, Toussaint, hiver) montrent :
+Cela montre que la mobilité est encore largement contrainte, mais les vacances produisent déjà un petit rebond, en particulier l’été (orange).
 
--   une **remontée progressive** durant l’été 2020,
+**3. Confinement 2 (novembre 2020) : baisse nette mais moins profonde**
 
--   un niveau encore **négatif et très fluctuant**.
+La ligne bleue (2 novembre 2020) correspond au deuxième confinement. On voit une baisse du niveau de mobilité, mais moins spectaculaire que la première (-30 à -40 %). Cela s’explique par des restrictions plus ciblées et une adaptation des comportements (click & collect, commerce essentiel, etc.).
 
-Cela montre que la mobilité est encore largement contrainte, mais **les vacances produisent déjà un petit rebond**, en particulier l’été (orange).
+**4. 2021 : un schéma clair apparaît → les vacances augmentent la mobilité**
 
-#### **3. Confinement 2 (novembre 2020) : baisse nette mais moins profonde**
+À partir de 2021, chaque période de vacances produit un pic positif relatif : Vacances d'hiver : hausse visible, carnaval : petite hausse, pâques : nette augmentation, été : maximum annuel, toussaint : hausse locale.
 
-La ligne bleue (2 novembre 2020) correspond au deuxième confinement.
+On voit clairement que la mobilité liée aux commerces/loisirs est très sensible aux congés scolaires dès que les restrictions COVID disparaissent.
 
-On voit une **baisse du niveau de mobilité**, mais moins spectaculaire que la première (-30 à -40 %).\
-Cela s’explique par des restrictions plus ciblées et une adaptation des comportements (click & collect, commerce essentiel, etc.).
+Les périodes hors congés reviennent systématiquement vers un niveau plus bas → effet structurel de la saisonnalité sociale.
 
-#### **4. 2021 : un schéma clair apparaît → les vacances augmentent la mobilité**
+**5. 2022 : normalisation + reprise forte durant l’été**
 
-À partir de 2021, chaque période de vacances produit un **pic positif relatif** :
+En 2022, la mobilité oscille autour de 0 % (retour vers les niveaux pré-pandémiques), les vacances génèrent toujours des hausses très nettes, l’été 2022 correspond à une des plus fortes augmentations de toute la série. Cela montre un effet de rattrapage post-pandémie, les activités de loisirs ayant explosé à nouveau.
 
--   Vacances d'hiver : hausse visible
+**Conclusion**
 
--   Carnaval : petite hausse
+L’ajout des périodes de vacances montre qu’avant 2021, les confinements dominent totalement la mobilité et les vacances n’ont presque aucun effet. À partir de 2021, les vacances deviennent des périodes systématiquement associées à une augmentation de la mobilité dans les commerces et loisirs.
 
--   Pâques : nette augmentation
-
--   Été : **maximum annuel**
-
--   Toussaint : hausse locale
-
-On voit clairement que **la mobilité liée aux commerces/loisirs est très sensible aux congés scolaires** dès que les restrictions COVID disparaissent.
-
-Les périodes hors congés reviennent systématiquement vers un niveau plus bas → *effet structurel de la saisonnalité sociale*.
-
-#### **5. 2022 : normalisation + reprise forte durant l’été**
-
-En 2022 :
-
--   la mobilité oscille autour de 0 % (retour vers les niveaux pré-pandémiques),
-
--   les vacances génèrent toujours des hausses très nettes,
-
--   l’été 2022 correspond à **une des plus fortes augmentations de toute la série**.
-
-Cela montre un **effet de rattrapage post-pandémie**, les activités de loisirs ayant explosé à nouveau.
-
-#### Conclusion
-
-L’ajout des périodes de vacances montre que :
-
--   **Avant 2021**, les confinements dominent totalement la mobilité et les vacances n’ont presque aucun effet.
-
--   **À partir de 2021**, les vacances deviennent des périodes systématiquement associées à une augmentation de la mobilité dans les commerces et loisirs.
-
--   **En 2022**, la mobilité revient à la normale et les vacances — en particulier l’été — deviennent les moments clés où la fréquentation dépasse le niveau de référence.
+En 2022, la mobilité revient à la normale et les vacances, en particulier l’été, deviennent les moments clés où la fréquentation dépasse le niveau de référence.
 
 ### Cycle hebdomadaire
 
@@ -1326,39 +1279,31 @@ legend("topleft",
 
 ```
 
-#### **1. La série originale est très bruitée**
+**1. La série originale est très bruitée**
 
-La courbe grise montre :
+La courbe grise montre une forte variabilité quotidienne, un cycle hebdomadaire très marqué (hausses le week-end, creux en semaine) rendant difficile l’interprétation à long terme.
 
--   une forte **variabilité quotidienne**,
+**2. La série “sans week-ends” (verte)**
 
--   un cycle hebdomadaire très marqué (hausses le week-end, creux en semaine),
+Cette courbe est plus basse que la série week-end (logique, les achats et loisirs sont plus faibles en semaine), présente une variabilité modérée, reflète surtout la fréquentation “pratique” ou “nécessaire” du commerce (achats alimentaires, courses régulières).
 
--   rendant difficile l’interprétation directe à long terme.
-
-#### **2. La série “sans week-ends” (verte) décrit la fréquentation *en semaine***
-
-Cette courbe est **plus basse** que la série week-end (normal : les achats et loisirs sont plus faibles en semaine), présente une variabilité modérée, reflète surtout la fréquentation “pratique” ou “nécessaire” du commerce (achats alimentaires, courses régulières).
-
-#### **3. La série “week-ends uniquement” (rouge) est systématiquement plus élevée**
+**3. La série “week-ends uniquement” (rouge) est systématiquement plus élevée**
 
 Cette courbe reflète la fréquentation liée aux achats de loisir, aux sorties, aux centres commerciaux, aux activités en famille.
 
-Elle est **plus élevée que la série sans week-end**. **Plus volatile**, car le week-end est plus sensible aux contraintes sanitaires et aux comportements sociaux et **plus proche de la série originale** (puisque ce sont les week-ends qui génèrent les maxima).
+Elle est plus élevée que la série sans week-end. Effectivement, le week-end est plus sensible aux contraintes sanitaires et aux comportements sociaux et plus proche de la série originale (puisque ce sont les week-ends qui génèrent les maxima).
 
-### Points remarquables :
+**Points remarquables :**
 
--   Été 2020 → **fort rebond**, les loisirs reprennent plus vite
+Été 2020: Fort rebond, les loisirs reprennent plus vite
 
-<!-- -->
+2021: Variations fortes selon les vagues COVID
 
--   2021 → variations fortes selon les vagues COVID
+2022: Dépasse régulièrement +20 %, (rattrapage post-pandémie)
 
--   2022 → **dépasse régulièrement +20 %**, signe d’un rattrapage post-pandémie
+Le week-end reflète les pics de la mobilité commerciale.
 
-**Le week-end pilote les pics de la mobilité commerciale.**
-
-#### Conclusion :
+**Conclusion :**
 
 La superposition des séries montre clairement que la fréquentation des commerces suit deux dynamiques distinctes : une tendance modérée et relativement stable les jours de semaine, et une activité beaucoup plus élevée mais plus volatile durant les week-ends. Les week-ends expliquent l’essentiel des pics et des fluctuations de la série originale, tandis que les jours de semaine reflètent la tendance lente et structurelle de la fréquentation. Après le confinement de mars 2020, la reprise est plus rapide les week-ends que durant la semaine, et en 2022 la fréquentation du week-end dépasse régulièrement les niveaux pré-pandémiques, traduisant un rattrapage marqué des activités de loisirs.
 
