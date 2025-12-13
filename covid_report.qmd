@@ -25,9 +25,39 @@ Au début de l’année 2020, la Belgique et le reste du monde furent confronté
 
 <!--% Rédigez le but de ce rapport.-->
 
+Le but de ce rapport est de quantifier et de comparer la fréquentation de ces lieux entre jours de semaine et week-ends en Wallonie durant la pandémie (et plus précisémment de 2020 à 2021), à l’aide d’analyses de séries spatio-temporelles.
+
 ## Matériel et méthodes
 
 <!--% Cette section doit comprendre deux parties. La première partie doit expliciter le données employées et la seconde traiter des analyses réalisées et des logiciels employés.-->
+
+### Données employées
+
+Les données analysées proviennent des Google COVID-19 Community Mobility Reports, qui fournissent des indicateurs de l’évolution de la fréquentation de différents types de lieux, dont la Wallonie en Belgique \[@google_mobility\]. Elles sont accessibles librement sous forme de fichiers CSV et couvrent la période du 15 février 2020 au 15 octobre 2022.
+
+Les variations quotidiennes sont exprimées en pourcentage par rapport à un niveau de référence propre à chaque jour de la semaine. Cette référence correspond à la médiane des valeurs observées entre le 3 janvier et le 6 février 2020 \[@google_documentation\].
+
+Dans ce travail, nous nous focalisons principalement sur les années 2020 et 2021, à partir du premier confinement ordonné par le gouvernement belge le 18 mars 2020 \[@unric_belgique_confinement_2020\], afin de suivre les périodes de confinement, de post-confinement et les perturbations de mobilité directement liées aux restrictions COVID-19. L’année 2022 est utilisée comme témoin d’une situation progressivement stabilisée post-pandémie.
+
+Parmi les indicateurs disponibles, nous retenons quatre catégories de lieux : commerces et loisirs (retail), parcs, lieux de travail (workplaces) et épiceries/pharmacies (grocery & pharmacy). Pour étudier les différences de comportements, les séries ont été déclinées en sous-ensembles distinguant les week-ends (samedi–dimanche) des jours de semaine (lundi–vendredi), et annotées en fonction des périodes de vacances scolaires en Fédération Wallonie-Bruxelles (carnaval, Pâques, été, Toussaint, hiver) \[@.. références à insérer + tard\].
+
+### Analyses réalisées et logiciels employés
+
+L’ensemble des analyses a été réalisé dans la SciViews Box 2025 sur la plateforme Saturn Cloud, à l’aide du logiciel R et de l’environnement SciViews::R. Les séries temporelles ont été manipulées et étudiées à l’aide notamment du package pastecs (r packageVersion("pastecs")), ainsi que des fonctions de base de R pour les objets ts.
+
+Pour chaque catégorie de lieu, les pourcentages de variation ont d’abord été convertis en séries temporelles journalières (ts, fréquence = 365, début = 15 février 2020). Nous avons réalisé :
+
+1\) Une visualisation exploratoire des séries brutes, avec ajout de lignes verticales aux dates de confinement et de bandes colorées pour les périodes de vacances scolaires, afin de situer les principaux événements contextuels dans le temps.
+
+2\) Une analyse de la saisonnalité hebdomadaire, en extrayant la composante saisonnière à l’aide de la décomposition de séries temporelles (tsd, avec estimation de la tendance et de la composante saisonnière) puis en représentant le cycle moyen sur plusieurs semaines.
+
+3\) Une analyse spectrale (périodogramme lissé via spectrum et cumulative periodogram via cpgram) pour identifier les fréquences dominantes (comme le cycle hebdomadaire) et vérifier que la saisonnalité constitue bien la structure principale des séries.
+
+4\) Une agrégation hebdomadaire des séries journalières à l’aide de la fonction aggregate et de la moyenne pondérée, afin de lisser les fluctuations quotidiennes et de mettre en évidence les tendances à plus long terme.
+
+5\) Une séparation des dynamiques de semaine et de week-end, en construisant trois versions de chaque série : la série complète, une série ne conservant que les week-ends (jours de semaine remplacés par NA puis agrégation hebdomadaire), une série ne conservant que les jours de semaine (week-ends remplacés par NA puis agrégation hebdomadaire).
+
+Ces différentes étapes ont été appliquées de manière similaire aux catégories commerces et loisirs, parcs, lieux de travail et épiceries/pharmacies, afin de comparer systématiquement l’évolution de la mobilité entre week-ends et jours de semaine pour chacun de ces types de lieux.
 
 ## Résultats
 
