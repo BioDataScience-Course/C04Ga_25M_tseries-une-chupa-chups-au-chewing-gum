@@ -2122,3 +2122,5 @@ legend("topright",
 ## Commentaire
 
 *Le texte a fait l’objet d’une correction linguistique (orthographe, grammaire) réalisée à l’aide de ChatGPT (modèle GPT-5.1, OpenAI).*
+
+## Références
