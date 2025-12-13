@@ -1326,7 +1326,16 @@ parks_ts <- ts(mobil$parks, start = c(2020, 46), frequency = 365)
 
 # Graphique de l'objet ts
 plot(parks_ts, xlab = "Temps [année]", ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)")
+
 ```
+
+À première vue, il n'y a pas de tendance générale croissante ou décroissante. Nous vérifierons cependant que ce n'es pas le cas dans la suite de l'analyse
+
+Par contre, une forte saisonnalité annuelle est clairement présente de manière plus ou moins régulière. Les pics sont présents vers le milieu de l'année, correspondant à la période de beau temps où les parcs sont généralement beaucoup plus fréquentés.
+
+Des perturbations brutales et régulières sont visibles au début du graphique, en 2020 dû à la pandémie de COVID-19. On observe nottament une grosse chute de fréquentation aux environs de mars 2020, date du premier confinement. Ces variations sont surement dûes aux mesures sanitaires appliquées ainsi qu'à la crainte de certains citoyens d'être contaminés évitant ainsi les lieux publics. Nous allons mettre en évidance les différents confinements dans la suite de l'analyse pour essayer de voir leur influence sur la fréquentation des parcs et autres espace publics
+
+De manière générale, la série est très bruitée. Il doit y avoir une variation journalière assez importante pouvant correspondre aux variations de la météorologie, aux weekends et vacances scolaires influancant également la fréquentation des parcs et autres espaces publics. Nous allons également essayer de mettre ceci en évidence dans la suite de l'analyse.
 
 **Graphique de l'objet ts : allure générale de la série**
 
@@ -1337,9 +1346,9 @@ plot(parks_ts, xlab = "Temps [année]", ylab = "Mobilité vers les parcs, plages
 # Ajouter une ligne verticale pour les confinements
 # Convertir la date en position sur l'axe x (fraction de l'année)
 x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
-abline(v = x_vert, col = "red", lwd = 2, lty = 2)
+abline(v = x_vert, col = "red", lwd = 1, lty = 2)
 x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
-abline(v = x_blue, col = "blue", lwd = 2, lty = 2)
+abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
 
 # Périodes des vacances pour Wallonie (2020‑2022) (@VacancesScolaires)
 
@@ -1444,6 +1453,8 @@ legend("topright",
 
 ```
 
+Ce graphique confirme la description ci dessus avec un cycle annuel bien marqué.
+
 ```{r}
 #parks_sl <- stat.slide(time(parks_nwe_agr), parks_nwe_agr, xmin = 2020, deltat = 0.2)
 # Graphique des statistiques glissantes
@@ -1462,7 +1473,7 @@ plot(parks_ts_ag,
      main = "Série journalière aggrégée ", xlab = "Temps [année]",
      ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", ylim = c(-80,400))
 # Ajouter une ligne verticale pour le 18 mars 2020
-abline(v = x_vert, col = "red", lwd = 2, lty = 2)
+abline(v = x_vert, col = "red", lwd = 1, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -1554,7 +1565,7 @@ plot(parks_nw_agg,
      main = "Série journalière aggrégée sans les jours de la semaines", xlab = "Temps [année]",
      ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", ylim = c(-95, 450))
 # Ajouter une ligne verticale pour le 18 mars 2020
-abline(v = x_vert, col = "red", lwd = 2, lty = 2)
+abline(v = x_vert, col = "red", lwd = 1, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -1645,7 +1656,7 @@ plot(parks_nwe_agg,
      main = "Série journalière aggrégée sans week-ends", xlab = "Temps [année]",
      ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", ylim = c(-95, 450))
 # Ajouter une ligne verticale pour le 18 mars 2020
-abline(v = x_vert, col = "red", lwd = 2, lty = 2)
+abline(v = x_vert, col = "red", lwd = 1, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -1729,7 +1740,7 @@ plot(parks_ts_ag,
      main = "Série journalière aggrégée ", xlab = "Temps [année]",
      ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", ylim = c(-80,400))
 # Ajouter une ligne verticale pour le 18 mars 2020
-abline(v = x_vert, col = "red", lwd = 2, lty = 2)
+abline(v = x_vert, col = "red", lwd = 1, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -1885,7 +1896,7 @@ plot(parks_nwe_agg,
      main = "Série journalière aggrégée sans week-ends", xlab = "Temps [année]",
      ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", ylim = c(-95, 450))
 # Ajouter une ligne verticale pour le 18 mars 2020
-abline(v = x_vert, col = "red", lwd = 2, lty = 2)
+abline(v = x_vert, col = "red", lwd = 1, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
