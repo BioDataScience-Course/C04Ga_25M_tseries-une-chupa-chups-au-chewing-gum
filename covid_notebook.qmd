@@ -1455,6 +1455,10 @@ legend("topright",
 
 Ce graphique confirme la description ci dessus avec un cycle annuel bien marqué.
 
+Au niveau des vacances scolaires:  - un maximum de fréquentation pendant les vacances d'été. Les enfants sont en vacances scolaires et la météo est bonne.  - légère augmentation des fréquentations pendant les vacances de Paques, surement dû à la météo également (plus net en 2022)  - les autres vacances scolaires n'ont pas l'air d'influencer n'ont pas l'air d'influencer la fréquentation aux périodes plus froides de l'année.
+
+Au niveau des confinements: on observe une nette diminution de l'occupation des parcs au premier confinement (18 mars 2020) alors que le deuxième confinement n'a pas l'air d'avoir réellement influencé l'affluence dans les parcs. Ce résultat est probablement dû à la date du deuxième confienement qui eu lieu à la fin de l'automne où les parcs sont moins fréquentés.
+
 ```{r}
 #parks_sl <- stat.slide(time(parks_nwe_agr), parks_nwe_agr, xmin = 2020, deltat = 0.2)
 # Graphique des statistiques glissantes
