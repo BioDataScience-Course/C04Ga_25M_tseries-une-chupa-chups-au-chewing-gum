@@ -22,7 +22,15 @@ link-citations: true
 
 <!--% Rédigez une courte introduction de 3 ou 5 phrases qui présente vos données. Ajoutez une phrase de but. Vous devez citer la bibliographie en utilisant le formatage Markdown ad hoc et en incluant votre référence au format bibtex dans le fichier references.bib. -->
 
-... Introduction et but...
+La pandémie de COVID-19 a entraîné la prise de mesures exceptionnelles, telles que le confinement et les restrictions de déplacement visant à limiter la propagation du virus. Cela a eu d’importants impacts sur la mobilité et l’économie dans le monde entier.
+
+Nous nous intéressons ici aux données concernant la Belgique, et plus précisément la Wallonie. Pour étudier ces impacts, nous utilisons les données des *Google COVID-19 Community Mobility Reports*, qui fournissent des variations quotidiennes en pourcentage par rapport à une période de référence prépandémique (@google_mobility).
+
+Nous nous focalisons sur les années 2020–2021, les plus fortement affectées par les mesures sanitaires, et nous examinons quatre types de lieux : commerces et loisirs, parcs, lieux de travail, et épiceries/pharmacies.
+
+Dans notre analyse, nous comparons les week-ends et les jours de semaine, car ces périodes correspondent à des comportements de déplacement différents.
+
+Le but de ce travail est de quantifier et de comparer la fréquentation de ces lieux entre jours de semaine et week-ends en Wallonie durant la pandémie, à l’aide d’analyses de séries spatio-temporelles.
 
 ## Matériel et méthodes
 
