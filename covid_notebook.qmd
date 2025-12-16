@@ -2147,7 +2147,458 @@ legend("topright",
 
 alternance de valeurs au dessus et en dessous de la moyenne; montre pas grand chose; leger plateau fin 2021 (confinement?)
 
-### Hugo
+### **Mobilité liée aux magasins alimentaires et aux pharmacies (Hugo)**
+
+```{r}
+grocery_ts <- ts(mobil$grocery, start = c(2020, 46), frequency = 365)
+
+# Graphique de l'objet ts
+plot(grocery_ts, xlab = "Temps [année]", ylab = "Mobilité liée aux supermarchés et pharmacies (% par rapport à la référence)")
+```
+
+**1. Exploration des différentes séries** **1.1 Série brute**
+
+```{r}
+# Graphique de l'objet ts
+plot(grocery_ts, xlab = "Temps [année]", ylab = "Mobilité liée aux magasins alimentaires et pharmacies (% par rapport à la référence)",
+  ylim = c(-100, 250))
+# Ajouter une ligne verticale pour les confinements
+# Convertir la date en position sur l'axe x (fraction de l'année)
+x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
+abline(v = x_vert, col = "red", lwd = 2, lty = 2)
+x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
+abline(v = x_blue, col = "blue", lwd = 2, lty = 2)
+
+# Périodes des vacances pour Wallonie (2020‑2022) (@VacancesScolaires)
+
+vacances_hiver <- data.frame(
+  start = as.Date(c("2020-12-21", "2021-12-27")),
+  end   = as.Date(c("2021-01-01", "2022-01-09"))
+)
+
+vacances_ete <- data.frame(
+  start = as.Date(c("2020-07-01", "2021-07-01", "2022-07-01")),
+  end   = as.Date(c("2020-08-31", "2021-08-31", "2022-08-31"))
+)
+
+vacances_paques <- data.frame(
+  start = as.Date(c("2020-04-06","2021-04-05", "2022-04-04")),
+  end   = as.Date(c("2020-04-19","2021-04-16", "2022-04-15"))
+)
+
+vacances_carnaval <- data.frame(
+  start = as.Date(c("2020-02-24","2021-02-15", "2022-02-28")),
+  end   = as.Date(c("2020-03-01","2021-02-19", "2022-03-04"))
+)
+
+vacances_toussaint <- data.frame(
+  start = as.Date(c("2020-11-02", "2021-11-01")),
+  end   = as.Date(c("2020-11-06", "2021-11-05"))
+)
+
+
+# Ajouter un encadrement pour les vacances hiver
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_hiver)){
+  x_start <- 2020 + as.numeric(vacances_hiver$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_hiver$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.4,0.6,0.9,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances été
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_ete)){
+  x_start <- 2020 + as.numeric(vacances_ete$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_ete$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(1,0.7,0.3,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances paque
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_paques)){
+  x_start <- 2020 + as.numeric(vacances_paques$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_paques$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(1,0.5,0.5,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances carnaval
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_carnaval)){
+  x_start <- 2020 + as.numeric(vacances_carnaval$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_carnaval$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.4,0.8,0.4,0.3), border = NA)
+}
+
+
+# Ajouter un encadrement pour les vacances toussaint
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_toussaint)){
+  x_start <- 2020 + as.numeric(vacances_toussaint$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_toussaint$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.7,0.4,0.8,0.5), border = NA)
+}
+
+#legend
+legend("topright", 
+       legend = c("Confinement du 18 mars 2020",
+         "Confinement du 02 novembre 2020",
+                  "Vacances hiver", 
+                  "Vacances carnaval", 
+                  "Vacances Pâques", 
+                  "Vacances été", 
+                  "Vacances Toussaint"),
+       col = c("red", "blue",
+                 rgb(0.4,0.6,0.9,0.5),
+               rgb(0.4,0.8,0.5,0.5),
+               rgb(1,0.5,0.5,0.5),
+               rgb(1,0.7,0.3,0.5),
+               rgb(0.7,0.4,0.8,0.5)),
+       lty = c(2,2, NA, NA, NA, NA, NA),
+       pch = c(NA,NA, 15, 15, 15, 15, 15),
+       pt.cex = 1.2,
+       cex = 0.8,
+       bty = "o",
+       bg = "white")
+
+```
+
+**1.2 Série journalière agrégée**
+
+```{r}
+grocery_ts_ag <- aggregate(grocery_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
+
+plot(grocery_ts_ag, 
+     main = "Série journalière agrégée ", xlab = "Temps [année]",
+     ylab = "Mobilité liée aux magasins d'alimentation et pharmacies (% par rapport à la référence)", ylim = c(-60,160))
+# Ajouter une ligne verticale pour les confinements
+# Convertir la date en position sur l'axe x (fraction de l'année)
+x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
+abline(v = x_vert, col = "red", lwd = 2, lty = 2)
+x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
+abline(v = x_blue, col = "blue", lwd = 2, lty = 2)
+
+# Ajouter un encadrement pour les vacances hiver
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_hiver)){
+  x_start <- 2020 + as.numeric(vacances_hiver$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_hiver$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.4,0.6,0.9,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances été
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_ete)){
+  x_start <- 2020 + as.numeric(vacances_ete$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_ete$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(1,0.7,0.3,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances paque
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_paques)){
+  x_start <- 2020 + as.numeric(vacances_paques$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_paques$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(1,0.5,0.5,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances carnaval
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_carnaval)){
+  x_start <- 2020 + as.numeric(vacances_carnaval$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_carnaval$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.4,0.8,0.4,0.3), border = NA)
+}
+
+
+# Ajouter un encadrement pour les vacances toussaint
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_toussaint)){
+  x_start <- 2020 + as.numeric(vacances_toussaint$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_toussaint$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.7,0.4,0.8,0.5), border = NA)
+}
+
+#legend
+legend("topright", 
+       legend = c("Confinement du 18 mars 2020",
+         "Confinement du 02 novembre 2020",
+                  "Vacances hiver", 
+                  "Vacances carnaval", 
+                  "Vacances Pâques", 
+                  "Vacances été", 
+                  "Vacances Toussaint"),
+       col = c("red", "blue",
+                 rgb(0.4,0.6,0.9,0.5),
+               rgb(0.4,0.8,0.5,0.5),
+               rgb(1,0.5,0.5,0.5),
+               rgb(1,0.7,0.3,0.5),
+               rgb(0.7,0.4,0.8,0.5)),
+       lty = c(2,2, NA, NA, NA, NA, NA),
+       pch = c(NA,NA, 15, 15, 15, 15, 15),
+       pt.cex = 1.2,
+       cex = 0.8,
+       bty = "o",
+       bg = "white")
+```
+
+**1.3 Série journalière avec uniquement les week-ends**
+
+```{r}
+grocery_nw_ts <- ts(mobil_nw$grocery,start = c(2020, 46),frequency = 365)
+
+#graphique avec NA
+plot(grocery_nw_ts, 
+     main = "Série journalière avec uniquement les week-ends", xlab = "Temps [année]",
+     ylab = "Magasins alimentaires et pharmacies (% par rapport à la référence)")
+
+# Aggrégation par moyenne des valeurs par semaine et suppression des NA
+grocery_nw_tsb  <- aggregate(grocery_nw_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
+
+plot(grocery_nw_tsb, 
+     main = "Série journalière avec uniquement les week-ends", xlab = "Temps [année]",
+     ylab = "Magasins alimentaires et pharmacies (% par rapport à la référence)", ylim = c(-95, 160))
+# Ajouter une ligne verticale pour le 18 mars 2020
+abline(v = x_vert, col = "red", lwd = 2, lty = 2)
+
+# Ajouter une ligne verticale pour les confinements
+# Convertir la date en position sur l'axe x (fraction de l'année)
+x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
+abline(v = x_vert, col = "red", lwd = 2, lty = 2)
+x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
+abline(v = x_blue, col = "blue", lwd = 2, lty = 2)
+
+# Ajouter un encadrement pour les vacances hiver
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_hiver)){
+  x_start <- 2020 + as.numeric(vacances_hiver$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_hiver$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.4,0.6,0.9,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances été
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_ete)){
+  x_start <- 2020 + as.numeric(vacances_ete$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_ete$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(1,0.7,0.3,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances paque
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_paques)){
+  x_start <- 2020 + as.numeric(vacances_paques$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_paques$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(1,0.5,0.5,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances carnaval
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_carnaval)){
+  x_start <- 2020 + as.numeric(vacances_carnaval$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_carnaval$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.4,0.8,0.4,0.3), border = NA)
+}
+
+
+# Ajouter un encadrement pour les vacances toussaint
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_toussaint)){
+  x_start <- 2020 + as.numeric(vacances_toussaint$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_toussaint$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.7,0.4,0.8,0.5), border = NA)
+}
+
+#legend
+legend("topright", 
+       legend = c("Confinement du 18 mars 2020",
+         "Confinement du 02 novembre 2020",
+                  "Vacances hiver", 
+                  "Vacances carnaval", 
+                  "Vacances Pâques", 
+                  "Vacances été", 
+                  "Vacances Toussaint"),
+       col = c("red", "blue",
+                 rgb(0.4,0.6,0.9,0.5),
+               rgb(0.4,0.8,0.5,0.5),
+               rgb(1,0.5,0.5,0.5),
+               rgb(1,0.7,0.3,0.5),
+               rgb(0.7,0.4,0.8,0.5)),
+       lty = c(2,2, NA, NA, NA, NA, NA),
+       pch = c(NA,NA, 15, 15, 15, 15, 15),
+       pt.cex = 1.2,
+       cex = 0.8,
+       bty = "o",
+       bg = "white")
+```
+
+**1.3 Série journalière agrégée sans weekend**
+
+```{r}
+grocery_nwe_ts2 <- ts(mobil_nwe$grocery,start = c(2020, 46),frequency = 365)
+
+plot(grocery_nwe_ts2, 
+     main = "Série journalière sans week-end", xlab = "Temps [année]",
+     ylab = "Magasins alimentaires et pharmacies (% par rapport à la référence)")
+
+# Aggrégation par moyenne des valeurs par semaine
+grocery_nwe_ts2b <- aggregate(retail_nwe_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
+
+plot(grocery_nwe_ts2b, 
+     main = "Série journalière aggrégée sans week-end", xlab = "Temps [année]",
+     ylab = "Magasins alimentaires et pharmacies (% par rapport à la référence)", ylim = c(-95, 140))
+# Ajouter une ligne verticale pour le 18 mars 2020
+abline(v = x_vert, col = "red", lwd = 2, lty = 2)
+
+# Ajouter un encadrement pour les vacances hiver
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_hiver)){
+  x_start <- 2020 + as.numeric(vacances_hiver$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_hiver$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.4,0.6,0.9,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances été
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_ete)){
+  x_start <- 2020 + as.numeric(vacances_ete$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_ete$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(1,0.7,0.3,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances paque
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_paques)){
+  x_start <- 2020 + as.numeric(vacances_paques$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_paques$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(1,0.5,0.5,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances carnaval
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_carnaval)){
+  x_start <- 2020 + as.numeric(vacances_carnaval$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_carnaval$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.4,0.8,0.4,0.3), border = NA)
+}
+
+
+# Ajouter un encadrement pour les vacances toussaint
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_toussaint)){
+  x_start <- 2020 + as.numeric(vacances_toussaint$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_toussaint$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.7,0.4,0.8,0.5), border = NA)
+}
+
+#legend
+legend("topright", 
+       legend = c("Confinement du 18 mars 2020", 
+                  "Vacances hiver", 
+                  "Vacances carnaval", 
+                  "Vacances Pâques", 
+                  "Vacances été", 
+                  "Vacances Toussaint"),
+       col = c("red", 
+                 rgb(0.4,0.6,0.9,0.5),
+               rgb(0.4,0.8,0.5,0.5),
+               rgb(1,0.5,0.5,0.5),
+               rgb(1,0.7,0.3,0.5),
+               rgb(0.7,0.4,0.8,0.5)),
+       lty = c(2, NA, NA, NA, NA, NA),
+       pch = c(NA, 15, 15, 15, 15, 15),
+       pt.cex = 1.2,
+       cex = 0.8,
+       bty = "o",
+       bg = "white")
+```
+
+```{r}
+# Premier graphique : série originale
+plot(grocery_ts, 
+  ylim = c(-95, 135),
+     xlab = "Temps [année]", 
+     ylab = "Magasins alimentaires et pharmacies (% par rapport à la référence)", 
+     main = "Superposition de la séries but et des series aggrégées", col = rgb(0, 0, 0, alpha = 0.1))
+
+# Ajouter la deuxième série : week-ends supprimés
+lines(grocery_nwe_ts2b, col = "red")
+
+lines(grocery_nw_tsb, col = "blue")
+
+lines(grocery_ts_ag, col = rgb(0, 1, 0, 0.5))
+
+# Optionnel : ajouter une légende
+legend("topright", 
+       legend = c("Série originale","Série originale aggrégée ", "Série journalière aggrégée sans les week-ends ", "Série journalière aggrégée avec seulement les week-ends" ), 
+       col = c("gray", rgb(0, 1, 0, 0.5), "red", "blue"), lty=1)
+```
+
+```{r}
+# convertir en série temporelle journalière
+grocery_ts_daily <- ts(grocery_ts, frequency = 7)
+
+
+decomp_grocery <- tsd(grocery_ts_daily, s.window = 7, trend = TRUE, t.window = 7)
+
+plot(decomp_grocery, col = 1:4)
+
+cycle_hebdo_grocery <- extract(decomp_grocery, components = "seasonal")
+
+
+plot(window(cycle_hebdo_grocery, start = 46, end = 98))
+abline(v = seq(0, 200, by = 1), col = "grey90")
+
+spectrum(cycle_hebdo_grocery, spans = c(5, 7), col = "aquamarine3")
+abline(v = seq(0, 200, by = 1), col = "grey90")
+abline(h = seq(0, 10000, by = 250), col = "grey80")
+
+cpgram(cycle_hebdo_grocery) 
+abline(v = seq(0, 200, by = 1), col = "grey90")
+
+
+
+
+```
 
 ## Conclusion
 
