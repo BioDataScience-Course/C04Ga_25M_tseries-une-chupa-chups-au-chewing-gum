@@ -1590,9 +1590,6 @@ Ces graphiques nous montrent que la semaine n'est pas seulement structurée en s
 
 -   fréquence de 1: cycle hebdomadaire classique d'une semaine montrant un pic de fréquentation dans les parcs en fin de semaine, pendant les week-ends avec une période de creux en début de semaine lorsque tout le monde travaille et que les enfants sont à l'école.
 
-```{=html}
-<!-- -->
-```
 -   fréquence de 2: indique deux cycles par semaine, soit une période de 3,5 jours. Ce résultat est dû au fait que le cycle hebdomadaire n'est pas bien lisse; les fréquentations augmentent et diminuent brutalement. En effet, en général, les espaces publics subissent une forte aygmentation de l'affluence dès le samedi matin et subissent une grosse chute le lundi matin avec le retour du travail.
 
 -   fréquence de 3: indique trois cycles par semaine soit une période de plus ou moins 2,3 jours qui met en différences intra-semaines plus fines. Cela est surement dû à une plus forte affluence les mercredis après midi lorsque les jeunes ne sont pas à l'école, à une augmentation de l'affluence le vendredi soir en début de week-end ou à une baisse de fréquentation le dimanche soir avant le début de la semaine.
