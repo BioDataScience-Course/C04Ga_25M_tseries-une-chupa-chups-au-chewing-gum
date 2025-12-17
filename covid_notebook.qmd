@@ -304,7 +304,7 @@ Le cycle semaine / week-end exerce une influence marquée sur la série. Le week
 
 -   Si l’on considère que la tendance générale est à la baisse, alors l’observation correspondrait à un artefact. Les individus ne se déplacent pas davantage vers leur lieu de travail le week-end, mais la pandémie de COVID-19 a davantage impacté les déplacements vers les lieux de travail en semaine que durant le week-end. Ainsi, la fréquence apparente des déplacements semble plus élevée le week-end, mais le dépassement de la tendance résulte d’un effet plus faible du COVID-19 sur les week-ends par rapport aux jours de semaine et/ou d’une représentation inadéquate de la référence (référentiel inadapté, probablement soumis à un cycle annuel).
 -   Aménagements liés au COVID-19 : une redistribution des déplacements salariaux sur la semaine afin d’éviter les contacts, associée à une augmentation du télétravail en semaine.
--   Les secteurs de la bureautique travaillent principalement en semaine et se prêtent plus facilement au télétravail. À l’inverse, la charge salariale des week-ends est majoritairement constituée des secteurs du tourisme et des secteurs essentiels ou réguliers, moins dépendants du rythme hebdomadaire. Dans ces secteurs, le télétravail est plus complexe, voire impossible, à mettre en place. A titre d'exemple, cette différences entre classe de travailleurs à été identifier par l'INSEE en 2023 mais sur des données française (@insee2024organisation).
+-   Les secteurs de la bureautique travaillent principalement en semaine et se prêtent plus facilement au télétravail. À l’inverse, la charge salariale des week-ends est majoritairement constituée des secteurs du tourisme et des secteurs essentiels ou réguliers, moins dépendants du rythme hebdomadaire. Dans ces secteurs, le télétravail est plus complexe, voire impossible, à mettre en place. A titre d'exemple, cette différences entre classe de travailleurs à été identifier par l'INSEE en 2023 mais sur des données française (@insee2023organisation).
 
 Les causes sont peut-etre hybrides. Les données fournies par Google ne discriminant pas les classes de travailleurs, elles ne permettent ni de confirmer ni d’infirmer ces hypothèses.
 
@@ -322,6 +322,7 @@ plot(work_ts1_ag,
      ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)", ylim = c(-60, 80))
 # Ajouter une ligne verticale pour le 18 mars 2020
 abline(v = x_vert, col = "red", lwd = 2, lty = 2)
+abline(v = x_blue, col = "blue", lwd = 2, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -375,26 +376,31 @@ for(i in 1:nrow(vacances_toussaint)){
 }
 
 #legend
+
 legend("topright", 
-       legend = c("Confinement du 18 mars 2020", 
+       legend = c("Confinement du 18 mars 2020",
+         "Confinement du 02 novembre 2020",
                   "Vacances hiver", 
                   "Vacances carnaval", 
                   "Vacances Pâques", 
                   "Vacances été", 
                   "Vacances Toussaint"),
-       col = c("red", 
+       col = c("red", "blue",
                  rgb(0.4,0.6,0.9,0.5),
                rgb(0.4,0.8,0.5,0.5),
                rgb(1,0.5,0.5,0.5),
                rgb(1,0.7,0.3,0.5),
                rgb(0.7,0.4,0.8,0.5)),
-       lty = c(2, NA, NA, NA, NA, NA),
-       pch = c(NA, 15, 15, 15, 15, 15),
+       lty = c(2,2, NA, NA, NA, NA, NA),
+       pch = c(NA,NA, 15, 15, 15, 15, 15),
        pt.cex = 1.2,
        cex = 0.8,
        bty = "o",
        bg = "white")
 ```
+
+La courbe agrégé permet un lisage et la suppression du bruit de fond de la série.
+
 
 ```{r}
 work_nw_ts1 <- ts(mobil_nw$workplaces,start = c(2020, 46),frequency = 365)
@@ -412,6 +418,7 @@ plot(work_nw_ts1b,
      ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)", ylim = c(-95, 100))
 # Ajouter une ligne verticale pour le 18 mars 2020
 abline(v = x_vert, col = "red", lwd = 2, lty = 2)
+abline(v = x_blue, col = "blue", lwd = 2, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -466,27 +473,28 @@ for(i in 1:nrow(vacances_toussaint)){
 
 #legend
 legend("topright", 
-       legend = c("Confinement du 18 mars 2020", 
+       legend = c("Confinement du 18 mars 2020",
+         "Confinement du 02 novembre 2020",
                   "Vacances hiver", 
                   "Vacances carnaval", 
                   "Vacances Pâques", 
                   "Vacances été", 
                   "Vacances Toussaint"),
-       col = c("red", 
+       col = c("red", "blue",
                  rgb(0.4,0.6,0.9,0.5),
                rgb(0.4,0.8,0.5,0.5),
                rgb(1,0.5,0.5,0.5),
                rgb(1,0.7,0.3,0.5),
                rgb(0.7,0.4,0.8,0.5)),
-       lty = c(2, NA, NA, NA, NA, NA),
-       pch = c(NA, 15, 15, 15, 15, 15),
+       lty = c(2,2, NA, NA, NA, NA, NA),
+       pch = c(NA,NA, 15, 15, 15, 15, 15),
        pt.cex = 1.2,
        cex = 0.8,
        bty = "o",
        bg = "white")
 ```
 
-Aprés le 1er confinement, le déplacement vers le lieux de travail est proches de celui de la référence et est même plus haut que celle-ci quelque semaine après le confinement total du 18 mars 2020 (peut être car on a essayer de repartir les travailleurs pour éviter les contacts ?) La variation en fonction des vacance de la fréquentation du lieu de travail est beaucoup moins marqué sur les week-ends, mais visible.
+Juste aprés le 1er confinement, le déplacement vers le lieux de travail est netement diminuer par rapport à celui de la référence. Par contre, quelque semaine après le confinement total du 18 mars 2020, le deplaement est legerement supérieur à la references jsustes avant les vacances d'été de 2020. Si l'on prend les vacances de toussaint de  2021, le confinement du 02 novembre 2020 semble avoir un impacte negatif sur les deplavcement sur le lieux de travail le weekend avant et aprés.  Sans conptée les confinement et les vacances d'hiver, les weekends semble plus proche de la references. La variation en fonction des vacance de la fréquentation du lieu de travail est beaucoup moins marqué sur les week-ends, mais visible.
 
 ```{r}
 work_nwe_ts1 <- ts(mobil_nwe$workplaces,start = c(2020, 46),frequency = 365)
@@ -577,7 +585,7 @@ legend("topright",
        bg = "white")
 ```
 
-La variation en fonction des vacance de la fréquentation du lieu de travail est beaucoup plus marqué sur la semaine sans prendre en compte les week-ends.
+La variation en fonction des vacance de la fréquentation du lieu de travail est beaucoup plus marqué sur la semaine sans prendre en compte les week-ends. La niveaux pré-1er confinement ne sembles pas avoir etait totalement retrouvé en fin 2022.
 
 ```{r}
 
@@ -717,9 +725,8 @@ legend("topright",
 
 Le faible signal dans les residuts nous indique que le cycle annuel à été relativement bien extrait, bien qu'une composante cyclique annuelle semble toujours être identifiables dans les residuts mais nettement moins importantes que précédemment.
 
-On voit que c'est clairement les vacances scolaires qui dirige le cycle annuels de la fréquentation des lieux de travail en semaines.
+On voit que c'est clairement les vacances scolaires qui dirige le cycle annuels de la fréquentation des deplacement sur les lieux de travail.
 
-Notons donc que la références médiane des cinq semaines du 3 janvier au 6 février 2020 de base est peut être sou-évaluer car elle prends en comptent 3 jours pendants les vacances d'hiver.
 
 ```{r}
 acf <- acf(cycle_annuel_work_b)
