@@ -2679,7 +2679,7 @@ plot(decomp_grocery, col = 1:4)
 cycle_hebdo_grocery <- extract(decomp_grocery, components = "seasonal")
 
 
-plot(window(cycle_hebdo_grocery, start = 46, end = 98))
+plot(window(cycle_hebdo_grocery, start = 30, end = 110))
 abline(v = seq(0, 200, by = 1), col = "grey90")
 
 spectrum(cycle_hebdo_grocery, spans = c(5, 7), col = "aquamarine3")
@@ -2690,6 +2690,10 @@ cpgram(cycle_hebdo_grocery)
 abline(v = seq(0, 200, by = 1), col = "grey90")
 
 ```
+
+**L'analyse de tendance** montre clairement une hausse de fréquentation des commerces alimentaires et pharmacies sans besoin de lissage même si on considère la période pré confinement début 2020
+
+**L'analyse spectrale** confirme un cycle hebdomadaire dominant semaine vs week-end (pic à 1 de fréquence) mais les 2 autres pics (à 2 et 3 de fréquence) montrent qu'il existe des sous-cycles hebdomadaires sûrement liés aux différentes habitudes de courses des gens. Certains font régulièrement des petites courses, d'autres attendent le week-end pour faire de plus grosses courses.
 
 ## Conclusion
 
