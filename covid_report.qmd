@@ -78,7 +78,7 @@ Cette section reprend l'analyse de l'influence du COVID-19, nottament des deux c
 parks_ts_agg <- aggregate(parks_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
 
-plot(parks_ts_ag, 
+plot(parks_ts_agg, 
      main = "Série journalière aggrégée ", xlab = "Temps [année]",
      ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", ylim = c(-80,400))
 
@@ -320,7 +320,7 @@ abline(h = seq(0, 10000, by = 250), col = "grey80")
 
 Les analyses concernant l'influence du COVID-19 sur la fréquentation des parcs restent similaire à ce qui a été évoqué au préalable.
 
-L'analyse spectrale permet non seulement de confirmer la présence d'un cycle hebdomadaire mais elle permet également de mettre en évidence que ce cycle est asymétrique pusiqu'on observe un cycle significatif à une fréquence de 1,2 et 3.
+L'analyse spectrale permet non seulement de confirmer la présence d'un cycle hebdomadaire mais elle permet également de mettre en évidence que ce cycle est asymétrique puisqu'on observe un cycle significatif à une fréquence de 1,2 et 3.
 
 ### Impact sur les pharmacies
 
