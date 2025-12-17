@@ -148,10 +148,10 @@ plot(work_ts1, xlab = "Temps [année]", ylab = "Mobilité vers les lieux de trav
   ylim = c(-95, 120))
 # Ajouter une ligne verticale pour les confinements
 # Convertir la date en position sur l'axe x (fraction de l'année)
-x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
-abline(v = x_vert, col = "red", lwd = 2, lty = 2)
-x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
-abline(v = x_blue, col = "blue", lwd = 2, lty = 2)
+x_conf1 <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
+abline(v = x_conf1, col = "red", lwd = 2, lty = 2)
+x_conf2 <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
+abline(v = x_conf2, col = "blue", lwd = 2, lty = 2)
 
 # Périodes des vacances pour Wallonie (2020‑2022) (@VacancesScolaires)
 
@@ -321,8 +321,8 @@ plot(work_ts1_ag,
      main = "Série journalière aggrégée ", xlab = "Temps [année]",
      ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)", ylim = c(-60, 80))
 # Ajouter une ligne verticale pour le 18 mars 2020
-abline(v = x_vert, col = "red", lwd = 2, lty = 2)
-abline(v = x_blue, col = "blue", lwd = 2, lty = 2)
+abline(v = x_conf1, col = "red", lwd = 2, lty = 2)
+abline(v = x_conf2, col = "blue", lwd = 2, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -417,8 +417,8 @@ plot(work_nw_ts1b,
      main = "Série journalière aggrégée sans les jours de la semaines", xlab = "Temps [année]",
      ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)", ylim = c(-95, 100))
 # Ajouter une ligne verticale pour le 18 mars 2020
-abline(v = x_vert, col = "red", lwd = 2, lty = 2)
-abline(v = x_blue, col = "blue", lwd = 2, lty = 2)
+abline(v = x_conf1, col = "red", lwd = 2, lty = 2)
+abline(v = x_conf2, col = "blue", lwd = 2, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -510,7 +510,7 @@ plot(work_nwe_ts1b,
      main = "Série journalière aggrégée sans week-ends", xlab = "Temps [année]",
      ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)", ylim = c(-95, 100))
 # Ajouter une ligne verticale pour le 18 mars 2020
-abline(v = x_vert, col = "red", lwd = 2, lty = 2)
+abline(v = x_conf1, col = "red", lwd = 2, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -736,8 +736,8 @@ acf <- acf(cycle_annuel_work_b)
 
 ```{r}
 loc <- local.trend(work_ts1_ag, ylim = c(-470, 200))
-abline(v = x_vert, col = "red", lwd = 2, lty = 2)
-abline(v = x_blue, col = "blue", lwd = 2, lty = 2)
+abline(v = x_conf1, col = "red", lwd = 2, lty = 2)
+abline(v = x_conf2, col = "blue", lwd = 2, lty = 2)
 legend("topright", 
        legend = c("Courbe", "Tendance local", "Confinement du 18 mars 2020", "Confinement du 02 novembre 2020"),
        col = c("black", "red", "red", "blue"), lty = c(3, 1, 2,2), cex = 0.5)
@@ -783,10 +783,10 @@ plot(mobil_ts2, xlab = "Temps [année]", ylab = "Commerces et loisirs (% par rap
   ylim = c(-120, 250))
 # Ajouter une ligne verticale pour les confinements
 # Convertir la date en position sur l'axe x (fraction de l'année)
-x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
-abline(v = x_vert, col = "red", lwd = 2, lty = 2)
-x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
-abline(v = x_blue, col = "blue", lwd = 2, lty = 2)
+
+abline(v = x_conf1, col = "red", lwd = 2, lty = 2)
+
+abline(v = x_conf2, col = "blue", lwd = 2, lty = 2)
 
 
 # Ajouter un encadrement pour les vacances hiver
@@ -965,7 +965,7 @@ plot(retail_ts2_ag,
      main = "Série journalière aggrégée ", xlab = "Temps [année]",
      ylab = "Commerces et loisirs (% par rapport à la référence)", ylim = c(-90, 140))
 # Ajouter une ligne verticale pour le 18 mars 2020
-abline(v = x_vert, col = "red", lwd = 2, lty = 2)
+abline(v = x_conf1, col = "red", lwd = 2, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -1059,7 +1059,7 @@ plot(work_nw_ts1b,
      main = "Série journalière aggrégée sans les jours de la semaines", xlab = "Temps [année]",
      ylab = "Commerces et loisirs (% par rapport à la référence)", ylim = c(-95, 160))
 # Ajouter une ligne verticale pour le 18 mars 2020
-abline(v = x_vert, col = "red", lwd = 2, lty = 2)
+abline(v = x_conf1, col = "red", lwd = 2, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -1152,7 +1152,7 @@ plot(retail_nwe_ts2b,
      main = "Série journalière aggrégée sans week-end", xlab = "Temps [année]",
      ylab = "Commerces et loisirs (% par rapport à la référence)", ylim = c(-95, 140))
 # Ajouter une ligne verticale pour le 18 mars 2020
-abline(v = x_vert, col = "red", lwd = 2, lty = 2)
+abline(v = x_conf1, col = "red", lwd = 2, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -1269,10 +1269,10 @@ plot(mobil_ts2, ylim = c(-95, 200),
      main = "Superposition de séries agrégées", col = rgb(0, 0, 0, alpha = 0.1))
 
 # Convertir la date en position sur l'axe x (fraction de l'année)
-x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
-abline(v = x_vert, col = "red", lwd = 1, lty = 2)
-x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
-abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
+
+abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
+
+abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -1508,8 +1508,8 @@ Des statistiques glissantes ont été appliquées à la série complète afin de
 
 ```{r}
 loc <- local.trend(retail_ts2_ag, ylim = c(-1500, 400))
-abline(v = x_vert, col = "red", lwd = 2, lty = 2)
-abline(v = x_blue, col = "blue", lwd = 2, lty = 2)
+abline(v = x_conf1, col = "red", lwd = 2, lty = 2)
+abline(v = x_conf2, col = "blue", lwd = 2, lty = 2)
 legend("topright", 
        legend = c("Courbe", "Tendance local", "Confinement du 18 mars 2020", "Confinement du 02 novembre 2020"),
        col = c("black", "red", "red", "blue"), lty = c(3, 1, 2,2), cex = 0.5)
@@ -1550,37 +1550,10 @@ plot(parks_ts, xlab = "Temps [année]", ylab = "Mobilité vers les parcs, plages
   ylim = c(-95, 500))
 # Ajouter une ligne verticale pour les confinements
 # Convertir la date en position sur l'axe x (fraction de l'année)
-x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
-abline(v = x_vert, col = "red", lwd = 1, lty = 2)
-x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
-abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
 
-# Périodes des vacances pour Wallonie (2020‑2022) (@VacancesScolaires)
+abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
 
-vacances_hiver <- data.frame(
-  start = as.Date(c("2020-12-21", "2021-12-27")),
-  end   = as.Date(c("2021-01-01", "2022-01-09"))
-)
-
-vacances_ete <- data.frame(
-  start = as.Date(c("2020-07-01", "2021-07-01", "2022-07-01")),
-  end   = as.Date(c("2020-08-31", "2021-08-31", "2022-08-31"))
-)
-
-vacances_paques <- data.frame(
-  start = as.Date(c("2020-04-06","2021-04-05", "2022-04-04")),
-  end   = as.Date(c("2020-04-19","2021-04-16", "2022-04-15"))
-)
-
-vacances_carnaval <- data.frame(
-  start = as.Date(c("2020-02-24","2021-02-15", "2022-02-28")),
-  end   = as.Date(c("2020-03-01","2021-02-19", "2022-03-04"))
-)
-
-vacances_toussaint <- data.frame(
-  start = as.Date(c("2020-11-02", "2021-11-01")),
-  end   = as.Date(c("2020-11-06", "2021-11-05"))
-)
+abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
 
 
 # Ajouter un encadrement pour les vacances hiver
@@ -1731,10 +1704,10 @@ plot(parks_ts_agg,
      ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", ylim = c(-80,400))
 
 # Convertir la date en position sur l'axe x (fraction de l'année)
-x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
-abline(v = x_vert, col = "red", lwd = 1, lty = 2)
-x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
-abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
+
+abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
+
+abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -1840,10 +1813,10 @@ plot(parks_nw_agg,
      ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", ylim = c(-95, 450))
 
 # Convertir la date en position sur l'axe x (fraction de l'année)
-x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
-abline(v = x_vert, col = "red", lwd = 1, lty = 2)
-x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
-abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
+
+abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
+
+abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -1938,10 +1911,9 @@ plot(parks_nwe_agg,
      ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", ylim = c(-95, 450))
 
 # Convertir la date en position sur l'axe x (fraction de l'année)
-x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
-abline(v = x_vert, col = "red", lwd = 1, lty = 2)
-x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
-abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
+
+abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
+abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -2029,10 +2001,10 @@ plot(parks_ts_agg,
      ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", ylim = c(-80,400))
 
 # Convertir la date en position sur l'axe x (fraction de l'année)
-x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
-abline(v = x_vert, col = "red", lwd = 1, lty = 2)
-x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
-abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
+
+abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
+
+abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -2111,7 +2083,7 @@ plot(parks_nw_agg,
      main = "Série journalière aggrégée sans les jours de la semaines", xlab = "Temps [année]",
      ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", ylim = c(-95, 450))
 # Ajouter une ligne verticale pour le 18 mars 2020
-abline(v = x_vert, col = "red", lwd = 2, lty = 2)
+abline(v = x_conf1, col = "red", lwd = 2, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -2189,7 +2161,7 @@ plot(parks_nwe_agg,
      main = "Série journalière aggrégée sans week-ends", xlab = "Temps [année]",
      ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", ylim = c(-95, 450))
 # Ajouter une ligne verticale pour le 18 mars 2020
-abline(v = x_vert, col = "red", lwd = 1, lty = 2)
+abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -2279,10 +2251,10 @@ plot(parks_ts,
 
 
 # Convertir la date en position sur l'axe x (fraction de l'année)
-x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
-abline(v = x_vert, col = "red", lwd = 1, lty = 2)
-x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
-abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
+
+abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
+
+abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -2411,8 +2383,8 @@ analyse spectrale: elle permet de mettre en évidence le fait que nous avons bel
 
 ```{r}
 loc_parks <- local.trend(parks_ts_agg, ylim = c(-1600, 200))
-abline(v = x_vert, col = "red", lwd = 1, lty = 2)
-abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
+abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
+abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
 legend("topright", 
        inset = c(0.15, 0),  # décale vers la gauche
        legend = c("Courbe", "Tendance locale",
@@ -2453,10 +2425,10 @@ plot(grocery_ts, xlab = "Temps [année]", ylab = "Mobilité liée aux magasins a
   ylim = c(-100, 250))
 # Ajouter une ligne verticale pour les confinements
 # Convertir la date en position sur l'axe x (fraction de l'année)
-x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
-abline(v = x_vert, col = "red", lwd = 2, lty = 2)
-x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
-abline(v = x_blue, col = "blue", lwd = 2, lty = 2)
+x_conf1 <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
+abline(v = x_conf1, col = "red", lwd = 2, lty = 2)
+x_conf2 <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
+abline(v = x_conf2, col = "blue", lwd = 2, lty = 2)
 
 # Périodes des vacances pour Wallonie (2020‑2022) (@VacancesScolaires)
 
@@ -2573,10 +2545,10 @@ plot(grocery_ts_ag,
      ylab = "Mobilité liée aux magasins d'alimentation et pharmacies (% par rapport à la référence)", ylim = c(-60,160))
 # Ajouter une ligne verticale pour les confinements
 # Convertir la date en position sur l'axe x (fraction de l'année)
-x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
-abline(v = x_vert, col = "red", lwd = 2, lty = 2)
-x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
-abline(v = x_blue, col = "blue", lwd = 2, lty = 2)
+
+abline(v = x_conf1, col = "red", lwd = 2, lty = 2)
+
+abline(v = x_conf2, col = "blue", lwd = 2, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -2669,7 +2641,7 @@ plot(grocery_nw_tsb,
      main = "Série journalière avec uniquement les week-ends", xlab = "Temps [année]",
      ylab = "Magasins alimentaires et pharmacies (% par rapport à la référence)", ylim = c(-95, 160))
 # Ajouter une ligne verticale pour le 18 mars 2020
-abline(v = x_vert, col = "red", lwd = 2, lty = 2)
+abline(v = x_conf1, col = "red", lwd = 2, lty = 2)
 
 # Ajouter une ligne verticale pour les confinements
 # Convertir la date en position sur l'axe x (fraction de l'année)
@@ -2717,7 +2689,7 @@ plot(grocery_nwe_ts2b,
      main = "Série journalière aggrégée sans week-end", xlab = "Temps [année]",
      ylab = "Magasins alimentaires et pharmacies (% par rapport à la référence)", ylim = c(-95, 140))
 # Ajouter une ligne verticale pour le 18 mars 2020
-abline(v = x_vert, col = "red", lwd = 2, lty = 2)
+abline(v = x_conf1, col = "red", lwd = 2, lty = 2)
 x_conf2 <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
 abline(v = x_conf2, col = "red", lwd = 2, lty = 2)
 x_lundpa <- 2021 + as.numeric(as.Date("2021-04-05") - as.Date("2021-01-01"))/365
