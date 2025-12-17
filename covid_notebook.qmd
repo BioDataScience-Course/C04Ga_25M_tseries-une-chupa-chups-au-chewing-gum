@@ -1263,25 +1263,108 @@ plot(mobil_nw_ts2b,
 
 ```{r}
 # Premier graphique : série originale
-plot(mobil_ts2, ylim = c(-95, 120),
+plot(mobil_ts2, ylim = c(-95, 200),
      xlab = "Temps [année]", 
      ylab = "Commerces et loisirs (% par rapport à la référence)", 
-     main = "Superposition de séries", col = rgb(0, 0, 0, alpha = 0.1))
+     main = "Superposition de séries agrégées", col = rgb(0, 0, 0, alpha = 0.1))
 
-# Ajouter la deuxième série : week-ends supprimés
-lines(mobil_nwe_ts2b, col = "red")
-lines(mobil_nw_ts2b, col = "blue")
-lines(work_ts1_ag, col = "green")
+# Convertir la date en position sur l'axe x (fraction de l'année)
+x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
+abline(v = x_vert, col = "red", lwd = 1, lty = 2)
+x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
+abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
+
+# Ajouter un encadrement pour les vacances hiver
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_hiver)){
+  x_start <- 2020 + as.numeric(vacances_hiver$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_hiver$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.4,0.6,0.9,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances été
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_ete)){
+  x_start <- 2020 + as.numeric(vacances_ete$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_ete$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(1,0.7,0.3,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances paque
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_paques)){
+  x_start <- 2020 + as.numeric(vacances_paques$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_paques$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(1,0.5,0.5,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances carnaval
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_carnaval)){
+  x_start <- 2020 + as.numeric(vacances_carnaval$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_carnaval$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.4,0.8,0.4,0.3), border = NA)
+}
+
+
+# Ajouter un encadrement pour les vacances toussaint
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_toussaint)){
+  x_start <- 2020 + as.numeric(vacances_toussaint$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_toussaint$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.7,0.4,0.8,0.5), border = NA)
+}
+
+#legend
+legend("topright", 
+       legend = c("Confinement du 18 mars 2020",
+         "Confinement du 02 novembre 2020",
+                  "Vacances hiver", 
+                  "Vacances carnaval", 
+                  "Vacances Pâques", 
+                  "Vacances été", 
+                  "Vacances Toussaint"),
+       col = c("red", "blue",
+                 rgb(0.4,0.6,0.9,0.5),
+               rgb(0.4,0.8,0.5,0.5),
+               rgb(1,0.5,0.5,0.5),
+               rgb(1,0.7,0.3,0.5),
+               rgb(0.7,0.4,0.8,0.5)),
+       lty = c(2,2, NA, NA, NA, NA, NA),
+       pch = c(NA,NA, 15, 15, 15, 15, 15),
+       pt.cex = 1.2,
+       cex = 0.8,
+       bty = "o",
+       bg = "white")
 
 # Optionnel : ajouter une légende
 legend("topleft", 
-       c("Série originale", "Série journalière aggrégée (week-ends = NA)", "Série journalière aggrégée (week = NA)"), 
+       c("Série originale","Série journalière aggrégée (weeks + week-ends", "Série journalière aggrégée sans les week-ends", "Série journalière aggrégée sans les semaines"), 
        col = c("grey", "green", "red", "blue"), 
-  lty=1)
+  lty=1, , cex=0.75)
+
+# Ajouter les lignes
+lines(retail_nwe_ts2b, col = "red")
+lines(retail_nw_ts2b, col = "blue")
+lines(retail_ts2_ag, col = "green") 
 
 ```
 
-La superposition des séries met en évidence des différences marquées entre la dynamique globale de la fréquentation des commerces et celle observée selon le type de jour. La série originale apparaît fortement bruitée, avec une variabilité quotidienne importante dominée par un cycle hebdomadaire prononcé, ce qui complique la lecture des tendances de long terme. La série agrégée sans les week-ends présente une dynamique plus basse et plus stable, traduisant une fréquentation en semaine moins volatile, tandis que la série correspondant aux week-ends est globalement plus élevée et plus fluctuante, reflétant une activité plus sensible aux comportements de loisirs et aux contraintes sanitaires. Les périodes estivales, notamment en 2020, montrent un rebond plus rapide de la fréquentation durant les week-ends, alors que l’année 2021 est marquée par de fortes variations liées aux vagues successives de la pandémie. En 2022, la fréquentation du week-end atteint fréquemment des niveaux supérieurs à la référence pré-pandémique, suggérant un rattrapage marqué des activités de loisirs. Dans l’ensemble, cette superposition montre que les week-ends expliquent l’essentiel des pics et de la volatilité de la série originale, tandis que les jours de semaine reflètent davantage la tendance lente et structurelle de la fréquentation des commerces.
+La superposition des séries met en évidence des différences entre la dynamique globale de la fréquentation des commerces et loisirs et celle observée selon le type de jour (week-ends ou semaines). La série originale (en gris) apparaît très bruitée et varie beaucoup et étant dominée par un cycle hebdomadaire. Cela rend difficile l’identification des tendances à long terme. La série journalière agrégée qui l’ensemble des jours de week-ends et de semaines (en vert) permet de lisser ce bruit et de mieux faire ressortir l’évolution générale de la courbe de fréquentation. La série agrégée sans les week-ends (en rouge) présente un niveau (pics) plus faible et plus stable. Cela montre une fréquentation en semaine moins fluctuante et plus directement contrainte par les mesures sanitaires. À l’inverse, la série agrégée sans les jours de semaine, correspondant aux week-ends (en bleu) est en moyenne plus élevée et nettement plus fluctuante reflétant une fréquentation davantage liée aux comportements de loisirs et aux possibilités de déplacement.
+
+L’ajout des périodes de vacances scolaires met en évidence leur rôle au niveau des variations de fréquentation des commerces et loisirs. Cela en particulier lors des vacances d’été qui coïncident avec des hausses marquées de la fréquentation et surtout le week-end. Cette croissance est visible dès l’été 2020, après la chute brutale provoquée par le premier confinement de mars 2020 et devient encore plus marquée à partir de 2021 lorsque les restrictions diminuent. Les vacances de printemps et d’automne montrent également des hausses ponctuelles principalement les week-ends tandis que les jours de semaine sont encore un peu touchés.
+
+En 2022, la fréquentation durant les week-ends dépasse fréquemment la référence pré-pandémique. On suppose un effet de « rattrapage des activités de loisirs » tandis que alors que la fréquentation en semaine suit une évolution plus progressive et régulière. Dans l’ensemble, cette superposition montre que les week-ends concentrent l’essentiel des pics et de la variation de la série originale, amplifiés lors des périodes de vacances, tandis que les jours de semaine traduisent principalement la tendance lente et évolutive de la fréquentation des commerces et loisirs en Wallonie sur la période étudiée.
 
 ```{r}
 retail_tsd_weekly <- tsd(retail_ts2_ag, s.window = 52, 
