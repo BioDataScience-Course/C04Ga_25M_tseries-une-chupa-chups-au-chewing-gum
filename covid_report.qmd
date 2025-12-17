@@ -1,6 +1,6 @@
 ---
 title: "___"
-author: "___, ___, ___, ___"
+author: "Amazone Pouillard, Hugo De Smet, Richard Dumont, Solène Joris "
 format:
   pdf:
     documentclass: report
@@ -62,6 +62,14 @@ Ces différentes étapes ont été appliquées de manière similaire aux catégo
 ## Résultats
 
 <!--% Présentez les analyses les plus pertinents que vous avez sélectionnés. Structurez la section en partie avec des titres explicites de niveau trois.-->
+
+### Impact sur le travail 
+
+### Impact sur le commerce 
+
+### Impact sur les parcs et espaces publics 
+
+### Impact sur les pharmacies 
 
 ## Discussion et Conclusion
 
