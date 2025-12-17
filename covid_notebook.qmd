@@ -1459,7 +1459,13 @@ legend("topright",
 
 Ce graphique confirme la description ci dessus avec un cycle annuel bien marqué.
 
-Au niveau des vacances scolaires: - un maximum de fréquentation pendant les vacances d'été. Les enfants sont en vacances scolaires et la météo est bonne. - légère augmentation des fréquentations pendant les vacances de Paques, surement dû à la météo également (plus net en 2022) - les autres vacances scolaires n'ont pas l'air d'influencer n'ont pas l'air d'influencer la fréquentation aux périodes plus froides de l'année.
+Au niveau des vacances scolaires:
+
+\- un maximum de fréquentation pendant les vacances d'été. Les enfants sont en vacances scolaires et la météo est bonne.
+
+\- légère augmentation des fréquentations pendant les vacances de Paques, surement dû à la météo également (plus net en 2022)
+
+\- les autres vacances scolaires n'ont pas l'air d'influencer n'ont pas l'air d'influencer la fréquentation aux périodes plus froides de l'année.
 
 Au niveau des confinements: on observe une nette diminution de l'occupation des parcs au premier confinement (18 mars 2020) alors que le deuxième confinement n'a pas l'air d'avoir réellement influencé l'affluence dans les parcs. Ce résultat est probablement dû à la date du deuxième confinement qui eu lieu à la fin de l'automne où les parcs sont moins fréquentés.
 
@@ -1468,18 +1474,15 @@ Au niveau des confinements: on observe une nette diminution de l'occupation des 
 parks_ts_daily <- ts(parks_ts, frequency = 7)
 # il y a deux valeurs manquantes en position 158 et 186 à compléter si on veut travaillers sur la série complète et non aggréger 
 # on prend les 3 valeurs en amont et en aval de la valeur manquantes
-parks_ts_daily[158] <- 190
-parks_ts_daily[186] <- 130
+parks_ts_daily[158] <- 188  #(188+242+205+180+188+130)/6
+parks_ts_daily[186] <- 142  # (164+168+135+128+137+120)/6
 
 
 decomp_parks <- tsd(parks_ts_daily, s.window = 7, trend = TRUE, t.window = 7)
 
+
 plot(decomp_parks, col = 1:4)
-# Convertir la date en position sur l'axe x (fraction de l'année)
-x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
-abline(v = x_vert, col = "red", lwd = 1, lty = 2)
-x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
-abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
+
 
 cycle_hebdo_parks<- extract(decomp_parks, components = "seasonal")
 
@@ -1495,12 +1498,28 @@ cpgram(cycle_hebdo_parks)
 abline(v = seq(0, 200, by = 1), col = "grey90")
 ```
 
-```{r}
-parks_sl <- stat.slide(time(parks_nwe_agr), parks_nwe_agr, xmin = 2020, deltat = 0.2)
-# Graphique des statistiques glissantes
-plot(parks_sl, ylim=c(-50,220), xlab = "Temps [année]", ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)")
-legend(2020.8, 220, c("serie","médian"), col = 1:2, lty = 1)
+Ces graphiques nous montrent que la semaine n'est pas seulement structurée en semaine vs week-end. En effet, l'analyse spectrale révèle l'existence d'un cycle hebdomadaire mais selon différente fréquences:
+
+-   fréquence de 1: cycle hebdomadaire classique d'une semaine montrant un pic de fréquentation dans les parcs en fin de semaine, pendant les week-ends avec une période de creux en début de semaine lorsque tout le monde travaille et que les enfants sont à l'école.
+
+```{=html}
+<!-- -->
 ```
+-   fréquence de 2: indique deux cycles par semaine, soit une période de 3,5 jours. Ce résultat est dû au fait que le cycle hebdomadaire n'est pas bien lisse; les fréquentations augmentent et diminuent brutalement. En effet, en général, les espaces publics subissent une forte aygmentation de l'affluence dès le samedi matin et subissent une grosse chute le lundi matin avec le retour du travail.
+
+-   fréquence de 3: indique trois cycles par semaine soit une période de plus ou moins 2,3 jours qui met en différences intra-semaines plus fines. Cela est surement dû à une plus forte affluence les mercredis après midi lorsque les jeunes ne sont pas à l'école, à une augmentation de l'affluence le vendredi soir en début de week-end ou à une baisse de fréquentation le dimanche soir avant le début de la semaine.
+
+Ces différentes fréquences renforcent la preuve du cycle hebdomadaire et mettent en évidence que ce cycle est asymétrique. La fréquence la plus marquée sur le spectrum reste la fréquence de 1.
+
+Les résidus, quant à eux, restent assez bruités. Cela est dû aux variations parfois brutales de la météo ou des nouvelles normes gouvernementales toutes indépendantes du cycle hebdomadaire.
+
+En ce qui concerne le COVID-19, on peut clairement voir son influence sur la fréquentation des parcs:
+
+De manière générale, on observe un pic beaucoup plus marqué au niveau de la tendance générale à la période covid (année 2020).
+
+-   premier confinement (mars 2020): on observe une grosse chute de fréquentations. En effet, au premier confinement, les mesures étaient très strictes. Il fallait une raison valable pour être autorisé à sortir de chez soi et la majorité des parcs ont été fermés. De plus, toute la popuation était touchée par une forte incertitude et une peur sanitaire. Après le premier confinement, les fréquentations ont fortement augmentés. La population a surement eu un besoin d'extérieur plus fréquent qu'habituellement à cause du confinement.
+
+-   deuxième confinement (novembre 2020): on observe une chute plus legère et à nouveau une forte augmentation quelques semaines plus tard. Cette fois-ci, les mesures sont plus souples, les parcs sont majoritairement toujours ouverts meme si les distances de sécurités et les mesures sanitaires sont toujours de vigueur. Cela explique une chute beaucoup moins importante des fréquentations.
 
 **Séries agrégées générales: semaine + week-end**
 
@@ -1512,8 +1531,12 @@ parks_ts_agg <- aggregate(parks_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
 plot(parks_ts_ag, 
      main = "Série journalière aggrégée ", xlab = "Temps [année]",
      ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", ylim = c(-80,400))
-# Ajouter une ligne verticale pour le 18 mars 2020
+
+# Convertir la date en position sur l'axe x (fraction de l'année)
+x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
 abline(v = x_vert, col = "red", lwd = 1, lty = 2)
+x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
+abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -1587,6 +1610,18 @@ legend("topright",
        bty = "o",
        bg = "white")
 ```
+
+Cette série aggrégée nous permet de voir l'influnce de nos différentes périodes de manière beaucoup plus lisible:
+
+L'influence des vacances scolaires a déjà été décrite ci dessus. Rien de particulier à ajouter ici.
+
+-   premier confinement: grosse chute des fréquentations dans les espaces publics dû aux mesures très strictes appliquées (besoin de justificatif valable pour avoir l' autorisation de sortir de chez soi, fermeture de la majorité des parcs, formation de "bulles" de personnes autorisées à voir,...)
+
+-   post premier confinement: très forte hausse de fréquentation des espaces publics. La population a besoin de profiter de l'air extérieur après en avoir été inderdit sur une longue période. Les nouvelles mesures, impliquant le port du masque obligatoire et les distances de sécurités permettent de profiter des espaces extérieurs sans se sentir menacés.
+
+-   deuxième confinement: très faible influence. Les mesures en vigueur sont tout à fait différentes, beaucoup plus souples. Elles permettent de se déplacer de manière beaucoup moins strictes du moment que le port du masque et que les distances de sécurités sont respectées. Cette fois, la majorité des espaces publics restent ouverts également. Cependant, le manque d'influence sur la fréquentation des parcs doit probablement être dû à la période où ce confinement à lieu. En effet, en novembre, puisque le temps est généralement beaucoup plus froid et pluvieux, les parcs sont beaucoup moins fréquentés.
+
+-   post deuxième confinement: on observe malgrés tout un léger pic à la fin du confinement qui est probablement dû au besoin de sortir de chez soi après avoir été forcé a y rester enfermer.
 
 **Séries agrégées: weekend uniquement**
 
@@ -1604,8 +1639,12 @@ parks_nw_agg<- aggregate(parks_nw_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
 plot(parks_nw_agg, 
      main = "Série journalière aggrégée sans les jours de la semaines", xlab = "Temps [année]",
      ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", ylim = c(-95, 450))
-# Ajouter une ligne verticale pour le 18 mars 2020
+
+# Convertir la date en position sur l'axe x (fraction de l'année)
+x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
 abline(v = x_vert, col = "red", lwd = 1, lty = 2)
+x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
+abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -1679,6 +1718,8 @@ legend("topright",
        bty = "o",
        bg = "white")
 ```
+
+(voir graphique des séries aggrégées superposées)
 
 **Séries agrégées: semaine sans weekend**
 
@@ -1695,8 +1736,12 @@ parks_nwe_agg <- aggregate(parks_nwe_ts, 52, FUN = collapse::fmean, ts.eps = 1/5
 plot(parks_nwe_agg, 
      main = "Série journalière aggrégée sans week-ends", xlab = "Temps [année]",
      ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", ylim = c(-95, 450))
-# Ajouter une ligne verticale pour le 18 mars 2020
+
+# Convertir la date en position sur l'axe x (fraction de l'année)
+x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
 abline(v = x_vert, col = "red", lwd = 1, lty = 2)
+x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
+abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -1771,6 +1816,8 @@ legend("topright",
        bg = "white")
 ```
 
+(voir graphique des séries aggrégées superposées)
+
 Comparaison séries agrégées: vue globale des 3 graphiques
 
 ```{r}
@@ -1779,8 +1826,12 @@ par(mfrow = c(3, 1))  # 3 lignes, 1 colonne
 plot(parks_ts_ag, 
      main = "Série journalière aggrégée ", xlab = "Temps [année]",
      ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", ylim = c(-80,400))
-# Ajouter une ligne verticale pour le 18 mars 2020
+
+# Convertir la date en position sur l'axe x (fraction de l'année)
+x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
 abline(v = x_vert, col = "red", lwd = 1, lty = 2)
+x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
+abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -2011,6 +2062,8 @@ legend("topright",
        bg = "white")
 ```
 
+Ne donne pas le résultat voulu, à ignorer.
+
 **Superposition des séries agrégées avec périodes de couleurs**
 
 ```{r}
@@ -2022,9 +2075,11 @@ plot(parks_ts,
      main = "Superposition de la séries but et des series aggrégées", col = rgb(0, 0, 0, alpha = 0.1))
 
 
-
-# Ajouter une ligne verticale pour le 18 mars 2020
+# Convertir la date en position sur l'axe x (fraction de l'année)
+x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
 abline(v = x_vert, col = "red", lwd = 1, lty = 2)
+x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
+abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -2112,6 +2167,14 @@ lines(parks_ts_agg, col = rgb(0, 1, 0, 0.5))
 #lines(parks_ts_agg, col = "black")
 ```
 
+-   premier confinement: grosse chute de fréquentation des parcs comme expliqué précédement.
+
+-   Post premier confinement: la différence de fréquentations entre la semaine est les weekend est très mince. Cela est dû aux mesures covid et post-covid comme l'augmentation des chomages techniques et du télétravail donnant en général plus de temps libre et des semaines plus réparties. Au fil du temps, l'écart de fréquentation entre la semaine et les week-ends se creuse, montrant que la situation redevient petit à petit à la normale (visible sur l'ensemble du graphique) Cependant, en période vacances scolaires les différences de fréquentations entre la semaine et les weekends sont beaucoup moins marquées voire totalement aléatoire puisque les jeunes ne sont pas à l'école et que souvent les parents prennent également congé à cette période.
+
+-   deuxieme confinement: très peu d'influence
+
+-   post deuxième confinement: on observe un pic de fréquentation les weekends suivant ce confinement. Cela est surement dû à la reprise du travail. La population, était habituée à avoir beaucoup plus de temps libre ou des semaines plus légères a besoin de profiter d'avantage des espaces publics les weekends.
+
 **Extraction du cycle annuel**
 
 ```{r}
@@ -2123,12 +2186,22 @@ cycle_annuel_parks <- extract(parks_tsd_weekly, components = "seasonal")
 plot(cycle_annuel_parks, col = "blue")
 spectrum(cycle_annuel_parks, spans = c(3,5))
 abline(v = seq(0, 100, by = 1), col = "grey90")
-abline(h = seq(0, 100, by = 1), col = "grey80")
+
 
 cpgram(cycle_annuel_parks)
 abline(v = seq(0, 100, by = 1), col = "grey90")
 
 ```
+
+Ce premier graphique nous permet d'avoir un point de vue global de notre série.
+
+-   seasonal: nous pouvons tout d'abord observer un cycle saisonnier fortement marqué, montrant l'influence des saisons sur le nombre de fréquentations des parcs et espaces publics comme prévus.
+
+-   trend: très forte baisse initiale en mars 2020 dû aux mesures strictes du premier confinement suivie d'une augmentation fortement marquée du nombre de fréquentations à la fin du confinement ainsi qu'avec l'arrivée des beaux jours. La suite du graphique est particulièrement interessante puisque qu'elle nous montre que meme lorsqu'on extrait la composante régulière saisonnière la tendant n'est pas droite comme nous aurions pu l'imaginer. En effet, le covid a laissé des traces. Les annonces politiques sur l'évolution de la pandémie, la peur du virus ainsi le télétravail qui est resté fréquent dans certaines entreprises influencent la population à long terme, bien après les confinements. La population s'adapte aux nouvelles et ce de manière ni saisonnière, ni régulière.
+
+-   résiduals: les résidus restent assez bruités montrant une variations aléatoire de la fréquentation dû aux changements de météos et aux différentes nouvelles sur l'évolution de la pandémie.
+
+analyse spectrale: elle permet de mettre en évidence le fait que nous avons bel et bien un cycle annuel bien marqué.
 
 **Analyse de la tendance locale**
 
@@ -2146,7 +2219,13 @@ legend("topright",
        cex = 0.5)
 ```
 
-alternance de valeurs au dessus et en dessous de la moyenne; montre pas grand chose; leger plateau fin 2021 (confinement?)
+-   premier confinement: chute brutale de la courbe noire dû à une accumulation rapide de valeurs inférieurs à la normale montrant l'effet immédiat du confinement.
+
+-   poste premier confinement: la courbe commence à remonter suite au déconfinement et au retour des beaux jours. La tendance locale suit avec un léger retard. Il est également observable que la fréquentation reste négative, on ne rattrape pas totalement la perte cumulée du confinement.
+
+-   deuxième confinement: très faible influence comparé au premier confinement
+
+-   post confinements: la tendance locale montre de larges vagues mais celles-ci n'ont pas une période fixe. Cela montre que ces variations ne sont pas uniquement dûes au cycle saisonnier mais aussi aux différents impacts que le covid a pu avoir à long terme comme le télétravail, les restrictions variables etc
 
 ### **Mobilité liée aux magasins alimentaires et aux pharmacies (Hugo)**
 
