@@ -1563,6 +1563,11 @@ parks_ts_daily[186] <- 130
 decomp_parks <- tsd(parks_ts_daily, s.window = 7, trend = TRUE, t.window = 7)
 
 plot(decomp_parks, col = 1:4)
+# Convertir la date en position sur l'axe x (fraction de l'année)
+x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
+abline(v = x_vert, col = "red", lwd = 1, lty = 2)
+x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
+abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
 
 cycle_hebdo_parks<- extract(decomp_parks, components = "seasonal")
 
