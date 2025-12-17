@@ -33,13 +33,13 @@ Le but de ce rapport est de quantifier et de comparer la fréquentation de ces l
 
 ### Données employées
 
-Les données analysées proviennent des Google COVID-19 Community Mobility Reports, qui fournissent des indicateurs de l’évolution de la fréquentation de différents types de lieux, dont la Wallonie en Belgique \[@google_mobility\]. Elles sont accessibles librement sous forme de fichiers CSV et couvrent la période du 15 février 2020 au 15 octobre 2022.
+Les données analysées proviennent des Google COVID-19 Community Mobility Reports, qui fournissent des indicateurs de l’évolution de la fréquentation de différents types de lieux, dont la Wallonie en Belgique [@google_mobility]. Elles sont accessibles librement sous forme de fichiers CSV et couvrent la période du 15 février 2020 au 15 octobre 2022.
 
-Les variations quotidiennes sont exprimées en pourcentage par rapport à un niveau de référence propre à chaque jour de la semaine. Cette référence correspond à la médiane des valeurs observées entre le 3 janvier et le 6 février 2020 \[@google_documentation\].
+Les variations quotidiennes sont exprimées en pourcentage par rapport à un niveau de référence propre à chaque jour de la semaine. Cette référence correspond à la médiane des valeurs observées entre le 3 janvier et le 6 février 2020 [@google_documentation].
 
-Dans ce travail, nous nous focalisons principalement sur les années 2020 et 2021, à partir du premier confinement ordonné par le gouvernement belge le 18 mars 2020 \[@unric_belgique_confinement_2020\], afin de suivre les périodes de confinement, de post-confinement et les perturbations de mobilité directement liées aux restrictions COVID-19. L’année 2022 est utilisée comme témoin d’une situation progressivement stabilisée post-pandémie.
+Dans ce travail, nous nous focalisons principalement sur les années 2020 et 2021, à partir du premier confinement ordonné par le gouvernement belge le 18 mars 2020 [@unric_belgique_confinement_2020], afin de suivre les périodes de confinement, de post-confinement et les perturbations de mobilité directement liées aux restrictions COVID-19. L’année 2022 est utilisée comme témoin d’une situation progressivement stabilisée post-pandémie.
 
-Parmi les indicateurs disponibles, nous retenons quatre catégories de lieux : commerces et loisirs (retail), parcs, lieux de travail (workplaces) et épiceries/pharmacies (grocery & pharmacy). Pour étudier les différences de comportements, les séries ont été déclinées en sous-ensembles distinguant les week-ends (samedi–dimanche) des jours de semaine (lundi–vendredi), et annotées en fonction des périodes de vacances scolaires en Fédération Wallonie-Bruxelles (carnaval, Pâques, été, Toussaint, hiver) \[@.. références à insérer + tard\].
+Parmi les indicateurs disponibles, nous retenons quatre catégories de lieux : commerces et loisirs (retail), parcs, lieux de travail (workplaces) et épiceries/pharmacies (grocery & pharmacy). Pour étudier les différences de comportements, les séries ont été déclinées en sous-ensembles distinguant les week-ends (samedi–dimanche) des jours de semaine (lundi–vendredi), et annotées en fonction des périodes de vacances scolaires en Fédération Wallonie-Bruxelles (carnaval, Pâques, été, Toussaint, hiver) \[\@.. références à insérer + tard\].
 
 ### Analyses réalisées et logiciels employés
 
