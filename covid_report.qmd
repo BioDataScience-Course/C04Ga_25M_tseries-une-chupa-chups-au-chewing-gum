@@ -65,9 +65,117 @@ Ces différentes étapes ont été appliquées de manière similaire aux catégo
 
 ### Impact sur le travail
 
-### Impact sur le commerce
+### Évolution de la mobilité dans les commerces et loisirs
 
-### Analyse de l'impact sur les parcs
+Cette section reprend l'analyse de l'influence du COVID-19, notamment des deux confinements ainsi que celle des vacances scolaires sur les commecres tels que les restaurants, les cafés, les parcs à thèmes, les musées, les bibliothèques et les cinémas.
+
+#### Analyse générale de la série
+
+```{r}
+# Aggrégation par moyenne des valeurs par semaine
+retail_ts2_ag <- aggregate(mobil_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
+
+
+plot(retail_ts2_ag, 
+     main = "Série journalière aggrégée ", xlab = "Temps [année]",
+     ylab = "Commerces et loisirs (% par rapport à la référence)", ylim = c(-90, 140))
+
+x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
+abline(v = x_vert, col = "red", lwd = 1, lty = 2)
+x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
+abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
+
+# Ajouter un encadrement pour les vacances hiver
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_hiver)){
+  x_start <- 2020 + as.numeric(vacances_hiver$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_hiver$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.4,0.6,0.9,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances été
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_ete)){
+  x_start <- 2020 + as.numeric(vacances_ete$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_ete$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(1,0.7,0.3,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances paque
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_paques)){
+  x_start <- 2020 + as.numeric(vacances_paques$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_paques$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(1,0.5,0.5,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances carnaval
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_carnaval)){
+  x_start <- 2020 + as.numeric(vacances_carnaval$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_carnaval$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.4,0.8,0.4,0.3), border = NA)
+}
+
+
+# Ajouter un encadrement pour les vacances toussaint
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_toussaint)){
+  x_start <- 2020 + as.numeric(vacances_toussaint$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_toussaint$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.7,0.4,0.8,0.5), border = NA)
+}
+
+#legend
+legend("topright", 
+       legend = c("Confinement du 18 mars 2020",
+         "Confinement du 02 novembre 2020",
+                  "Vacances hiver", 
+                  "Vacances carnaval", 
+                  "Vacances Pâques", 
+                  "Vacances été", 
+                  "Vacances Toussaint"),
+       col = c("red", "blue",
+                 rgb(0.4,0.6,0.9,0.5),
+               rgb(0.4,0.8,0.5,0.5),
+               rgb(1,0.5,0.5,0.5),
+               rgb(1,0.7,0.3,0.5),
+               rgb(0.7,0.4,0.8,0.5)),
+       lty = c(2,2, NA, NA, NA, NA, NA),
+       pch = c(NA,NA, 15, 15, 15, 15, 15),
+       pt.cex = 1.2,
+       cex = 0.6,
+       bty = "o",
+       bg = "white")
+```
+
+**Influence du premier confinement**
+
+Dès les premières mesures du confinement, avec la fermeture complète des commerces et activités de loisirs, l'affluence diminue de près de -80%. Le maintient de cette mesure tout au long du confinement explique le léger plateau observé ainsi que le manque d'influence des vacances de Pâques.
+
+**Influence post premier confinement**
+
+Au déconfinement, les commerces et loisirs reprennent peu à peu leurs activités mais l'affluence ne revient pas à son seuil initial. En effet, certaines mesures sanitaires comme le port du masque ou les distances de sécurités limitent encore ce secteur et font varier son nombre de fréquentations. On observe malgré tout une augmentation des présences dans les commerces et loisirs en été 2020.
+
+**Influence du deuxième confinement**
+
+Les commerces et loisirs ferment à nouveau, mais partiellement. Les mesures sont plus souples et permettent les évènements en plein air. L'horeca s'est adapté aux mesures COVID-19; les restaurateurs effectuent désormais des click&collects. Ces adaptations permettent au secteur de moins subir les mesures sanitaires appliquées ce qui explique la baisse beaucoup moins importante de fréquentation (-40%).
+
+**Influence post deuxième confinement**
+
+La mobilité reste en dessous de zéro pourcent jusque fin 2021 dû aux mesures sanitaires variables. Ensuite, fin 2021 et début 2022, la réouverture progressive de tous les commerces fait remonter le nombre de fréquentations au dessus des 0%. Les fréquentaions restent encore très variables mais les vacances scolaires recommencent à influencer positivement la fréquentation. Fin 2022, la situation semble se stabiliser avce un taux de fréquentation similaire à la normale voire un peu plus (+30%). Ce taux supérieur à la normale est probablement dû à un phénomène de rattrapage de la part de la population dû à l’arrêt prolongé des commerces et loisirs. Une fois la situation revenue à la normale, on peut observer que les vacances scolaires ont un réel impact positif sur les commerces et loisirs.
+
+### Évolution de la mobilité dans les parcs et espaces publics
 
 Cette section reprend l'analyse de l'influence du COVID-19, notamment des deux confinements ainsi que celle des vacances scolaires sur les parcs nationaux, les plages publiques, les marinas, les parcs canins, les places et les jardins publics.
 
@@ -141,22 +249,23 @@ for(i in 1:nrow(vacances_toussaint)){
 
 #legend
 legend("topright", 
-       legend = c("Confinement du 18 mars 2020", 
+       legend = c("Confinement du 18 mars 2020",
+         "Confinement du 02 novembre 2020",
                   "Vacances hiver", 
                   "Vacances carnaval", 
                   "Vacances Pâques", 
                   "Vacances été", 
                   "Vacances Toussaint"),
-       col = c("red", 
+       col = c("red", "blue",
                  rgb(0.4,0.6,0.9,0.5),
                rgb(0.4,0.8,0.5,0.5),
                rgb(1,0.5,0.5,0.5),
                rgb(1,0.7,0.3,0.5),
                rgb(0.7,0.4,0.8,0.5)),
-       lty = c(2, NA, NA, NA, NA, NA),
-       pch = c(NA, 15, 15, 15, 15, 15),
+       lty = c(2,2, NA, NA, NA, NA, NA),
+       pch = c(NA,NA, 15, 15, 15, 15, 15),
        pt.cex = 1.2,
-       cex = 0.8,
+       cex = 0.6,
        bty = "o",
        bg = "white")
 ```
