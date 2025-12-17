@@ -1285,6 +1285,10 @@ cpgram(cycle_annuel_retail)
 abline(v = seq(0, 100, by = 1), col = "grey90")
 ```
 
+Les graphiques montrent que la mobilité vers les commerces est structurée par une saisonnalité annuelle marquée et une tendance à long terme fortement perturbée par la pandémie. Après une chute brutale lors du premier confinement, la reprise s’effectue de manière irrégulière, traduisant des effets durables du contexte sanitaire au-delà des seuls cycles saisonniers.
+
+L’analyse spectrale confirme la dominance du cycle annuel, tandis que les résidus indiquent des variations ponctuelles liées à des événements exceptionnels.
+
 ```{r}
 retail_ts1_window_b <- window(retail_ts2_ag, start = c(2020, 27), end = c(2022,39))
 retail_tsd1_b <- tsd(retail_ts1_window_b, s.window = 52, trend = TRUE, t.window = 13)
@@ -1403,6 +1407,19 @@ La comparaison du cycle annuel du commerce montre que la saisonnalité est forte
 **Important :**
 
 Des statistiques glissantes ont été appliquées à la série complète afin de caractériser l’impact global du COVID-19. La comparaison entre jours de semaine et week-ends repose ensuite sur des séries agrégées distinctes, cette approche étant plus adaptée pour mettre en évidence les différences de comportement selon le type de jour. Par conséquent les statistiques glissantes à cette échelle n'apporterait pas grand chose car les statistiques glissantes sont sur 2 semaines et lissent déjà nos résultats.
+
+#### Analyse de la tendance locale 
+
+```{r}
+loc <- local.trend(retail_ts2_ag, ylim = c(-1500, 400))
+abline(v = x_vert, col = "red", lwd = 2, lty = 2)
+abline(v = x_blue, col = "blue", lwd = 2, lty = 2)
+legend("topright", 
+       legend = c("Courbe", "Tendance local", "Confinement du 18 mars 2020", "Confinement du 02 novembre 2020"),
+       col = c("black", "red", "red", "blue"), lty = c(3, 1, 2,2), cex = 0.5)
+```
+
+Le graphique de la tendance locale met en évidence un changement majeur à partir de mars 2020, marquée par une chute traduisant des valeurs inférieures à la moyenne de référence et ce, en lien avec le premier confinement. Au cours du printemps et de l’été 2020, une reprise partielle des déplacements vers les commerces et loisirs commence mais sans retourer aux niveaux avant la pandémie. Le second confinement de novembre 2020 se manifeste par une diminution bien plus progressive, suggérant un impact moins soudain. Le minimum global observé début 2021 indique un effet prolongé de la crise sanitaire avec une fréquentation inférieure à la moyenne pendant un long moment. À partir de mi-2021, la tendance s’inverse progressivement traduisant une reprise lente et séquencée (graduelle) des activités laissant apparaître des effets de la pandémie de 2020.
 
 ```{r}
 # Pendant la pandémie de COVID-19, la fréquentation des commerces a été beaucoup plus affectée les week-ends et les jours fériés que durant la semaine. 
