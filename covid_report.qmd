@@ -324,7 +324,7 @@ L'analyse spectrale permet non seulement de confirmer la présence d'un cycle he
 
 La fréquence de 1 montre que nous avons un cycle hebdomadaire classique. Cependant, la fréquence de 2, correspondant à un cycle de trois jours et demi, met en évidence le fait que ce cycle n’est pas lisse. Les variations du cycle sont brutales, alors que, lorsqu’un cycle est lisse et symétrique, les valeurs augmentent et diminuent de manière progressive. En effet, alors que la semaine est calme, on observe une augmentation rapide dès le samedi matin et une diminution importante le dimanche soir. La fréquence 3, quant à elle, indique des variations intra-hebdomadaires plus fines. Avec des cycles d’environ 2,3 jours, elle met en évidence une augmentation de l’affluence le mercredi après-midi, lorsque les jeunes n’ont souvent pas cours.
 
-#### Analyse du cycle annuel 
+#### Analyse du cycle annuel
 
 De part nos différentes analyses, il est évident qu'un cycle annuel est présent ici. Nous allons malgré tout faire une analyse spectrale pour le vérifier. Dans cette partie, nous allons principalement extraire ce cycle annuel pour voir s'il est réellement le seul à influencer nos données.
 
