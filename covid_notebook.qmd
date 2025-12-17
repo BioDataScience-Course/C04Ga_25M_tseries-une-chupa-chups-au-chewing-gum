@@ -298,11 +298,17 @@ abline(v = seq(0, 200, by = 1), col = "grey90")
 
 ```
 
-Le cycle hebdomadaire et la tendances générale ont été extrait. Le cycles hebdomadaire et de 3.5 jours (peut etre le mercredi) sont observées de manières significative.
+Le cycle hebdomadaire et une première tendance générale brute ont été extraits. Deux fréquences hebdomadaires, l’une de 7 jours et l’autre de 3,5 jours (possiblement associée au mercredi), sont observées de manière significative (graphique du spectre).
 
-Le cycle semaine / week-ends exerce une influence marquée sur la série. Étant donné que la référence correspond à la **médiane des cinq semaines du 3 janvier au 6 février 2020**, pour chaque jour de la semaine, les week-ends peuvent apparaître « surdimensionnés » (et inversement les jours de semaine sous-dimensionnés) (@google_documentation).
+Le cycle semaine / week-end exerce une influence marquée sur la série. Le week-end, les déplacements vers les lieux de travail semblent plus proches de la référence, correspondant à la médiane des cinq semaines du *3 janvier au 6 février 2020* (@google_documentation). Notons la faible échelle temporelle de cette médiane et, par conséquent, son objectivité relative pour une interprétation portant sur 2,5 ans d’analyse. Cette « anomalie » pourrait s’expliquer par plusieurs hypothèses :
 
-Il est donc pertinent de travailler trois sous-séries distinctes : l’ensemble (tous les jours), uniquement les week-ends, et uniquement les jours de semaine (lundi–vendredi).
+-   Si l’on considère que la tendance générale est à la baisse, alors l’observation correspondrait à un artefact. Les individus ne se déplacent pas davantage vers leur lieu de travail le week-end, mais la pandémie de COVID-19 a davantage impacté les déplacements vers les lieux de travail en semaine que durant le week-end. Ainsi, la fréquence apparente des déplacements semble plus élevée le week-end, mais le dépassement de la tendance résulte d’un effet plus faible du COVID-19 sur les week-ends par rapport aux jours de semaine et/ou d’une représentation inadéquate de la référence (référentiel inadapté, probablement soumis à un cycle annuel).
+-   Aménagements liés au COVID-19 : une redistribution des déplacements salariaux sur la semaine afin d’éviter les contacts, associée à une augmentation du télétravail en semaine.
+-   Les secteurs de la bureautique travaillent principalement en semaine et se prêtent plus facilement au télétravail. À l’inverse, la charge salariale des week-ends est majoritairement constituée des secteurs du tourisme et des secteurs essentiels ou réguliers, moins dépendants du rythme hebdomadaire. Dans ces secteurs, le télétravail est plus complexe, voire impossible, à mettre en place. A titre d'exemple, cette différences entre classe de travailleurs à été identifier par l'INSEE en 2023 mais sur des données française (@insee2024organisation).
+
+Les causes sont peut-etre hybrides. Les données fournies par Google ne discriminant pas les classes de travailleurs, elles ne permettent ni de confirmer ni d’infirmer ces hypothèses.
+
+Il est donc pertinent d’analyser trois sous-séries distinctes : l’ensemble de la série (tous les jours), uniquement les week-ends, et uniquement les jours de semaine (lundi–vendredi).
 
 #### Découpages en séries agrégées général, semaine et weekend
 
