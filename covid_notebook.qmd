@@ -1340,9 +1340,9 @@ legend("topleft",
   lty=1, , cex=0.75)
 
 # Ajouter les lignes
-lines(mobil_nwe_ts2b, col = "red")
-lines(mobil_nw_ts2b, col = "blue")
-lines(retail_ts2_ag, col = "green")
+lines(retail_nwe_ts2b, col = "red")
+lines(retail_nw_ts2, col = "blue")
+lines(retail_ts2_ag, col = "green") 
 
 ```
 
