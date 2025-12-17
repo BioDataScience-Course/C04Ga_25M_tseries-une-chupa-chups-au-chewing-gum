@@ -740,19 +740,15 @@ mobil_ts2 <- ts(mobil$retail, start = c(2020, 46), frequency = 365)
 plot(mobil_ts2, xlab = "Temps [année]", ylab = "Commerces et loisirs (% par rapport à la référence)")
 ```
 
-**1. Une chute massive au début de la série (printemps 2020)**
+**Une chute massive au début de la série (printemps 2020)**
 
-On observe une baisse brutale et immédiate sous la référence (jusqu’à –80 % environ). Cela correspond très clairement au premier confinement COVID où les commerces et activités de loisirs ont été fermés, entraînant une chute extrêmement forte de la mobilité.Cela correspond très clairement au premier confinement COVID où les commerces et activités de loisirs ont été fermés, entraînant une chute extrêmement forte de la mobilité.
+On observe une baisse brutale et immédiate sous la référence. Cela correspond très clairement au premier confinement COVID où les commerces et activités de loisirs ont été fermés, entraînant une chute extrêmement forte de la mobilité.
 
-**2. 2020–2021 : mobilité très fluctuante, cycles visibles**
+**2020–2021 : mobilité très fluctuante, cycles visibles**
 
-Après cette chute initiale, la mobilité reste en dessous de 0 % tout au long de 2020 et d’une grande partie de 2021, avec :
+Après cette chute initiale, la mobilité reste en dessous de 0 % tout au long de 2020 et d’une grande partie de 2021 avec des oscillations régulières (effet saisonnier + week-ends) et des creux très marqués (probables mesures sanitaires successives par exemple deuxième confinement, fermeture horeca, restrictions locales).
 
--   des oscillations régulières (effet saisonnier + week-ends),
-
--   des creux très marqués (probables mesures sanitaires successives : confinement 2, fermeture horeca, restrictions locales).
-
-3.  **2021–2022 : remontée progressive**
+**2021–2022 : remontée progressive**
 
 Fin 2021 et début 2022, la mobilité remonte vers 0, puis dépasse régulièrement la référence historique mais reste irrégulière avec de fortes variations quotidiennes. Ceci correspond à la réouverture progressive des commerces et loisirs et à un retour à la normale, mais pas uniforme.
 
