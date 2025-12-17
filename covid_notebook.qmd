@@ -1408,7 +1408,7 @@ La comparaison du cycle annuel du commerce montre que la saisonnalité est forte
 
 Des statistiques glissantes ont été appliquées à la série complète afin de caractériser l’impact global du COVID-19. La comparaison entre jours de semaine et week-ends repose ensuite sur des séries agrégées distinctes, cette approche étant plus adaptée pour mettre en évidence les différences de comportement selon le type de jour. Par conséquent les statistiques glissantes à cette échelle n'apporterait pas grand chose car les statistiques glissantes sont sur 2 semaines et lissent déjà nos résultats.
 
-#### Analyse de la tendance locale 
+#### Analyse de la tendance locale
 
 ```{r}
 loc <- local.trend(retail_ts2_ag, ylim = c(-1500, 400))
