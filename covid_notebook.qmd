@@ -2152,7 +2152,12 @@ grocery_ts <- ts(mobil$grocery, start = c(2020, 46), frequency = 365)
 plot(grocery_ts, xlab = "Temps [année]", ylab = "Mobilité liée aux supermarchés et pharmacies (% par rapport à la référence)")
 ```
 
-**1. Exploration des différentes séries** **1.1 Série brute**
+On devine un cycle annuel avec quelques valeurs extrêmes de mobilité aux alentours des fêtes de fin d'années et d'autres plus ou moins régulières dispersées au sein des années (probablement liées aux jours fériés).\
+On remarque néanmoins une tendance globable à la hausse par rapport au début de la série
+
+**1. Exploration des différentes séries**
+
+**1.1 Série brute**
 
 ```{r}
 # Graphique de l'objet ts
@@ -2268,6 +2273,8 @@ legend("topright",
 
 ```
 
+On observe ici que notre première grosse baisse de fréquentation des magasins alimentaires et des pharmacies correspond au premier confinement de mars 2020, le léger pic le précédant peut être lié à une panique de pénurie de denrées alimentaires et médicaments de la population.
+
 **1.2 Série journalière agrégée**
 
 ```{r}
@@ -2378,84 +2385,33 @@ abline(v = x_vert, col = "red", lwd = 2, lty = 2)
 
 # Ajouter une ligne verticale pour les confinements
 # Convertir la date en position sur l'axe x (fraction de l'année)
-x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
-abline(v = x_vert, col = "red", lwd = 2, lty = 2)
-x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
-abline(v = x_blue, col = "blue", lwd = 2, lty = 2)
-
-# Ajouter un encadrement pour les vacances hiver
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_hiver)){
-  x_start <- 2020 + as.numeric(vacances_hiver$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_hiver$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(0.4,0.6,0.9,0.5), border = NA)
-}
-
-# Ajouter un encadrement pour les vacances été
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_ete)){
-  x_start <- 2020 + as.numeric(vacances_ete$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_ete$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(1,0.7,0.3,0.5), border = NA)
-}
-
-# Ajouter un encadrement pour les vacances paque
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_paques)){
-  x_start <- 2020 + as.numeric(vacances_paques$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_paques$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(1,0.5,0.5,0.5), border = NA)
-}
-
-# Ajouter un encadrement pour les vacances carnaval
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_carnaval)){
-  x_start <- 2020 + as.numeric(vacances_carnaval$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_carnaval$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(0.4,0.8,0.4,0.3), border = NA)
-}
+x_conf1 <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
+abline(v = x_conf1, col = "red", lwd = 2, lty = 2)
+x_asso <- 2020 + as.numeric(as.Date("2020-08-15") - as.Date("2020-01-01"))/365
+abline(v = x_asso, col = "black", lwd = 2, lty = 2)
+x_lend <- 2020 + as.numeric(as.Date("2020-12-26") - as.Date("2020-01-01"))/365
+abline(v = x_lend, col = "blue", lwd = 2, lty = 2)
+x_fete <- 2021 + as.numeric(as.Date("2021-05-01") - as.Date("2021-01-01"))/365
+abline(v = x_fete, col = "green", lwd = 2, lty = 2)
+x_noel <- 2021 + as.numeric(as.Date("2021-12-25") - as.Date("2021-01-01"))/365
+abline(v = x_noel, col = "yellow", lwd = 2, lty = 2)
 
 
-# Ajouter un encadrement pour les vacances toussaint
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_toussaint)){
-  x_start <- 2020 + as.numeric(vacances_toussaint$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_toussaint$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(0.7,0.4,0.8,0.5), border = NA)
-}
 
 #legend
 legend("topright", 
-       legend = c("Confinement du 18 mars 2020",
-         "Confinement du 02 novembre 2020",
-                  "Vacances hiver", 
-                  "Vacances carnaval", 
-                  "Vacances Pâques", 
-                  "Vacances été", 
-                  "Vacances Toussaint"),
-       col = c("red", "blue",
-                 rgb(0.4,0.6,0.9,0.5),
-               rgb(0.4,0.8,0.5,0.5),
-               rgb(1,0.5,0.5,0.5),
-               rgb(1,0.7,0.3,0.5),
-               rgb(0.7,0.4,0.8,0.5)),
-       lty = c(2,2, NA, NA, NA, NA, NA),
-       pch = c(NA,NA, 15, 15, 15, 15, 15),
+       legend = c("Confinement du 18 mars 2020","Assomption",
+         "Lendemain de Noël", "Fête du travail", "Noël"),
+       col = c("red", "black", "blue","green", "yellow"),
+       lty = c(2,2,2,2),
+       pch = c(NA,NA,NA,NA),
        pt.cex = 1.2,
        cex = 0.8,
        bty = "o",
        bg = "white")
 ```
+
+Le premier confinement apparait toujours bien sur ce graphique avec simplement les weekends. Les différents jours fériés qui tombaient des samedis ont été mis en avant (les dimanches ayant souvent le même impact qu'un jour férié). La grosse chute de la fin d'année 2021 correspond aux week-ends de Noël et du nouvel an 2022 où les 2 jours fériés sont tombés des samedis.
 
 **1.3 Série journalière agrégée sans weekend**
 
@@ -2474,79 +2430,48 @@ plot(grocery_nwe_ts2b,
      ylab = "Magasins alimentaires et pharmacies (% par rapport à la référence)", ylim = c(-95, 140))
 # Ajouter une ligne verticale pour le 18 mars 2020
 abline(v = x_vert, col = "red", lwd = 2, lty = 2)
-
-# Ajouter un encadrement pour les vacances hiver
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_hiver)){
-  x_start <- 2020 + as.numeric(vacances_hiver$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_hiver$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(0.4,0.6,0.9,0.5), border = NA)
-}
-
-# Ajouter un encadrement pour les vacances été
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_ete)){
-  x_start <- 2020 + as.numeric(vacances_ete$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_ete$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(1,0.7,0.3,0.5), border = NA)
-}
-
-# Ajouter un encadrement pour les vacances paque
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_paques)){
-  x_start <- 2020 + as.numeric(vacances_paques$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_paques$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(1,0.5,0.5,0.5), border = NA)
-}
-
-# Ajouter un encadrement pour les vacances carnaval
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_carnaval)){
-  x_start <- 2020 + as.numeric(vacances_carnaval$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_carnaval$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(0.4,0.8,0.4,0.3), border = NA)
-}
-
-
-# Ajouter un encadrement pour les vacances toussaint
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_toussaint)){
-  x_start <- 2020 + as.numeric(vacances_toussaint$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_toussaint$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(0.7,0.4,0.8,0.5), border = NA)
-}
-
+x_conf2 <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
+abline(v = x_conf2, col = "red", lwd = 2, lty = 2)
+x_lundpa <- 2021 + as.numeric(as.Date("2021-04-05") - as.Date("2021-01-01"))/365
+abline(v = x_lundpa, col = "green", lwd = 2, lty = 2)
+x_asce <- 2021 + as.numeric(as.Date("2021-05-13") - as.Date("2021-01-01"))/365
+abline(v = x_asce, col = "green", lwd = 2, lty = 2)
+x_lundpe <- 2021 + as.numeric(as.Date("2021-05-24") - as.Date("2021-01-01"))/365
+abline(v = x_lundpe, col = "green", lwd = 2, lty = 2)
+x_touss <- 2021 + as.numeric(as.Date("2021-11-01") - as.Date("2021-01-01"))/365
+abline(v = x_touss, col = "green", lwd = 2, lty = 2)
+x_noel21 <- 2021 + as.numeric(as.Date("2021-12-25") - as.Date("2021-01-01"))/365
+abline(v = x_noel21, col = "green", lwd = 2, lty = 2)
+x_na22 <- 2022 + as.numeric(as.Date("2022-01-01") - as.Date("2022-01-01"))/365
+abline(v = x_na22, col = "green", lwd = 2, lty = 2)
+x_lundpa2 <- 2022 + as.numeric(as.Date("2022-04-18") - as.Date("2022-01-01"))/365
+abline(v = x_lundpa2, col = "green", lwd = 2, lty = 2)
+x_asce2 <- 2022 + as.numeric(as.Date("2022-05-26") - as.Date("2022-01-01"))/365
+abline(v = x_asce2, col = "green", lwd = 2, lty = 2)
+x_lundpe2 <- 2022 + as.numeric(as.Date("2022-06-06") - as.Date("2022-01-01"))/365
+abline(v = x_lundpe2, col = "green", lwd = 2, lty = 2)
+x_nati <- 2021 + as.numeric(as.Date("2021-07-21") - as.Date("2021-01-01"))/365
+abline(v = x_nati, col = "blue", lwd = 2, lty = 2)
+x_nati2 <- 2022 + as.numeric(as.Date("2022-07-21") - as.Date("2022-01-01"))/365
+abline(v = x_nati2, col = "blue", lwd = 2, lty = 2)
+x_armi <- 2021 + as.numeric(as.Date("2021-11-11") - as.Date("2021-01-01"))/365
+abline(v = x_armi, col = "black", lwd = 2, lty = 2)
 #legend
 legend("topright", 
-       legend = c("Confinement du 18 mars 2020", 
-                  "Vacances hiver", 
-                  "Vacances carnaval", 
-                  "Vacances Pâques", 
-                  "Vacances été", 
-                  "Vacances Toussaint"),
-       col = c("red", 
-                 rgb(0.4,0.6,0.9,0.5),
-               rgb(0.4,0.8,0.5,0.5),
-               rgb(1,0.5,0.5,0.5),
-               rgb(1,0.7,0.3,0.5),
-               rgb(0.7,0.4,0.8,0.5)),
-       lty = c(2, NA, NA, NA, NA, NA),
-       pch = c(NA, 15, 15, 15, 15, 15),
+       legend = c("Confinements", "Fêtes religieuses", "Fête nationale belge", "Armistice"),
+       col = c("red", "green", "blue", "black"),
+       lty = c(2,2,2,2),
+       pch = c(NA,NA,NA,NA),
        pt.cex = 1.2,
        cex = 0.8,
        bty = "o",
        bg = "white")
 ```
+
+On note différentes chutes ponctuelles de mobilités aux moments des différents jours fériés (fêtes religieuses / nationales belge) avec des intensités différentes (certains commerces restent ouverts avec des horaires restreints malgré le jour férié).\
+Le pic de mobilité le plus notable pré-Noël 2022 probablement dû aux affluences de courses pour le repas du réveillon de Noêl et celui du nouvel an tombaient tous les deux un vendredi (24 décembre et 31 décembre) pour cette année.
+
+Les 2 baisses les plus importantes de mobilité sont liées aux 2 confinements nationaux de 2020. On observe une reprise de cette mobilité aux alentours de mai 2020 jusqu'à atteindre un plateau en juin/juillet 2020 coïncidant avec le déconfinement progressif et le relâchement des mesures de distanciations. La rechute qui suit, pas aussi brutale que la première, est liée à la ressurgence des cas de Covid-19 commençant mi-septembre auxquelles on ajoute les annonces de saturation hospitalière et la reprise progressive de mesures de distanciations pour ensuite arriver au 2e confinement de novembre 2020.
 
 ```{r}
 # Premier graphique : série originale
@@ -2569,6 +2494,10 @@ legend("topright",
        col = c("gray", rgb(0, 1, 0, 0.5), "red", "blue"), lty=1)
 ```
 
+Ce graphique résumé nous permet d'observer que les commerces étudiés semblent plus fréquentés les week-ends que en semaine. On peut l'expliquer par le fait que la fréquentation agrégée est dominée par les commerces alimentaires, beaucoup plus fréquemment visités que les pharmacies. Même si les pharmacies sont probablement davantage fréquentées en semaine, leur "poids relatif" est insuffisant pour compenser celui plus important de l’alimentaire, ce qui tire la courbe des week-ends vers le haut.
+
+On remarque aussi que la hausse et la rechute de fréquentation entre les deux confinements apparaissent plus lissées le week-end que en semaine, les sorties y sont en fait moins fréquentes mais plus longues et concentrées sur moins de points, tandis qu’en semaine, les déplacements sont plus nombreux et surtout plus sensibles aux restrictions ce qui produit des variations plus abruptes.
+
 ```{r}
 # convertir en série temporelle journalière
 grocery_ts_daily <- ts(grocery_ts, frequency = 7)
@@ -2590,9 +2519,6 @@ abline(h = seq(0, 10000, by = 250), col = "grey80")
 
 cpgram(cycle_hebdo_grocery) 
 abline(v = seq(0, 200, by = 1), col = "grey90")
-
-
-
 
 ```
 
