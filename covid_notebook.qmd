@@ -1253,7 +1253,7 @@ plot(mobil_nw_ts2b,
 plot(mobil_ts2, ylim = c(-95, 200),
      xlab = "Temps [année]", 
      ylab = "Commerces et loisirs (% par rapport à la référence)", 
-     main = "Superposition de séries", col = rgb(0, 0, 0, alpha = 0.1))
+     main = "Superposition de séries agrégées", col = rgb(0, 0, 0, alpha = 0.1))
 
 # Convertir la date en position sur l'axe x (fraction de l'année)
 x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
