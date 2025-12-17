@@ -69,7 +69,7 @@ Ces différentes étapes ont été appliquées de manière similaire aux catégo
 
 ### Analyse de l'impact sur les parcs
 
-Cette section reprend l'analyse de l'influence du COVID-19, nottament des deux confinements ainsi que celle des vacances scolaires sur les parcs nationaux, les plages publiques, les marinas, les parcs canins, les places et les jardins publics.
+Cette section reprend l'analyse de l'influence du COVID-19, notamment des deux confinements ainsi que celle des vacances scolaires sur les parcs nationaux, les plages publiques, les marinas, les parcs canins, les places et les jardins publics.
 
 #### Analyse générale de la série
 
@@ -321,6 +321,30 @@ abline(h = seq(0, 10000, by = 250), col = "grey80")
 Les analyses concernant l'influence du COVID-19 sur la fréquentation des parcs restent similaire à ce qui a été évoqué au préalable.
 
 L'analyse spectrale permet non seulement de confirmer la présence d'un cycle hebdomadaire mais elle permet également de mettre en évidence que ce cycle est asymétrique puisqu'on observe un cycle significatif à une fréquence de 1,2 et 3.
+
+La fréquence de 1 montre que nous avons un cycle hebdomadaire classique. Cependant, la fréquence de 2, correspondant à un cycle de trois jours et demi, met en évidence le fait que ce cycle n’est pas lisse. Les variations du cycle sont brutales, alors que, lorsqu’un cycle est lisse et symétrique, les valeurs augmentent et diminuent de manière progressive. En effet, alors que la semaine est calme, on observe une augmentation rapide dès le samedi matin et une diminution importante le dimanche soir. La fréquence 3, quant à elle, indique des variations intra-hebdomadaires plus fines. Avec des cycles d’environ 2,3 jours, elle met en évidence une augmentation de l’affluence le mercredi après-midi, lorsque les jeunes n’ont souvent pas cours.
+
+#### Analyse du cycle annuel 
+
+De part nos différentes analyses, il est évident qu'un cycle annuel est présent ici. Nous allons malgré tout faire une analyse spectrale pour le vérifier. Dans cette partie, nous allons principalement extraire ce cycle annuel pour voir s'il est réellement le seul à influencer nos données.
+
+```{r}
+parks_tsd_weekly <- tsd(parks_ts_agg, s.window = 52, 
+  trend = TRUE, t.window = 13)
+plot(parks_tsd_weekly, col = 1:4)
+
+spectrum(cycle_annuel_parks, spans = c(3,5))
+abline(v = seq(0, 100, by = 1), col = "grey90")
+
+```
+
+L'analyse spectrale permet de confirmer qu'il y a un cycle annuel.
+
+Après extraction de ce cycle, regardons la tendance. Une chute brutale en début de 2020 marque le début du premier confinement. Au déconfinement, la tendance évolue petit à petit. Bien que nous nous attendions à ce que la tendance soit plane après avoir désaisonnaliser, ce n'est pas le cas.
+
+Cette tendance permet donc de mettre en lumière l’impact du COVID-19 à long terme. Lors du déconfinement, on observe une croissance très rapide, montrant le besoin de la population de sortir de chez elle et de profiter du plein air. Ensuite, une alternance de phases d’augmentation et de diminution apparaît. Cette période montre que le COVID-19 ne s’est pas arrêté avec la fin des confinements. L’utilisation variable du télétravail, l’évolution des mesures sanitaires d’une semaine à l’autre, ainsi que les informations sur l’évolution de la pandémie ont continué à influencer le quotidien de la population pendant plusieurs mois après la crise sanitaire proprement dite.
+
+Les résidus restent quant à eux très bruités. Cela met également en lumière que l'affluence dans les parcs est également aléatoire. En effet, la météo, les jours fériés ou les nouvelles affectent eux aussi, de manière ponctuelle, la population à se rendre dans les parcs et autres espaces publics.
 
 ### Impact sur les pharmacies
 
