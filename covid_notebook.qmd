@@ -1606,7 +1606,6 @@ De manière générale, on observe un pic beaucoup plus marqué au niveau de la 
 
 -   deuxième confinement (novembre 2020): on observe une chute plus legère et à nouveau une forte augmentation quelques semaines plus tard. Cette fois-ci, les mesures sont plus souples, les parcs sont majoritairement toujours ouverts meme si les distances de sécurités et les mesures sanitaires sont toujours de vigueur. Cela explique une chute beaucoup moins importante des fréquentations.
 
-
 **Séries agrégées générales: semaine + week-end**
 
 ```{r}

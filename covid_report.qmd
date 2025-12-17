@@ -69,6 +69,7 @@ Ces différentes étapes ont été appliquées de manière similaire aux catégo
 
 ### Analyse de l'impact sur les parcs
 
+
 Cette section reprend l'analyse de l'influence du COVID-19, nottament des deux confinements ainsi que celle des vacances scolaires sur les parcs nationaux, les plages publiques, les marinas, les parcs canins, les places et les jardins publics.
 
 #### Analyse générale de la série
@@ -292,7 +293,9 @@ Au déconfinement, certaines mesures restent en place pour éviter que la pandé
 
 Le deuxième confinement a eu très peu d'impact sur l'affluence dans les parcs. Cependant, après celui-ci, une hausse de fréquentation des parcs est visibles les weekends. Le retour au travail, à la routine, incite à profiter d'avantage de son temps libre les weekends. Au fur et à mesure que les mois passent, on observe que l'écart entre la semaine et les weekends se creuse montrant un retour à la normale. Le travail reprend pour ceratins, le télétravail diminue, et la population se repose la semaine en rentrant du travail et profite des espaces publics le weekend.
 
-#### Analyse du cycle hebdomadaire
+
+#### Analyse du cycle hebdomadaire 
+
 
 La différence d'affluence entre la semaine et les weekends doit probablement impliquer qu'il y ait un cycle hebdomadaire, c'est ce que nous allons vérifier ici.
 
