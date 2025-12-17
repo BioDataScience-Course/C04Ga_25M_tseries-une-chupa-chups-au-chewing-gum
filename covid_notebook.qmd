@@ -1613,7 +1613,7 @@ De manière générale, on observe un pic beaucoup plus marqué au niveau de la 
 parks_ts_agg <- aggregate(parks_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
 
-plot(parks_ts_ag, 
+plot(parks_ts_agg, 
      main = "Série journalière aggrégée ", xlab = "Temps [année]",
      ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", ylim = c(-80,400))
 
@@ -1908,7 +1908,7 @@ Comparaison séries agrégées: vue globale des 3 graphiques
 ```{r}
 par(mfrow = c(3, 1))  # 3 lignes, 1 colonne
 
-plot(parks_ts_ag, 
+plot(parks_ts_agg, 
      main = "Série journalière aggrégée ", xlab = "Temps [année]",
      ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", ylim = c(-80,400))
 
