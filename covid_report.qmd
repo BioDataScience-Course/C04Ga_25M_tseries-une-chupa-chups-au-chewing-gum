@@ -1,6 +1,6 @@
 ---
 title: "___"
-author: "___, ___, ___, ___"
+author: "Amazone Pouillard, Hugo De Smet, Richard Dumont, Solène Joris "
 format:
   pdf:
     documentclass: report
@@ -62,6 +62,267 @@ Ces différentes étapes ont été appliquées de manière similaire aux catégo
 ## Résultats
 
 <!--% Présentez les analyses les plus pertinents que vous avez sélectionnés. Structurez la section en partie avec des titres explicites de niveau trois.-->
+
+### Impact sur le travail
+
+### Impact sur le commerce
+
+### Analyse de l'impact sur les parcs
+
+Cette section reprend l'analyse de l'influence du COVID-19, nottament des deux confinements ainsi que celle des vacances scolaires sur les parcs nationaux, les plages publiques, les marinas, les parcs canins, les places et les jardins publics.
+
+#### Analyse générale de la série
+
+```{r}
+# Aggrégation par moyenne des valeurs par semaine
+parks_ts_agg <- aggregate(parks_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
+
+
+plot(parks_ts_ag, 
+     main = "Série journalière aggrégée ", xlab = "Temps [année]",
+     ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", ylim = c(-80,400))
+
+# Convertir la date en position sur l'axe x (fraction de l'année)
+x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
+abline(v = x_vert, col = "red", lwd = 1, lty = 2)
+x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
+abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
+
+# Ajouter un encadrement pour les vacances hiver
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_hiver)){
+  x_start <- 2020 + as.numeric(vacances_hiver$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_hiver$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.4,0.6,0.9,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances été
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_ete)){
+  x_start <- 2020 + as.numeric(vacances_ete$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_ete$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(1,0.7,0.3,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances paque
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_paques)){
+  x_start <- 2020 + as.numeric(vacances_paques$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_paques$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(1,0.5,0.5,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances carnaval
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_carnaval)){
+  x_start <- 2020 + as.numeric(vacances_carnaval$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_carnaval$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.4,0.8,0.4,0.3), border = NA)
+}
+
+
+# Ajouter un encadrement pour les vacances toussaint
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_toussaint)){
+  x_start <- 2020 + as.numeric(vacances_toussaint$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_toussaint$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.7,0.4,0.8,0.5), border = NA)
+}
+
+#legend
+legend("topright", 
+       legend = c("Confinement du 18 mars 2020", 
+                  "Vacances hiver", 
+                  "Vacances carnaval", 
+                  "Vacances Pâques", 
+                  "Vacances été", 
+                  "Vacances Toussaint"),
+       col = c("red", 
+                 rgb(0.4,0.6,0.9,0.5),
+               rgb(0.4,0.8,0.5,0.5),
+               rgb(1,0.5,0.5,0.5),
+               rgb(1,0.7,0.3,0.5),
+               rgb(0.7,0.4,0.8,0.5)),
+       lty = c(2, NA, NA, NA, NA, NA),
+       pch = c(NA, 15, 15, 15, 15, 15),
+       pt.cex = 1.2,
+       cex = 0.8,
+       bty = "o",
+       bg = "white")
+```
+
+**L'influence de la saisonnalité sur l'affluence dans les parcs**
+
+Comme imaginé, l'affluence dans les parcs varie tout d'abord selon les saisons. Au début d'année, lorsque les températures sont au plus bas, le nombre de fréquentations est au plus bas. Ensuite, au fur et à mesure que les températures s'adoucissent, les parcs se remplissent petit à petit jusqu'à avoir une fréquentation maximum en plein été. Au début de l'automne, les températures diminuent à nouveau et les parcs se vident petit à petit.
+
+**L'influence des vacances scolaires sur l'affluence dans les parcs**
+
+En période de vacances scolaires, les parcs sont généralements plus remplis. En effet, les jeunes ne sont pas à l'école de la journée et les parents prennent parfois congés également à ces memes périodes pour profiter en famille de moments en extérieur. Evidemment, toutes les vacances scolaires n'ont pas le même impact. Même si les enfants et parents disposent de plus de temps libre, les vacances d'automne/hiver ne permettent pas une réelle augmentation de l'affluence dans les parcs puisque les températures ne le permettent pas.
+
+**L'influence du COVID-19 sur l'affluence dans les parcs**
+
+Le premier confinement a marqué un tournant majeurs dans la vie quotidienne des habitants. A partir de mars 2020, dès l'annonce du confinement, une importante chute est visible sur le graphique. En effet, les mesures ont été strictes: il était nécéssaire d'avoir une raison valable pour être autorisé à sortir de chez soi et surtout, la majorité des espaces publics ont été fermés pour des mesures sanitaires.
+
+Au déconfinement, l'arrivée des beaux jours et l'envie de sortir de chez soi après y avoir été enfermé sur une longue période montrent une augmentation très rapide de l'affluence dans les parcs. Pour le moment, les mesures sanitaires tels que le port du masque et les distances de sécurité permettent à la population de profiter des espaces publics tout en se sentant en sécurité.
+
+En novembre 2020, le deuxième confinement a lieu. De nouvelles mesures sont prises mais elles sont beaucoup plus souples cette fois: les distances de sécurités doivent toujours être respectées, les masques doivent toujours être portés mais les espaces publics extérieurs restent ouverts pour la plupart. Les mesures de déplacement sont également moins strictes, la population profite de son heure de déplacement à moins d'un kilomètre de chez soi pour profiter des espaces publics à proximité lorsqu'il y en a ou lorsque c'est possible. L'impact de ce confinement est donc moindre.
+
+Après ce deuxième confinement, on observe une légère hausse de fréquentation, montrant que malgré tout, la population est contente de retrouver pleinement sa liberté.
+
+#### Analyse de la différence de fréquentation entre la semaine et les weekends
+
+Ayant remarqués que les vacances scolaires influençaient l'affluence dans les parcs, nous avons voulu mettre en évidence la différence de fréquentation entre la semaine et les weekends.
+
+```{r}
+# Premier graphique : série originale
+plot(parks_ts, 
+  ylim = c(-95, 450),
+     xlab = "Temps [année]", 
+     ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", 
+     main = "Superposition de la séries but et des series aggrégées", col = rgb(0, 0, 0, alpha = 0.1))
+
+
+# Convertir la date en position sur l'axe x (fraction de l'année)
+x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
+abline(v = x_vert, col = "red", lwd = 1, lty = 2)
+x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
+abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
+
+# Ajouter un encadrement pour les vacances hiver
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_hiver)){
+  x_start <- 2020 + as.numeric(vacances_hiver$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_hiver$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.4,0.6,0.9,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances été
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_ete)){
+  x_start <- 2020 + as.numeric(vacances_ete$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_ete$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(1,0.7,0.3,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances paque
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_paques)){
+  x_start <- 2020 + as.numeric(vacances_paques$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_paques$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(1,0.5,0.5,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances carnaval
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_carnaval)){
+  x_start <- 2020 + as.numeric(vacances_carnaval$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_carnaval$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.4,0.8,0.4,0.3), border = NA)
+}
+
+
+# Ajouter un encadrement pour les vacances toussaint
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_toussaint)){
+  x_start <- 2020 + as.numeric(vacances_toussaint$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_toussaint$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.7,0.4,0.8,0.5), border = NA)
+}
+
+#legend
+legend("topright", 
+       legend = c("Confinement du 18 mars 2020", 
+                  "Vacances hiver", 
+                  "Vacances carnaval", 
+                  "Vacances Pâques", 
+                  "Vacances été", 
+                  "Vacances Toussaint"),
+       col = c("red", 
+                 rgb(0.4,0.6,0.9,0.5),
+               rgb(0.4,0.8,0.5,0.5),
+               rgb(1,0.5,0.5,0.5),
+               rgb(1,0.7,0.3,0.5),
+               rgb(0.7,0.4,0.8,0.5)),
+       lty = c(2, NA, NA, NA, NA, NA),
+       pch = c(NA, 15, 15, 15, 15, 15),
+       pt.cex = 1.2,
+       cex = 0.75,
+       bty = "o",
+       bg = "white")
+
+# Optionnel : ajouter une légende
+legend("topleft", 
+       legend = c("Série originale","Série originale aggrégée ", "Série journalière aggrégée sans les week-ends ", "Série journalière aggrégée avec seulement les week-ends" ), 
+       col = c("gray", rgb(0, 1, 0, 0.5), "red", "blue"), lty=1, cex=0.75)
+
+# Ajouter la deuxième série : week-ends supprimés
+lines(parks_nwe_agg, col = "red")
+
+lines(parks_nw_agg, col = "blue")
+
+lines(parks_ts_agg, col = rgb(0, 1, 0, 0.5))
+#lines(parks_ts_agg, col = "black")
+```
+
+De manière générale, nous pouvons affirmer que les weekends les parcs sont plus fréquentés que la semaine, ce qui coïncide avec le temps libre de la population. Nous pouvons également voir, comme expliqué précédemment que la saisonnalité et les vacances scolaires influencent le nombre de présences dans les parcs.
+
+Au premier confinement, puisque les parcs étaient fermés, l'affluence est au plus bas. Il est donc difficile d'y observer une différence entre les jours de semaine et les weekends.
+
+Au déconfinement, certaines mesures restent en place pour éviter que la pandémie ne reprenne. Les entreprises sont invitées à favoriser le télétravail et la crise du COVID-19 implique que de nombreuses personnes se retrouvent en chômage technique ou perdent leur travail. Tous ces changements impactent la vie quotidienne de la population en répartissant le travail différement sur la semaine ou bien en donnant plus de temps libre. La différence de fréquentation des espaces publics entre la semaine et les weekends est alors peu visible.
+
+Le deuxième confinement a eu très peu d'impact sur l'affluence dans les parcs. Cependant, après celui-ci, une hausse de fréquentation des parcs est visibles les weekends. Le retour au travail, à la routine, incite à profiter d'avantage de son temps libre les weekends. Au fur et à mesure que les mois passent, on observe que l'écart entre la semaine et les weekends se creuse montrant un retour à la normale. Le travail reprend pour ceratins, le télétravail diminue, et la population se repose la semaine en rentrant du travail et profite des espaces publics le weekend.
+
+#### Analyse du cycle hebdomadaire
+
+La différence d'affluence entre la semaine et les weekends doit probablement impliquer qu'il y ait un cycle hebdomadaire, c'est ce que nous allons vérifier ici.
+
+```{r}
+# convertir en série temporelle journalière
+parks_ts_daily <- ts(parks_ts, frequency = 7)
+# il y a deux valeurs manquantes en position 158 et 186 à compléter si on veut travaillers sur la série complète et non aggréger 
+# on prend les 3 valeurs en amont et en aval de la valeur manquantes
+parks_ts_daily[158] <- 188  #(188+242+205+180+188+130)/6
+parks_ts_daily[186] <- 142  # (164+168+135+128+137+120)/6
+
+
+decomp_parks <- tsd(parks_ts_daily, s.window = 7, trend = TRUE, t.window = 7)
+
+
+plot(decomp_parks, col = 1:4)
+
+
+spectrum(cycle_hebdo_parks, spans = c(5, 7), col = "aquamarine3")
+abline(v = seq(0, 200, by = 1), col = "grey90")
+abline(h = seq(0, 10000, by = 250), col = "grey80")
+
+
+```
+
+Les analyses concernant l'influence du COVID-19 sur la fréquentation des parcs restent similaire à ce qui a été évoqué au préalable.
+
+L'analyse spectrale permet non seulement de confirmer la présence d'un cycle hebdomadaire mais elle permet également de mettre en évidence que ce cycle est asymétrique pusiqu'on observe un cycle significatif à une fréquence de 1,2 et 3.
+
+### Impact sur les pharmacies
 
 ## Discussion et Conclusion
 
