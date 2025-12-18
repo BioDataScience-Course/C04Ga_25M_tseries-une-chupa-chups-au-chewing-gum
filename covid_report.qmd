@@ -669,6 +669,22 @@ legend("topleft",
        legend = c("Série originale","Série originale aggrégée ", "Série journalière aggrégée sans les week-ends ", "Série journalière aggrégée avec seulement les week-ends" ), 
        col = c("gray", rgb(0, 1, 0, 0.5), "red", "blue"), lty=1, cex=0.75)
 
+# calcul de la courbe aggrégée semaine et weekends
+parks_ts_agg <- aggregate(parks_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
+
+
+#calcul de la courbe aggrégée de la semaine uniquement
+parks_nwe_ts <- ts(mobil_nwe$parks,start = c(2020, 46),frequency = 365)
+
+parks_nwe_agg <- aggregate(parks_nwe_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
+
+
+# calcul de la courbe aggrégée des weekends uniquement
+parks_nw_ts <- ts(mobil_nw$parks,start = c(2020, 46),frequency = 365)
+
+parks_nw_agg<- aggregate(parks_nw_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
+
+
 # Ajouter la deuxième série : week-ends supprimés
 lines(parks_nwe_agg, col = "red")
 
@@ -704,6 +720,7 @@ decomp_parks <- tsd(parks_ts_daily, s.window = 7, trend = TRUE, t.window = 7)
 
 plot(decomp_parks, col = 1:4)
 
+cycle_hebdo_parks<- extract(decomp_parks, components = "seasonal")
 
 spectrum(cycle_hebdo_parks, spans = c(5, 7), col = "aquamarine3")
 abline(v = seq(0, 200, by = 1), col = "grey90")
@@ -727,16 +744,24 @@ parks_tsd_weekly <- tsd(parks_ts_agg, s.window = 52,
   trend = TRUE, t.window = 13)
 plot(parks_tsd_weekly, col = 1:4)
 
+cycle_annuel_parks <- extract(parks_tsd_weekly, components = "seasonal")
+
 spectrum(cycle_annuel_parks, spans = c(3,5))
 abline(v = seq(0, 100, by = 1), col = "grey90")
 
 ```
 
-L'analyse spectrale permet de confirmer qu'il y a un cycle annuel.
+**Analyse du cycle saisonnier**
+
+L'analyse spectrale permet de confirmer qu'il y a un cycle annuel. La fréquence de 1 signifique nous permet de confirmer qu'il y a bel et bien un cycle saisonnier. Cependant, le fait que la fréquence de 2 soit elle aussi significative montre des variations inter-annuelles plus fines et moins marquées. Cela permet de mettre en évidence que notre cycle annuel n'est ni régulier, ni symétrique. En effet, en dehors du cycle annuel, la fréquence de 2 peut par exemple mettre en évidence la forte activité de la population en été avec les vacances scolaires et le beau temps alors que l'activité est plutôt réduite en automne/hiver avec des températures beaucoup plus basses.
+
+**Analyse de la tendance**
 
 Après extraction de ce cycle, regardons la tendance. Une chute brutale en début de 2020 marque le début du premier confinement. Au déconfinement, la tendance évolue petit à petit. Bien que nous nous attendions à ce que la tendance soit plane après avoir désaisonnaliser, ce n'est pas le cas.
 
 Cette tendance permet donc de mettre en lumière l’impact du COVID-19 à long terme. Lors du déconfinement, on observe une croissance très rapide, montrant le besoin de la population de sortir de chez elle et de profiter du plein air. Ensuite, une alternance de phases d’augmentation et de diminution apparaît. Cette période montre que le COVID-19 ne s’est pas arrêté avec la fin des confinements. L’utilisation variable du télétravail, l’évolution des mesures sanitaires d’une semaine à l’autre, ainsi que les informations sur l’évolution de la pandémie ont continué à influencer le quotidien de la population pendant plusieurs mois après la crise sanitaire proprement dite.
+
+**Analyse des résidus**
 
 Les résidus restent quant à eux très bruités. Cela met également en lumière que l'affluence dans les parcs est également aléatoire. En effet, la météo, les jours fériés ou les nouvelles affectent eux aussi, de manière ponctuelle, la population à se rendre dans les parcs et autres espaces publics.
 
