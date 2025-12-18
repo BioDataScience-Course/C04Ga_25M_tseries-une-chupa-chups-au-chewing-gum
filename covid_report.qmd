@@ -464,6 +464,21 @@ legend("topleft",
 
 Les déplacements vers les lieux de travail montrent une forte chute à partir du premier confinement de mars 2020, avec une baisse très marquée par rapport àau niveau de référence, particulièrement visible en semaine. On observe une reprise avant l’été 2020, mais les niveaux pré-confinement ne sont pas pleinement retrouvés jusqu’à la fin de la période étudiée. Les effets des vacances et des confinements affectent principalement les jours de semaine, tandis que les week-ends apparaissent moins sensibles aux variations saisonnières et aux mesures sanitaires, ce qui se traduit par des écarts plus marqués entre les semaine et les week-ends en été.
 
+
+```{r}
+work_tsd_weekly <- tsd(work_ts1_ag, s.window = 52, 
+  trend = TRUE, t.window = 13)
+plot(work_tsd_weekly, col = 1:4, ylim = c(-50, 50))
+cycle_annuel_work <- extract(work_tsd_weekly, components = "trend", main = "Tendance géneral de la mobilité sur le lieux de travail")
+plot(cycle_annuel_work, col = "black")
+abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
+abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
+#legend
+legend("topright", legend = c("Confinement du 18 mars 2020","Confinement du 02 novembre 2020"),col = c("red", "blue"), lty = c(2,2),pt.cex = 1.2,cex = 0.5,bty = "o",bg = "white")
+
+```
+La tendance générale de la mobilité vers les lieux de travail évolue, après une grande baisse suite au premier confinement du 18 mars 2020, vers une augmentation progressive et un retour ver la valeur de références en 2022.
+
 ## Discussion et Conclusion
 
 <!--% En tenant compte du but de votre carnet de notes et de vos résultats, discutez de résultats et proposez des conclusions à votre analyse en 5 à 10 phrases. -->
