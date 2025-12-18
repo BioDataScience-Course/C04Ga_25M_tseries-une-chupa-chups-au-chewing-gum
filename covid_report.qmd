@@ -148,24 +148,6 @@ vacances_toussaint <- data.frame(
   end   = as.Date(c("2020-11-06", "2021-11-05"))
 )
 
-# fonction pour les vacances
-draw_vacances <- function(vacances, col){
-  for(i in seq_len(nrow(vacances))){
-    x_start <- 2020 + as.numeric(vacances$start[i] - as.Date("2020-01-01"))/365
-    x_end   <- 2020 + as.numeric(vacances$end[i]   - as.Date("2020-01-01"))/365
-
-    rect(
-      xleft   = x_start,
-      xright  = x_end,
-      ybottom = par("usr")[3],
-      ytop    = par("usr")[4],
-      col     = col,
-      border  = NA
-    )
-  }
-}
-
-
 ```
 
 ### Évolution de la mobilité dans les commerces et loisirs
@@ -186,12 +168,11 @@ plot(retail_ts2_ag,
      main = "Série journalière aggrégée des commerces et loisirs", xlab = "Temps [année]",
      ylab = "% par rapport à la référence", ylim = c(-90, 140))
 
-#dates confinement
+# Ajouter une ligne verticale pour le 18 mars 2020
 x_conf1 <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
-abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
 x_conf2 <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
+abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
 abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
-
 
 draw_vacances <- function(vacances, col){
   for(i in seq_len(nrow(vacances))){
@@ -208,7 +189,6 @@ draw_vacances <- function(vacances, col){
     )
   }
 }
-
 
 # Ajouter un encadrement pour les vacances
 draw_vacances(vacances_hiver,     rgb(0.4,0.6,0.9,0.5))
@@ -242,17 +222,95 @@ legend("topright",
 
 **Influence du premier confinement :** La fermeture complète des commerces et loisirs entraîne une chute brutale de la fréquentation, proche de −80 %. Le maintien de ces mesures explique le plateau observé et l’absence d’effet des vacances de Pâques.
 
+**Influence post premier confinement :** Au déconfinement, les commerces et loisirs reprennent peu à peu leurs activités mais l'affluence ne revient pas à son seuil initial. En effet, certaines mesures sanitaires comme le port du masque ou les distances de sécurités limitent encore ce secteur et font varier son nombre de fréquentations. On observe malgré tout une augmentation des présences dans les commerces et loisirs en été 2020.
+
+====\> **Influence post premier confinement :**Lors du déconfinement, l’activité reprend progressivement mais reste inférieure au niveau initial en raison des mesures sanitaires (masque, distanciation). Une hausse est néanmoins observée durant l’été 2020.
+
+**Influence du deuxième confinement :** Les commerces et loisirs ferment à nouveau, mais partiellement. Les mesures sont plus souples et permettent les évènements en plein air. L'horeca s'est adapté aux mesures COVID-19; les restaurateurs effectuent désormais des click&collects. Ces adaptations permettent au secteur de moins subir les mesures sanitaires appliquées ce qui explique la baisse beaucoup moins importante de fréquentation (-40%).
+
+=====\> **Influence du deuxième confinement :** Les fermetures sont partielles et les mesures plus souples (événements en plein air, click&collect), ce qui limite l’impact sur la fréquentation, avec une baisse plus modérée d’environ −40 %.
+
+**Influence post deuxième confinement :** La mobilité reste en dessous de zéro pourcent jusque fin 2021 dû aux mesures sanitaires variables. Ensuite, fin 2021 et début 2022, la réouverture progressive de tous les commerces fait remonter le nombre de fréquentations au dessus des 0%. Les fréquentaions restent encore très variables mais les vacances scolaires recommencent à influencer positivement la fréquentation. Fin 2022, la situation semble se stabiliser avce un taux de fréquentation similaire à la normale voire un peu plus (+30%). Ce taux supérieur à la normale est probablement dû à un phénomène de rattrapage de la part de la population dû à l’arrêt prolongé des commerces et loisirs. Une fois la situation revenue à la normale, on peut observer que les vacances scolaires ont un réel impact positif sur les commerces et loisirs.
+
+===\> **Influence post deuxième confinement :** La fréquentation demeure inférieure à 0 % jusqu’à fin 2021 en raison de mesures sanitaires fluctuantes. La réouverture progressive fin 2021–début 2022 fait repasser la fréquentation au-dessus de 0 %, avec une influence à nouveau positive des vacances scolaires. Fin 2022, la situation se stabilise à un niveau proche, voire supérieur à la normale (+30 %), probablement lié à un effet de rattrapage.
+=======
+**Influence du premier confinement :** La fermeture complète des commerces et loisirs entraîne une chute brutale de la fréquentation, proche de −80 %. Le maintien de ces mesures explique le plateau observé et l’absence d’effet des vacances de Pâques.
+
 **Influence post premier confinement :**Lors du déconfinement, l’activité reprend progressivement mais reste inférieure au niveau initial en raison des mesures sanitaires (masque, distanciation). Une hausse est néanmoins observée durant l’été 2020.
 
 **Influence du deuxième confinement :** Les fermetures sont partielles et les mesures plus souples (événements en plein air, click&collect), ce qui limite l’impact sur la fréquentation, avec une baisse plus modérée d’environ −40 %.
 
 **Influence post deuxième confinement :** La fréquentation demeure inférieure à 0 % jusqu’à fin 2021 en raison de mesures sanitaires fluctuantes. La réouverture progressive fin 2021–début 2022 fait repasser la fréquentation au-dessus de 0 %, avec une influence à nouveau positive des vacances scolaires. Fin 2022, la situation se stabilise à un niveau proche, voire supérieur à la normale (+30 %), probablement lié à un effet de rattrapage.
 
+
 #### Analyse de la différence de fréquentation entre la semaine et les weekends
 
 À priori, la population dispose de plus de temps libre les weekends. Ce temps, sert souvent à profiter avec ses proches dans les différents commerces et loisirs. C'est ce que nous allons vérifier ici.
 
 ```{r}
+
+# Premier graphique : série originale
+plot(mobil_ts2, ylim = c(-95, 200),
+     xlab = "Temps [année]", 
+     ylab = "% par rapport à la référence", 
+     main = "Superposition de séries agrégées pour les commerces et loisirs", col = rgb(0, 0, 0, alpha = 0.1))
+
+# Ajouter une ligne verticale pour le 18 mars 2020
+abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
+abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
+
+draw_vacances <- function(vacances, col){
+  for(i in seq_len(nrow(vacances))){
+    x_start <- 2020 + as.numeric(vacances$start[i] - as.Date("2020-01-01"))/365
+    x_end   <- 2020 + as.numeric(vacances$end[i]   - as.Date("2020-01-01"))/365
+
+    rect(
+      xleft   = x_start,
+      xright  = x_end,
+      ybottom = par("usr")[3],
+      ytop    = par("usr")[4],
+      col     = col,
+      border  = NA
+    )
+  }
+}
+
+# Ajouter un encadrement pour les vacances
+draw_vacances(vacances_hiver,     rgb(0.4,0.6,0.9,0.5))
+draw_vacances(vacances_carnaval,  rgb(0.4,0.8,0.4,0.3))
+draw_vacances(vacances_paques,    rgb(1,0.5,0.5,0.5))
+draw_vacances(vacances_ete,       rgb(1,0.7,0.3,0.5))
+draw_vacances(vacances_toussaint, rgb(0.7,0.4,0.8,0.5))
+
+#legend
+legend("topright", 
+       legend = c("Confinement du 18 mars 2020",
+         "Confinement du 02 novembre 2020",
+                  "Vacances hiver", 
+                  "Vacances carnaval", 
+                  "Vacances Pâques", 
+                  "Vacances été", 
+                  "Vacances Toussaint"),
+       col = c("red", "blue",
+                 rgb(0.4,0.6,0.9,0.5),
+               rgb(0.4,0.8,0.5,0.5),
+               rgb(1,0.5,0.5,0.5),
+               rgb(1,0.7,0.3,0.5),
+               rgb(0.7,0.4,0.8,0.5)),
+       lty = c(2,2, NA, NA, NA, NA, NA),
+       pch = c(NA,NA, 15, 15, 15, 15, 15),
+       pt.cex = 1.2,
+       cex = 0.75,
+       bty = "o",
+       bg = "white")
+
+# Optionnel : ajouter une légende
+legend("topleft", 
+       c("Série originale","Série journalière aggrégée (weeks + week-ends", "Série journalière aggrégée sans les week-ends", "Série journalière aggrégée sans les semaines"), 
+       col = c("grey", "green", "red", "blue"), 
+  lty=1, , cex=0.75)
+
+
 #calcul de la courbe aggrégée sans les semaines 
 retail_nw_ts2 <- ts(mobil_nw$retail,start = c(2020, 46),frequency = 365)
 retail_nw_ts2  <- aggregate(retail_nw_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
@@ -298,7 +356,18 @@ legend("topleft",
        c("Série originale","Série journalière aggrégée (weeks + week-ends", "Série journalière aggrégée sans les week-ends", "Série journalière aggrégée sans les semaines"), col = c("grey", "green", "red", "blue"), lty=1, , cex=0.5, bg = "white")
 ```
 
+Ici, l'influence du COVID-19 sur ce secteur est nette.
+
+Le premier confinement, avec la fermeture totale des commerces et loisirs, fait chuter de plus de 80% les fréquentations. Au déconfinement, les mesures en vigueurs tel que le COVID pass et les distanciations sociales limitent encore ce secteur. Le hausse du chomage technique et du télétravail influence également les habitudes quotidiennes de la population. En effet, contrairement à ce que nous pourrions penser, les fréquentations dans les commerces et loisirs sont plus hautes la semaine que les weekends pendant toute la période entre les deux confinements et même après ceux-ci. Cependant, à partir de l'été 2020, les vacances recommenecent à influencer positivement ce secteur.
+
+Aux alentours de juillet 2021, lorsque la situation redevient plus ou moins à la normale, on observe un retour d'une plus grande fréquentation les weekends plutôt que la semaine.
+
+De manière générale, on peut voir que l'affluence en jours de semaine reste beaucoup plus stable que celle des weekends montrant que le COVID-19 impacte principalement cette dernière. En regardant d'un peu plus près les weekends, un pic de décroissante fortement prononcé apparait au début de 2022. Cette chute brutale mais courte est probablement due à la vague Omicron, une vague de recontamination intense qui est apparue après les fêtes de fin d'année. Même si aucun confinement stricte n'a été appliqué, cette hausse de contamination a provoqué plusieurs restrictions sanitaires ainsi qu'une prudence accrue au sein de la population. Vers la moitié de l'année 2022, le retour à la normale de la vie quotidienne donne à la population l'occasion de rattraper le temps perdu pendant cette période difficile, se reflétant par une forte affluence dans les commerces et loisirs les weekends.
+
+====\> L’influence du COVID-19 sur ce secteur est très marquée. Le premier confinement, avec la fermeture totale des commerces et loisirs, entraîne une chute de fréquentation supérieure à 80 %. Lors du déconfinement, les mesures sanitaires (COVID pass, distanciation), ainsi que l’augmentation du chômage technique et du télétravail, continuent de limiter l’activité. Contrairement aux attentes, la fréquentation est alors plus élevée en semaine que le week-end entre les deux confinements, tendance qui persiste quelque temps après. À partir de l’été 2020, les vacances scolaires recommencent toutefois à avoir un effet positif. Vers juillet 2021, avec un retour progressif à une situation plus normale, la fréquentation du week-end redevient supérieure à celle de la semaine. Globalement, l’affluence en semaine reste plus stable, indiquant que l’impact du COVID-19 touche principalement les week-ends. Début 2022, une chute brutale mais brève est observée le week-end, probablement liée à la vague Omicron. À partir de la mi-2022, un effet de rattrapage se traduit par une forte affluence des commerces et loisirs le week-end.
+=======
 L’influence du COVID-19 sur ce secteur est très marquée. Le premier confinement, avec la fermeture totale des commerces et loisirs, entraîne une chute de fréquentation supérieure à 80 %. Lors du déconfinement, les mesures sanitaires (COVID pass, distanciation), ainsi que l’augmentation du chômage technique et du télétravail, continuent de limiter l’activité. Contrairement aux attentes, la fréquentation est alors plus élevée en semaine que le week-end entre les deux confinements, tendance qui persiste quelque temps après. À partir de l’été 2020, les vacances scolaires recommencent toutefois à avoir un effet positif. Vers juillet 2021, avec un retour progressif à une situation plus normale, la fréquentation du week-end redevient supérieure à celle de la semaine. Globalement, l’affluence en semaine reste plus stable, indiquant que l’impact du COVID-19 touche principalement les week-ends. Début 2022, une chute brutale mais brève est observée le week-end, probablement liée à la vague Omicron. À partir de la mi-2022, un effet de rattrapage se traduit par une forte affluence des commerces et loisirs le week-end.
+>>>>>>> fb1fdb15609d307e84a4839921d56ff9eda808c4
 
 #### Analyse du cycle hebdomadaire
 
@@ -366,7 +435,6 @@ plot(parks_ts_agg,
   et jardins publics", xlab = "Temps [année]",
      ylab = "% par rapport à la référence", ylim = c(-80,400))
 
-
 # Ajouter une ligne verticale pour le 18 mars 2020
 abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
 abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
@@ -386,12 +454,6 @@ draw_vacances <- function(vacances, col){
     )
   }
 }
-
-
-# Convertir la date en position sur l'axe x (fraction de l'année)
-abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
-abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
-
 
 # Ajouter un encadrement pour les vacances
 draw_vacances(vacances_hiver,     rgb(0.4,0.6,0.9,0.5))
@@ -477,14 +539,6 @@ draw_vacances <- function(vacances, col){
     )
   }
 }
-
-
-# Convertir la date en position sur l'axe x (fraction de l'année)
-
-abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
-
-abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
-
 
 # Ajouter un encadrement pour les vacances
 draw_vacances(vacances_hiver,     rgb(0.4,0.6,0.9,0.5))
@@ -576,7 +630,7 @@ abline(v = seq(0, 100, by = 1), col = "grey90")
 
 ### Évolution de la mobilité dans les commerces alimentaires et pharmacies
 
-#### Série journalière agrégée (avec jours fériés mis en évidence)
+#### **Série journalière agrégée (avec jours fériés mis en évidence)**
 
 ```{r}
 grocery_ts <- ts(mobil$grocery, start = c(2020, 46), frequency = 365)
@@ -587,7 +641,7 @@ plot(grocery_ts_ag,
      ylab = "Mobilité liée aux magasins d'alimentation et pharmacies (% par rapport à la référence)", ylim = c(-60,70))
 # Ajouter une ligne verticale pour les confinements
 # Convertir la date en position sur l'axe x (fraction de l'année)
-
+x_conf1 <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
 abline(v = x_conf1, col = "red", lwd = 2, lty = 2)
 x_conf2 <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
 abline(v = x_conf2, col = "red", lwd = 2, lty = 2)
@@ -637,8 +691,6 @@ legend("topright",
 
 #### Superposition des séries
 
-```{r}
-```
 
 ```{r}
 ```
@@ -680,7 +732,26 @@ legend("topright",
        col = c("gray", rgb(0, 1, 0, 0.5), "red", "blue"), lty=1, cex = 0.7)
 ```
 
-Les commerces étudiés semblent plus sensibles aux jours fériés qui tombent des week-ends plutôt qu'en semaine. Logique si on considère les dimanches où la plupart des commerces sont fermés ou à horaires restreints, lorsqu'un férié tombe alors un samedi, tout le week-end est atteint et apparaît donc comme une chute sur le graphique
+Les commerces alimentaires et pharmacies semblent plus sensibles aux jours fériés qui tombent des week-ends plutôt qu'en semaine. Logique si on considère les dimanches où la plupart des commerces sont fermés ou à horaires restreints, lorsqu'un férié tombe alors un samedi, tout le week-end est atteint et apparaît donc comme une chute sur le graphique des week-ends
+
+#### Analyse des cycles
+
+```{r}
+grocery_tsd_weekly <- tsd(grocery_ts_ag, s.window = 52, 
+  trend = TRUE, t.window = 13)
+plot(grocery_tsd_weekly, col = 1:4)
+
+cycle_annuel_grocery <- extract(grocery_tsd_weekly, components = "seasonal")
+plot(cycle_annuel_grocery, col = "blue")
+spectrum(cycle_annuel_grocery, spans = c(3,5))
+abline(v = seq(0, 100, by = 1), col = "grey90")
+abline(h = seq(0, 100, by = 1), col = "grey80")
+
+cpgram(cycle_annuel_grocery)
+abline(v = seq(0, 100, by = 1), col = "grey90")
+```
+Le cycle annuel est bien visible sur le premier ensemble de graphiques 
+
 
 ### Évolution de la mobilité vers les lieux de travail
 
@@ -720,3 +791,5 @@ Les déplacements vers les lieux de travail montrent une forte chute à partir d
 ## Discussion et Conclusion
 
 <!--% En tenant compte du but de votre carnet de notes et de vos résultats, discutez de résultats et proposez des conclusions à votre analyse en 5 à 10 phrases. -->
+
+La pandémie de Covid-19 a eu un effet massif sur les déplacements des gens. Le premier confinement en est le témoin le plus frappant, toutes nos analyses montrent une brusque chute de tous les types déplacements étudiés à partir de ce 18 mars 2020. Les commerces alimentaires et les pharmacies ont assistés à un pic d'affluence juste avant ce confinement, très probablement causé par la crainte de pénurie de ressources premières et de médicaments par le grand public. Les commerces et loisirs apparaissent comme les plus fortement affectés par les fermetures et restrictions successives, tandis que les parcs montrent une dynamique différente, plutôt dépendante de la saisonnalité et des mesures strictes de confinement. Les déplacements vers les lieux de travail diminuent fortement, en particulier en semaine, sous l’effet combiné du télétravail et des confinements. Nos analyses semaine/week-end révèle que les week-ends sont globalement plus sensibles aux mesures sanitaires, aux jours fériés et aux vagues de contamination, alors que les jours de la semaine présentent une fréquentation plus stable surtout chez les commerces (alimentaires) et pharmacies ainsi que les loisirs. Enfin, à partir de 2020 jusqu'à 2022, la plupart des secteurs montrent une reprise progressive, parfois au-delà de leurs niveaux de référence sûrement dû à un effet de rattrapage.
