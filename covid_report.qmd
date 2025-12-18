@@ -134,7 +134,7 @@ numeric_cols <- setdiff(numeric_cols, "date")
 mobil_nw[mobil_nw$wday %in% c(1:5), numeric_cols] <- NA
 ```
 
-### Évolution de la mobilité au travail 
+### Évolution de la mobilité au travail
 
 ### Évolution de la mobilité dans les commerces et loisirs
 
@@ -357,7 +357,7 @@ Aux alentours de juillet 2021, lorsque la situation redevient plus ou moins à l
 
 De manière générale, on peut voir que l'affluence en jours de semaine reste beaucoup plus stable que celle des weekends montrant que le COVID-19 impacte principalement cette dernière. En regardant d'un peu plus près les weekends, un pic de décroissante fortement prononcé apparait au début de 2022. Cette chute brutale mais courte est probablement due à la vague Omicron, une vague de recontamination intense qui est apparue après les fêtes de fin d'année. Même si aucun confinement stricte n'a été appliqué, cette hausse de contamination a provoqué plusieurs restrictions sanitaires ainsi qu'une prudence accrue au sein de la population. Vers la moitié de l'année 2022, le retour à la normale de la vie quotidienne donne à la population l'occasion de rattraper le temps perdu pendant cette période difficile, se reflétant par une forte affluence dans les commerces et loisirs les weekends.
 
-#### Analyse du cycle hebdomadaire 
+#### Analyse du cycle hebdomadaire
 
 ```{r}
 # convertir en série temporelle journalière
@@ -653,7 +653,7 @@ Cette tendance permet donc de mettre en lumière l’impact du COVID-19 à long 
 
 Les résidus restent quant à eux très bruités. Cela met également en lumière que l'affluence dans les parcs est également aléatoire. En effet, la météo, les jours fériés ou les nouvelles affectent eux aussi, de manière ponctuelle, la population à se rendre dans les parcs et autres espaces publics.
 
-### Évolution de la mobilité dans les pharmacies 
+### Évolution de la mobilité dans les pharmacies
 
 ## Discussion et Conclusion
 
