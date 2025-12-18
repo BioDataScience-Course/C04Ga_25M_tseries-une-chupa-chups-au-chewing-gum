@@ -67,6 +67,7 @@ Ces différentes étapes ont été appliquées de manière similaire aux catégo
 
 ```{r}
 # Importation 
+SciViews::R("ts")
 mobility  <- read("data/mobility_wallonia.rds")
 ```
 
@@ -174,8 +175,8 @@ retail_ts2_ag <- aggregate(mobil_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
 
 plot(retail_ts2_ag, 
-     main = "Série journalière aggrégée ", xlab = "Temps [année]",
-     ylab = "Commerces et loisirs (% par rapport à la référence)", ylim = c(-90, 140))
+     main = "Série journalière aggrégée des commerces et loisirs", xlab = "Temps [année]",
+     ylab = "% par rapport à la référence", ylim = c(-90, 140))
 
 x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
 abline(v = x_vert, col = "red", lwd = 1, lty = 2)
@@ -251,7 +252,7 @@ legend("topright",
        lty = c(2,2, NA, NA, NA, NA, NA),
        pch = c(NA,NA, 15, 15, 15, 15, 15),
        pt.cex = 1.2,
-       cex = 0.6,
+       cex = 0.5,
        bty = "o",
        bg = "white")
 ```
@@ -280,8 +281,8 @@ La mobilité reste en dessous de zéro pourcent jusque fin 2021 dû aux mesures 
 # Premier graphique : série originale
 plot(mobil_ts2, ylim = c(-95, 200),
      xlab = "Temps [année]", 
-     ylab = "Commerces et loisirs (% par rapport à la référence)", 
-     main = "Superposition de séries agrégées", col = rgb(0, 0, 0, alpha = 0.1))
+     ylab = "% par rapport à la référence", 
+     main = "Superposition de séries agrégées pour les commerces et loisirs", col = rgb(0, 0, 0, alpha = 0.1))
 
 # Convertir la date en position sur l'axe x (fraction de l'année)
 x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
@@ -472,8 +473,8 @@ parks_ts_agg <- aggregate(parks_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
 
 plot(parks_ts_agg, 
-     main = "Série journalière aggrégée ", xlab = "Temps [année]",
-     ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", ylim = c(-80,400))
+     main = "Série journalière aggrégée des parcs et jardins publics", xlab = "Temps [année]",
+     ylab = "% par rapport à la référence", ylim = c(-80,400))
 
 # Convertir la date en position sur l'axe x (fraction de l'année)
 x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
@@ -582,8 +583,8 @@ Ayant remarqués que les vacances scolaires influençaient l'affluence dans les 
 plot(parks_ts, 
   ylim = c(-95, 450),
      xlab = "Temps [année]", 
-     ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", 
-     main = "Superposition de la séries but et des series aggrégées", col = rgb(0, 0, 0, alpha = 0.1))
+     ylab = "% par rapport à la référence", 
+     main = "Superposition des series aggrégées des parcs et jardins publics", col = rgb(0, 0, 0, alpha = 0.1))
 
 
 # Convertir la date en position sur l'axe x (fraction de l'année)
