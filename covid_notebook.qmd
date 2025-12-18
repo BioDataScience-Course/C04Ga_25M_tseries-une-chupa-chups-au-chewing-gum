@@ -647,7 +647,7 @@ work_sl1_b <- stat.slide(time(cycle_annuel_work_b), cycle_annuel_work_b, xmin = 
 # Graphique des statistiques glissantes
 plot(work_sl1_b, main = "Statistiques glissante de 2 semaines
   sur le cycle annuelle", xlab = "Temps [année]", ylab = "Mobilité vers les lieux de travail 
-  (% par rapport à la référence)", col = c(rgb(0, 0, 0,0.2),rgb(1, 0, 0,1)),   ylim = c(-35, 45))
+  (% par rapport à la référence)", col = c(rgb(0, 0, 0,0.2),rgb(1, 0, 0,1)),   ylim = c(-35, 45), xlim = c(2020.5, 2022.15))
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -946,7 +946,7 @@ On remarque
 
 #### Extraction des données :
 
-##### **Composante saisonnière hebdomadaire extraite** de la série Commerces et Loisirs, observée sur environ 50 jours (≈ 7 semaines).
+##### Composante saisonnière hebdomadaire extraite de la série Commerces et Loisirs, observée sur environ 50 jours (≈ 7 semaines).
 
 ```{r}
 cycle_hebdo_retail <- extract(decomp_retail, components = "seasonal")
@@ -2427,7 +2427,7 @@ legend("topright",
 
 -   post confinements: la tendance locale montre de larges vagues mais celles-ci n'ont pas une période fixe. Cela montre que ces variations ne sont pas uniquement dûes au cycle saisonnier mais aussi aux différents impacts que le covid a pu avoir à long terme comme le télétravail, les restrictions variables etc
 
-### Évolution de la mobilité **liée aux magasins alimentaires et aux pharmacies (Hugo)**
+### Évolution de la mobilité liée aux magasins alimentaires et aux pharmacies (Hugo)
 
 ```{r}
 grocery_ts <- ts(mobil$grocery, start = c(2020, 46), frequency = 365)
