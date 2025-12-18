@@ -721,25 +721,6 @@ legend("topright",
 
 Les commerces alimentaires et pharmacies semblent plus sensibles aux jours fériés qui tombent des week-ends plutôt qu'en semaine. Logique si on considère les dimanches où la plupart des commerces sont fermés ou à horaires restreints, lorsqu'un férié tombe alors un samedi, tout le week-end est atteint et apparaît donc comme une chute sur le graphique des week-ends
 
-#### Analyse des cycles
-
-```{r}
-grocery_tsd_weekly <- tsd(grocery_ts_ag, s.window = 52, 
-  trend = TRUE, t.window = 13)
-plot(grocery_tsd_weekly, col = 1:4)
-
-cycle_annuel_grocery <- extract(grocery_tsd_weekly, components = "seasonal")
-plot(cycle_annuel_grocery, col = "blue")
-spectrum(cycle_annuel_grocery, spans = c(3,5))
-abline(v = seq(0, 100, by = 1), col = "grey90")
-abline(h = seq(0, 100, by = 1), col = "grey80")
-
-cpgram(cycle_annuel_grocery)
-abline(v = seq(0, 100, by = 1), col = "grey90")
-```
-Le cycle annuel est bien visible sur le premier ensemble de graphiques 
-
-
 ### Évolution de la mobilité vers les lieux de travail
 
 ```{r}
