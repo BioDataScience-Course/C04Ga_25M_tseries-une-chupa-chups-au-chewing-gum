@@ -22,15 +22,15 @@ link-citations: true
 
 <!--% Rédigez une courte introduction de 3 ou 5 phrases qui présente vos données. Ajoutez une phrase de but. Vous devez citer la bibliographie en utilisant le formatage Markdown ad hoc et en incluant votre référence au format bibtex dans le fichier references.bib. -->
 
-La pandémie de COVID-19 a entraîné la prise de mesures exceptionnelles, telles que le confinement et les restrictions de déplacement visant à limiter la propagation du virus. Cela a eu d’importants impacts sur la mobilité et l’économie dans le monde entier.
+La pandémie de COVID-19 en mars 2020 a entraîné la mise en place de mesures exceptionnelles, telles que des confinements et des restrictions au niveau des déplacements afin de limiter la propagation du virus. Ces mesures ont entraîné des répercussions majeures sur la mobilité de la population mondiale et sur l’activité économique à cette échelle.
 
-Nous nous intéressons ici aux données concernant la Belgique, et plus précisément la Wallonie. Pour étudier ces impacts, nous utilisons les données des *Google COVID-19 Community Mobility Reports*, qui fournissent des variations quotidiennes en pourcentage par rapport à une période de référence prépandémique (@google_mobility).
+Dans ce travail, nous nous intéressons aux données concernant la Belgique et plus particulièrement la Wallonie. Afin d’analyser ces impacts, nous exploitons les données issues des *Google COVID-19 Community Mobility Reports* qui décrivent les variations quotidiennes de fréquentation de différents lieux. Ces variations sont exprimées en pourcentage par rapport à une période de référence prépandémique [@google_mobility].
 
-Nous nous focalisons sur les années 2020–2021, les plus fortement affectées par les mesures sanitaires, et nous examinons quatre types de lieux : commerces et loisirs, parcs, lieux de travail, et épiceries/pharmacies.
+Notre analyse se concentre principalement sur les années 2020 et 2021, périodes durant lesquelles les mesures sanitaires ont été les plus contraignantes. Quatre catégories de lieux sont étudiées : les commerces et espaces de loisirs, les parcs, les lieux de travail, ainsi que les épiceries et pharmacies (commerces essentiels). Ces catégories permettent d’étudier les différents types de comportements de déplacement allant des activités professionnelles aux loisirs et aux besoins essentiels.
 
-Dans notre analyse, nous comparons les week-ends et les jours de semaine, car ces périodes correspondent à des comportements de déplacement différents.
+Dans ce contexte, nous comparons les observations entre les jours de semaine et les week-ends. Ces deux types de journées correspondent à des fréquentations distinctes de l’espace. Par ailleurs, les périodes de vacances scolaires sont mises en évidence, afin d’évaluer s’il existe une influence différente sur la fréquentation des différents lieux, indépendamment ou en corrélation avec les mesures sanitaires.
 
-Le but de ce travail est de quantifier et de comparer la fréquentation de ces lieux entre jours de semaine et week-ends en Wallonie durant la pandémie, à l’aide d’analyses de séries spatio-temporelles.
+Le but de ce rapport est ainsi d’analyser l’impact de la pandémie de COVID-19 sur la fréquentation de ces différents types de lieux en Wallonie entre 2020 et 2021, en quantifiant et en comparant les évolutions observées selon le type de jour et les périodes de vacances scolaires à l’aide d’analyses de séries spatio-temporelles.
 
 ## Matériel et méthodes
 
@@ -512,11 +512,11 @@ plot(work_tsd_weekly, col = 1:4)
 cycle_annuel_work <- extract(work_tsd_weekly, components = "seasonal")
 plot(cycle_annuel_work, col = "blue")
 spectrum(cycle_annuel_work, spans = c(3,5))
-abline(v = seq(0, 100, by = 1), col = "grey90")
-abline(h = seq(0, 100, by = 1), col = "grey80")
+abline(v = seq(0, 100, by = 1), col = rgb(0, 0, 0, alpha = 0.1))
+abline(h = seq(0, 100, by = 1), col = rgb(0, 0, 0, alpha = 0.1))
 
 cpgram(cycle_annuel_work)
-abline(v = seq(0, 100, by = 1), col = "grey90")
+abline(v = seq(0, 100, by = 1), col = rgb(0, 0, 0, alpha = 0.1))
 
 ```
 

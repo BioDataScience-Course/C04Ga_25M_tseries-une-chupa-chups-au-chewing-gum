@@ -25,7 +25,7 @@ Au début de l’année 2020, la Belgique et le reste du monde furent confronté
 
 <!--% Rédigez le but de ce rapport.-->
 
-Le but de ce travail est de quantifier et de comparer la fréquentation de ces lieux entre jours de semaine et week-ends en Wallonie durant la pandémie de COVID-19 (et plus précisémment de 2020 à 2021), à l’aide d’analyses de séries spatio-temporelles.
+Le but de ce rapport est d’analyser l’impact de la pandémie de COVID-19 sur la fréquentation de différents types de lieux en Wallonie (lieux de travail, commerces essentiels et non essentiels, espaces de loisirs et parcs) sur la période 2020–2021. Plus précisément, il s’agit de quantifier et de comparer les évolutions de fréquentation entre les jours de semaine et les week-ends à l’aide d’analyses de séries spatio-temporelles, afin de mettre en évidence les effets des mesures sanitaires et des changements de comportements induits par la pandémie.
 
 ## Matériel et méthodes
 
@@ -134,7 +134,7 @@ numeric_cols <- setdiff(numeric_cols, "date")
 mobil_nw[mobil_nw$wday %in% c(1:5), numeric_cols] <- NA
 ```
 
-### Évolution de la mobilité au travail 
+### Évolution de la mobilité au travail
 
 ### Évolution de la mobilité dans les commerces et loisirs
 
@@ -357,7 +357,7 @@ Aux alentours de juillet 2021, lorsque la situation redevient plus ou moins à l
 
 De manière générale, on peut voir que l'affluence en jours de semaine reste beaucoup plus stable que celle des weekends montrant que le COVID-19 impacte principalement cette dernière. En regardant d'un peu plus près les weekends, un pic de décroissante fortement prononcé apparait au début de 2022. Cette chute brutale mais courte est probablement due à la vague Omicron, une vague de recontamination intense qui est apparue après les fêtes de fin d'année. Même si aucun confinement stricte n'a été appliqué, cette hausse de contamination a provoqué plusieurs restrictions sanitaires ainsi qu'une prudence accrue au sein de la population. Vers la moitié de l'année 2022, le retour à la normale de la vie quotidienne donne à la population l'occasion de rattraper le temps perdu pendant cette période difficile, se reflétant par une forte affluence dans les commerces et loisirs les weekends.
 
-#### Analyse du cycle hebdomadaire 
+#### Analyse du cycle hebdomadaire
 
 À travers cette analyse, nous essayons de mettre en évidence à quel point les weekends influence les fréquentations dans ce secteur et essayant de déterminer si nous avons bel et bien un cycle hebdomadaire.
 
@@ -389,7 +389,7 @@ Même après avoir extrait le cycle hebdomadaire de cette série, la tendance re
 
 Les résidus restent quant à eux assez bruités. Ils mettent en évidence les variations ponctuelles et aléatoires comme les anniversaires, la météo, ou atres occasiosn qui influence la population à se rendre dans les commerces et loisirs
 
-#### Analyse du cycle annuel 
+#### Analyse du cycle annuel
 
 À travers cette analyse, nous avons essayé de mettre en évidence si le cycle annuel influençait les fréquentations dans ce secteur
 
@@ -695,7 +695,7 @@ Cette tendance permet donc de mettre en lumière l’impact du COVID-19 à long 
 
 Les résidus restent quant à eux très bruités. Cela met également en lumière que l'affluence dans les parcs est également aléatoire. En effet, la météo, les jours fériés ou les nouvelles affectent eux aussi, de manière ponctuelle, la population à se rendre dans les parcs et autres espaces publics.
 
-### Évolution de la mobilité dans les pharmacies 
+### Évolution de la mobilité dans les pharmacies
 
 ## Discussion et Conclusion
 
