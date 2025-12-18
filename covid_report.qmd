@@ -150,8 +150,6 @@ vacances_toussaint <- data.frame(
 
 ```
 
-### Évolution de la mobilité au travail
-
 ### Évolution de la mobilité dans les commerces et loisirs
 
 Cette section reprend l'analyse de l'influence du COVID-19, notamment des deux confinements ainsi que celle des vacances scolaires sur les commecres tels que les restaurants, les cafés, les parcs à thèmes, les musées, les bibliothèques et les cinémas.
@@ -170,61 +168,32 @@ plot(retail_ts2_ag,
      main = "Série journalière aggrégée des commerces et loisirs", xlab = "Temps [année]",
      ylab = "% par rapport à la référence", ylim = c(-90, 140))
 
-x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
-abline(v = x_vert, col = "red", lwd = 1, lty = 2)
-x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
-abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
+# Ajouter une ligne verticale pour le 18 mars 2020
+abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
+abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
 
-# Ajouter un encadrement pour les vacances hiver
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_hiver)){
-  x_start <- 2020 + as.numeric(vacances_hiver$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_hiver$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(0.4,0.6,0.9,0.5), border = NA)
+draw_vacances <- function(vacances, col){
+  for(i in seq_len(nrow(vacances))){
+    x_start <- 2020 + as.numeric(vacances$start[i] - as.Date("2020-01-01"))/365
+    x_end   <- 2020 + as.numeric(vacances$end[i]   - as.Date("2020-01-01"))/365
+
+    rect(
+      xleft   = x_start,
+      xright  = x_end,
+      ybottom = par("usr")[3],
+      ytop    = par("usr")[4],
+      col     = col,
+      border  = NA
+    )
+  }
 }
 
-# Ajouter un encadrement pour les vacances été
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_ete)){
-  x_start <- 2020 + as.numeric(vacances_ete$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_ete$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(1,0.7,0.3,0.5), border = NA)
-}
-
-# Ajouter un encadrement pour les vacances paque
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_paques)){
-  x_start <- 2020 + as.numeric(vacances_paques$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_paques$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(1,0.5,0.5,0.5), border = NA)
-}
-
-# Ajouter un encadrement pour les vacances carnaval
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_carnaval)){
-  x_start <- 2020 + as.numeric(vacances_carnaval$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_carnaval$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(0.4,0.8,0.4,0.3), border = NA)
-}
-
-
-# Ajouter un encadrement pour les vacances toussaint
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_toussaint)){
-  x_start <- 2020 + as.numeric(vacances_toussaint$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_toussaint$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(0.7,0.4,0.8,0.5), border = NA)
-}
+# Ajouter un encadrement pour les vacances
+draw_vacances(vacances_hiver,     rgb(0.4,0.6,0.9,0.5))
+draw_vacances(vacances_carnaval,  rgb(0.4,0.8,0.4,0.3))
+draw_vacances(vacances_paques,    rgb(1,0.5,0.5,0.5))
+draw_vacances(vacances_ete,       rgb(1,0.7,0.3,0.5))
+draw_vacances(vacances_toussaint, rgb(0.7,0.4,0.8,0.5))
 
 #legend
 legend("topright", 
@@ -249,13 +218,21 @@ legend("topright",
        bg = "white")
 ```
 
-**Influence du premier confinement :** La fermeture complète des commerces et loisirs entraîne une chute brutale de la fréquentation, proche de −80 %. Le maintien de ces mesures explique le plateau observé et l’absence d’effet des vacances de Pâques.
+**Influence du premier confinement :** Dès les premières mesures du confinement, avec la fermeture complète des commerces et activités de loisirs, l'affluence diminue de près de -80%. Le maintient de cette mesure tout au long du confinement explique le léger plateau observé ainsi que le manque d'influence des vacances de Pâques.
 
-**Influence post premier confinement :**Lors du déconfinement, l’activité reprend progressivement mais reste inférieure au niveau initial en raison des mesures sanitaires (masque, distanciation). Une hausse est néanmoins observée durant l’été 2020.
+=====\> **Influence du premier confinement :** La fermeture complète des commerces et loisirs entraîne une chute brutale de la fréquentation, proche de −80 %. Le maintien de ces mesures explique le plateau observé et l’absence d’effet des vacances de Pâques.
 
-**Influence du deuxième confinement :** Les fermetures sont partielles et les mesures plus souples (événements en plein air, click&collect), ce qui limite l’impact sur la fréquentation, avec une baisse plus modérée d’environ −40 %.
+**Influence post premier confinement :** Au déconfinement, les commerces et loisirs reprennent peu à peu leurs activités mais l'affluence ne revient pas à son seuil initial. En effet, certaines mesures sanitaires comme le port du masque ou les distances de sécurités limitent encore ce secteur et font varier son nombre de fréquentations. On observe malgré tout une augmentation des présences dans les commerces et loisirs en été 2020.
 
-**Influence post deuxième confinement :** La fréquentation demeure inférieure à 0 % jusqu’à fin 2021 en raison de mesures sanitaires fluctuantes. La réouverture progressive fin 2021–début 2022 fait repasser la fréquentation au-dessus de 0 %, avec une influence à nouveau positive des vacances scolaires. Fin 2022, la situation se stabilise à un niveau proche, voire supérieur à la normale (+30 %), probablement lié à un effet de rattrapage.
+====\> **Influence post premier confinement :**Lors du déconfinement, l’activité reprend progressivement mais reste inférieure au niveau initial en raison des mesures sanitaires (masque, distanciation). Une hausse est néanmoins observée durant l’été 2020.
+
+**Influence du deuxième confinement :** Les commerces et loisirs ferment à nouveau, mais partiellement. Les mesures sont plus souples et permettent les évènements en plein air. L'horeca s'est adapté aux mesures COVID-19; les restaurateurs effectuent désormais des click&collects. Ces adaptations permettent au secteur de moins subir les mesures sanitaires appliquées ce qui explique la baisse beaucoup moins importante de fréquentation (-40%).
+
+=====\> **Influence du deuxième confinement :** Les fermetures sont partielles et les mesures plus souples (événements en plein air, click&collect), ce qui limite l’impact sur la fréquentation, avec une baisse plus modérée d’environ −40 %.
+
+**Influence post deuxième confinement :** La mobilité reste en dessous de zéro pourcent jusque fin 2021 dû aux mesures sanitaires variables. Ensuite, fin 2021 et début 2022, la réouverture progressive de tous les commerces fait remonter le nombre de fréquentations au dessus des 0%. Les fréquentaions restent encore très variables mais les vacances scolaires recommencent à influencer positivement la fréquentation. Fin 2022, la situation semble se stabiliser avce un taux de fréquentation similaire à la normale voire un peu plus (+30%). Ce taux supérieur à la normale est probablement dû à un phénomène de rattrapage de la part de la population dû à l’arrêt prolongé des commerces et loisirs. Une fois la situation revenue à la normale, on peut observer que les vacances scolaires ont un réel impact positif sur les commerces et loisirs.
+
+===\> **Influence post deuxième confinement :** La fréquentation demeure inférieure à 0 % jusqu’à fin 2021 en raison de mesures sanitaires fluctuantes. La réouverture progressive fin 2021–début 2022 fait repasser la fréquentation au-dessus de 0 %, avec une influence à nouveau positive des vacances scolaires. Fin 2022, la situation se stabilise à un niveau proche, voire supérieur à la normale (+30 %), probablement lié à un effet de rattrapage.
 
 #### Analyse de la différence de fréquentation entre la semaine et les weekends
 
@@ -268,62 +245,32 @@ plot(mobil_ts2, ylim = c(-95, 200),
      ylab = "% par rapport à la référence", 
      main = "Superposition de séries agrégées pour les commerces et loisirs", col = rgb(0, 0, 0, alpha = 0.1))
 
-# Convertir la date en position sur l'axe x (fraction de l'année)
-x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
-abline(v = x_vert, col = "red", lwd = 1, lty = 2)
-x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
-abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
+# Ajouter une ligne verticale pour le 18 mars 2020
+abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
+abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
 
-# Ajouter un encadrement pour les vacances hiver
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_hiver)){
-  x_start <- 2020 + as.numeric(vacances_hiver$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_hiver$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(0.4,0.6,0.9,0.5), border = NA)
+draw_vacances <- function(vacances, col){
+  for(i in seq_len(nrow(vacances))){
+    x_start <- 2020 + as.numeric(vacances$start[i] - as.Date("2020-01-01"))/365
+    x_end   <- 2020 + as.numeric(vacances$end[i]   - as.Date("2020-01-01"))/365
+
+    rect(
+      xleft   = x_start,
+      xright  = x_end,
+      ybottom = par("usr")[3],
+      ytop    = par("usr")[4],
+      col     = col,
+      border  = NA
+    )
+  }
 }
 
-# Ajouter un encadrement pour les vacances été
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_ete)){
-  x_start <- 2020 + as.numeric(vacances_ete$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_ete$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(1,0.7,0.3,0.5), border = NA)
-}
-
-# Ajouter un encadrement pour les vacances paque
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_paques)){
-  x_start <- 2020 + as.numeric(vacances_paques$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_paques$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(1,0.5,0.5,0.5), border = NA)
-}
-
-# Ajouter un encadrement pour les vacances carnaval
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_carnaval)){
-  x_start <- 2020 + as.numeric(vacances_carnaval$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_carnaval$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(0.4,0.8,0.4,0.3), border = NA)
-}
-
-
-# Ajouter un encadrement pour les vacances toussaint
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_toussaint)){
-  x_start <- 2020 + as.numeric(vacances_toussaint$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_toussaint$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(0.7,0.4,0.8,0.5), border = NA)
-}
+# Ajouter un encadrement pour les vacances
+draw_vacances(vacances_hiver,     rgb(0.4,0.6,0.9,0.5))
+draw_vacances(vacances_carnaval,  rgb(0.4,0.8,0.4,0.3))
+draw_vacances(vacances_paques,    rgb(1,0.5,0.5,0.5))
+draw_vacances(vacances_ete,       rgb(1,0.7,0.3,0.5))
+draw_vacances(vacances_toussaint, rgb(0.7,0.4,0.8,0.5))
 
 #legend
 legend("topright", 
@@ -373,7 +320,15 @@ lines(retail_ts2_ag, col = "green")
 
 ```
 
-L’influence du COVID-19 sur ce secteur est très marquée. Le premier confinement, avec la fermeture totale des commerces et loisirs, entraîne une chute de fréquentation supérieure à 80 %. Lors du déconfinement, les mesures sanitaires (COVID pass, distanciation), ainsi que l’augmentation du chômage technique et du télétravail, continuent de limiter l’activité. Contrairement aux attentes, la fréquentation est alors plus élevée en semaine que le week-end entre les deux confinements, tendance qui persiste quelque temps après. À partir de l’été 2020, les vacances scolaires recommencent toutefois à avoir un effet positif. Vers juillet 2021, avec un retour progressif à une situation plus normale, la fréquentation du week-end redevient supérieure à celle de la semaine. Globalement, l’affluence en semaine reste plus stable, indiquant que l’impact du COVID-19 touche principalement les week-ends. Début 2022, une chute brutale mais brève est observée le week-end, probablement liée à la vague Omicron. À partir de la mi-2022, un effet de rattrapage se traduit par une forte affluence des commerces et loisirs le week-end.
+Ici, l'influence du COVID-19 sur ce secteur est nette.
+
+Le premier confinement, avec la fermeture totale des commerces et loisirs, fait chuter de plus de 80% les fréquentations. Au déconfinement, les mesures en vigueurs tel que le COVID pass et les distanciations sociales limitent encore ce secteur. Le hausse du chomage technique et du télétravail influence également les habitudes quotidiennes de la population. En effet, contrairement à ce que nous pourrions penser, les fréquentations dans les commerces et loisirs sont plus hautes la semaine que les weekends pendant toute la période entre les deux confinements et même après ceux-ci. Cependant, à partir de l'été 2020, les vacances recommenecent à influencer positivement ce secteur.
+
+Aux alentours de juillet 2021, lorsque la situation redevient plus ou moins à la normale, on observe un retour d'une plus grande fréquentation les weekends plutôt que la semaine.
+
+De manière générale, on peut voir que l'affluence en jours de semaine reste beaucoup plus stable que celle des weekends montrant que le COVID-19 impacte principalement cette dernière. En regardant d'un peu plus près les weekends, un pic de décroissante fortement prononcé apparait au début de 2022. Cette chute brutale mais courte est probablement due à la vague Omicron, une vague de recontamination intense qui est apparue après les fêtes de fin d'année. Même si aucun confinement stricte n'a été appliqué, cette hausse de contamination a provoqué plusieurs restrictions sanitaires ainsi qu'une prudence accrue au sein de la population. Vers la moitié de l'année 2022, le retour à la normale de la vie quotidienne donne à la population l'occasion de rattraper le temps perdu pendant cette période difficile, se reflétant par une forte affluence dans les commerces et loisirs les weekends.
+
+====\> L’influence du COVID-19 sur ce secteur est très marquée. Le premier confinement, avec la fermeture totale des commerces et loisirs, entraîne une chute de fréquentation supérieure à 80 %. Lors du déconfinement, les mesures sanitaires (COVID pass, distanciation), ainsi que l’augmentation du chômage technique et du télétravail, continuent de limiter l’activité. Contrairement aux attentes, la fréquentation est alors plus élevée en semaine que le week-end entre les deux confinements, tendance qui persiste quelque temps après. À partir de l’été 2020, les vacances scolaires recommencent toutefois à avoir un effet positif. Vers juillet 2021, avec un retour progressif à une situation plus normale, la fréquentation du week-end redevient supérieure à celle de la semaine. Globalement, l’affluence en semaine reste plus stable, indiquant que l’impact du COVID-19 touche principalement les week-ends. Début 2022, une chute brutale mais brève est observée le week-end, probablement liée à la vague Omicron. À partir de la mi-2022, un effet de rattrapage se traduit par une forte affluence des commerces et loisirs le week-end.
 
 #### Analyse du cycle hebdomadaire
 
@@ -395,11 +350,19 @@ abline(v = 1:3, col = "grey90")
 abline(h = c(1e-5, 1e-3, 1e-1, 1e+1), col = "grey80")
 ```
 
-**Analyse du cycle hebdomadaire :** L’analyse spectrale confirme un cycle hebdomadaire asymétrique, avec des fréquences significatives à 1, 2 et 3. La fréquence 1 correspond au cycle hebdomadaire classique. La fréquence 2 (+- 3,5 jours) indique un cycle non lisse, avec une hausse rapide le samedi et une chute marquée le dimanche soir. La fréquence 3 (+- 2,3 jours) révèle des variations intra-hebdomadaires plus fines, notamment une hausse de fréquentation le mercredi après-midi.
+**Analyse du cycle hebdomadaire :** L'analyse spectrale permet non seulement de confirmer la présence d'un cycle hebdomadaire mais elle permet également de mettre en évidence que ce cycle est asymétrique puisqu'on observe un cycle significatif à une fréquence de 1,2 et 3.
 
-**Analyse de la tendance :** Même après extraction du cycle hebdomadaire, la tendance présente de fortes variations. Les principales chutes correspondent au premier confinement, au deuxième confinement, puis à la vague Omicron début 2022. En dehors de ces périodes, les fluctuations restent marquées, traduisant la forte sensibilité du secteur des commerces et loisirs aux mesures sanitaires, fréquemment restreint lors des vagues de contamination.
+La fréquence de 1 montre que nous avons un cycle hebdomadaire classique. Cependant, la fréquence de 2, correspondant à un cycle de trois jours et demi, met en évidence le fait que ce cycle n’est pas lisse. Les variations du cycle sont brutales, alors que, lorsqu’un cycle est lisse et symétrique, les valeurs augmentent et diminuent de manière progressive. En effet, alors que la semaine est calme, on observe une augmentation rapide dès le samedi matin et une diminution importante le dimanche soir. La fréquence 3, quant à elle, indique des variations intra-hebdomadaires plus fines. Avec des cycles d’environ 2,3 jours, elle met en évidence une augmentation de l’affluence le mercredi après-midi, lorsque les jeunes n’ont souvent pas cours.
 
-**Analyse des résidus :** Les résidus restent bruités et reflètent des variations ponctuelles et aléatoires liées à des facteurs tels que la météo, les évènements personnels ou d’autres occasions exceptionnelles.
+=====\> **Analyse du cycle hebdomadaire :** L’analyse spectrale confirme un cycle hebdomadaire asymétrique, avec des fréquences significatives à 1, 2 et 3. La fréquence 1 correspond au cycle hebdomadaire classique. La fréquence 2 (+- 3,5 jours) indique un cycle non lisse, avec une hausse rapide le samedi et une chute marquée le dimanche soir. La fréquence 3 (+- 2,3 jours) révèle des variations intra-hebdomadaires plus fines, notamment une hausse de fréquentation le mercredi après-midi.
+
+**Analyse de la tendance :** Même après avoir extrait le cycle hebdomadaire de cette série, la tendance reste marquée par de fortes variations. La première chute importante correspond évidement au premier confinement, suivie d'une autre un peu moins importante au deuxième confinement. Une autre chute importante est également visible en début 2022 avec la vague Omicron. Cependant, même en dehors de ces périodes de contaminations importantes, les fluctuations sont fortement marquées. En effet, le secteur des commerces et loisirs a été un de ceux les plus effectés par la crise sanitaire. Les différentes vagues de contaminations se reflètent particulièrement ici puisque qu'il fait partie des premiers a été limité voir supprimés en cas de crise. En effet, de nombreuses mesures sanitaires telles que la distanciation sociale ou les COVID pass ont impacté les habitudes quotidennes de la population à long terme.
+
+**=====\> Analyse de la tendance :** Même après extraction du cycle hebdomadaire, la tendance présente de fortes variations. Les principales chutes correspondent au premier confinement, au deuxième confinement, puis à la vague Omicron début 2022. En dehors de ces périodes, les fluctuations restent marquées, traduisant la forte sensibilité du secteur des commerces et loisirs aux mesures sanitaires, fréquemment restreint lors des vagues de contamination.
+
+**Analyse des résidus :** Les résidus restent quant à eux assez bruités. Ils mettent en évidence les variations ponctuelles et aléatoires comme les anniversaires, la météo, ou atres occasiosn qui influence la population à se rendre dans les commerces et loisirs
+
+===\> **Analyse des résidus :** Les résidus demeurent bruités et reflètent des variations ponctuelles et aléatoires liées à des facteurs tels que la météo, les événements personnels ou d’autres occasions exceptionnelles.
 
 #### Analyse du cycle annuel
 
@@ -416,11 +379,17 @@ spectrum(cycle_annuel_retail, spans = c(3,5))
 abline(v = seq(0, 100, by = 1), col = "grey90")
 ```
 
-**Analyse du cycle saisonnier :** L’analyse spectrale confirme la présence d’un cycle annuel (fréquence 1), mais la significativité des fréquences 2 et 3 révèle des variations interannuelles plus fines. Le cycle annuel n’est donc ni régulier ni symétrique. La fréquence 2 met en évidence une activité plus élevée en été, liée aux vacances scolaires et au beau temps, et plus faible en automne–hiver. La fréquence 3 suggère un cycle d’environ quatre mois, souvent associé à des périodes de vacances scolaires influençant la fréquentation.
+**Analyse du cycle saisonnier :** L'analyse spectrale permet de mettre en lumière un phénomène particulier. La fréquence de 1 signifique nous permet de confirmer qu'il y a bel et bien un cycle saisonnier. Cependant, le fait que les fréquences de 2 et de 3 soient elles aussi significatives montrent des variations inter-annuelles plus fines et moins marquées. Cela permet de mettre en évidence que notre cycle annuel n'est ni régulier, ni symétrique. En effet, en dehors du cycle annuel, la fréquence de 2 peut par exemple mettre en évidence la forte activité de la population en été avec les vacances scolaires et le beau temps alors que l'activité est plutôt réduite en automne/hiver avec des températures beaucoup plus basses. La fréquence de 3 peut quant à elle mettre en évidence un cycle moins marqué de 4 mois qui se termine toujours généralement par une période de vacances scolaires influençant la population à se rendre dans les commerces et loisirs
 
-**Analyse de la tendance :** La tendance montre une reprise progressive des activités après le premier confinement, marquée par de fortes fluctuations dues aux vagues de contamination et aux mesures sanitaires variables. À long terme, l’activité retrouve un rythme proche de la normale, voire supérieur, traduisant un possible effet de rattrapage.
+====\> L’analyse spectrale confirme la présence d’un cycle annuel (fréquence 1), mais la significativité des fréquences 2 et 3 révèle des variations interannuelles plus fines. Le cycle annuel n’est donc ni régulier ni symétrique. La fréquence 2 met en évidence une activité plus élevée en été, liée aux vacances scolaires et au beau temps, et plus faible en automne–hiver. La fréquence 3 suggère un cycle d’environ quatre mois, souvent associé à des périodes de vacances scolaires influençant la fréquentation.
 
-**Analyse des résidus :** Les résidus restent quant à eux assez bruités. Ils mettent en évidence les variations ponctuelles et aléatoires comme les anniversaires, la météo, ou autres occasions qui influence la population à se rendre dans les commerces et loisirs
+**Analyse de la tendance :** Cette courbe met en évidence la reprise graduelle des activités après le premier confinement. Ce reprise n'étant pas stable dû aux différentes vagues de contamination et aux mesures sanitaires variables, de nombreuses fluctuations sont visibles. À long terme, les activités reprennent leur rythme habituel. Ceratines personnes voulant même rattraper le temps perdu après ces nombreuses restrictions font augmenter a'fflence dans les commerces et loisirs à un niveau supérieur à ce qui était observé avant le COVID-19.
+
+====\> La tendance montre une reprise progressive des activités après le premier confinement, marquée par de fortes fluctuations dues aux vagues de contamination et aux mesures sanitaires variables. À long terme, l’activité retrouve un rythme proche de la normale, voire supérieur, traduisant un possible effet de rattrapage.
+
+**Analyse des résidus :** Les résidus restent quant à eux assez bruités. Ils mettent en évidence les variations ponctuelles et aléatoires comme les anniversaires, la météo, ou atres occasiosn qui influence la population à se rendre dans les commerces et loisirs
+
+===\> Les résidus restent bruités et reflètent des variations ponctuelles et aléatoires liées notamment à la météo, aux événements personnels ou à d’autres occasions exceptionnelles.
 
 ### Évolution de la mobilité dans les parcs et espaces publics
 
@@ -440,62 +409,32 @@ plot(parks_ts_agg,
      main = "Série journalière aggrégée des parcs et jardins publics", xlab = "Temps [année]",
      ylab = "% par rapport à la référence", ylim = c(-80,400))
 
-# Convertir la date en position sur l'axe x (fraction de l'année)
-x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
-abline(v = x_vert, col = "red", lwd = 1, lty = 2)
-x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
-abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
+# Ajouter une ligne verticale pour le 18 mars 2020
+abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
+abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
 
-# Ajouter un encadrement pour les vacances hiver
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_hiver)){
-  x_start <- 2020 + as.numeric(vacances_hiver$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_hiver$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(0.4,0.6,0.9,0.5), border = NA)
+draw_vacances <- function(vacances, col){
+  for(i in seq_len(nrow(vacances))){
+    x_start <- 2020 + as.numeric(vacances$start[i] - as.Date("2020-01-01"))/365
+    x_end   <- 2020 + as.numeric(vacances$end[i]   - as.Date("2020-01-01"))/365
+
+    rect(
+      xleft   = x_start,
+      xright  = x_end,
+      ybottom = par("usr")[3],
+      ytop    = par("usr")[4],
+      col     = col,
+      border  = NA
+    )
+  }
 }
 
-# Ajouter un encadrement pour les vacances été
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_ete)){
-  x_start <- 2020 + as.numeric(vacances_ete$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_ete$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(1,0.7,0.3,0.5), border = NA)
-}
-
-# Ajouter un encadrement pour les vacances paque
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_paques)){
-  x_start <- 2020 + as.numeric(vacances_paques$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_paques$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(1,0.5,0.5,0.5), border = NA)
-}
-
-# Ajouter un encadrement pour les vacances carnaval
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_carnaval)){
-  x_start <- 2020 + as.numeric(vacances_carnaval$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_carnaval$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(0.4,0.8,0.4,0.3), border = NA)
-}
-
-
-# Ajouter un encadrement pour les vacances toussaint
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_toussaint)){
-  x_start <- 2020 + as.numeric(vacances_toussaint$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_toussaint$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(0.7,0.4,0.8,0.5), border = NA)
-}
+# Ajouter un encadrement pour les vacances
+draw_vacances(vacances_hiver,     rgb(0.4,0.6,0.9,0.5))
+draw_vacances(vacances_carnaval,  rgb(0.4,0.8,0.4,0.3))
+draw_vacances(vacances_paques,    rgb(1,0.5,0.5,0.5))
+draw_vacances(vacances_ete,       rgb(1,0.7,0.3,0.5))
+draw_vacances(vacances_toussaint, rgb(0.7,0.4,0.8,0.5))
 
 #legend
 legend("topright", 
@@ -520,11 +459,17 @@ legend("topright",
        bg = "white")
 ```
 
-**L'influence de la saisonnalité sur l'affluence dans les parcs :**L’affluence dans les parcs varie fortement selon les saisons : elle est minimale en hiver, augmente progressivement avec le réchauffement des températures, atteint un maximum en été, puis diminue à l’automne
+**L'influence de la saisonnalité sur l'affluence dans les parcs :** Comme imaginé, l'affluence dans les parcs varie tout d'abord selon les saisons. Au début d'année, lorsque les températures sont au plus bas, le nombre de fréquentations est au plus bas. Ensuite, au fur et à mesure que les températures s'adoucissent, les parcs se remplissent petit à petit jusqu'à avoir une fréquentation maximum en plein été. Au début de l'automne, les températures diminuent à nouveau et les parcs se vident petit à petit.
 
-**L'influence des vacances scolaires sur l'affluence dans les parcs :** Les périodes de vacances scolaires sont généralement associées à une fréquentation plus élevée, les enfants et parents disposant de plus de temps libre. Toutefois, les vacances d’automne et d’hiver ont un impact limité en raison de conditions météorologiques moins favorables.
+**L'influence des vacances scolaires sur l'affluence dans les parcs :** En période de vacances scolaires, les parcs sont généralements plus remplis. En effet, les jeunes ne sont pas à l'école de la journée et les parents prennent parfois congés également à ces memes périodes pour profiter en famille de moments en extérieur. Evidemment, toutes les vacances scolaires n'ont pas le même impact. Même si les enfants et parents disposent de plus de temps libre, les vacances d'automne/hiver ne permettent pas une réelle augmentation de l'affluence dans les parcs puisque les températures ne le permettent pas.
 
-**L'influence du COVID-19 sur l'affluence dans les parcs :** Le premier confinement entraîne une chute brutale de la fréquentation dès mars 2020, liée aux restrictions strictes de déplacement et à la fermeture de nombreux espaces publics. Le déconfinement, combiné aux beaux jours et à l’envie de sortir après une longue période d’isolement, provoque une hausse rapide de l’affluence, malgré le maintien de certaines mesures sanitaires. Le deuxième confinement, plus souple et laissant la plupart des espaces extérieurs ouverts, a un impact plus modéré. Par la suite, une légère augmentation de la fréquentation est observée, traduisant le retour progressif à une plus grande liberté de déplacement.
+**L'influence du COVID-19 sur l'affluence dans les parcs :** Le premier confinement a marqué un tournant majeurs dans la vie quotidienne des habitants. A partir de mars 2020, dès l'annonce du confinement, une importante chute est visible sur le graphique. En effet, les mesures ont été strictes: il était nécéssaire d'avoir une raison valable pour être autorisé à sortir de chez soi et surtout, la majorité des espaces publics ont été fermés pour des mesures sanitaires.
+
+Au déconfinement, l'arrivée des beaux jours et l'envie de sortir de chez soi après y avoir été enfermé sur une longue période montrent une augmentation très rapide de l'affluence dans les parcs. Pour le moment, les mesures sanitaires tels que le port du masque et les distances de sécurité permettent à la population de profiter des espaces publics tout en se sentant en sécurité.
+
+En novembre 2020, le deuxième confinement a lieu. De nouvelles mesures sont prises mais elles sont beaucoup plus souples cette fois: les distances de sécurités doivent toujours être respectées, les masques doivent toujours être portés mais les espaces publics extérieurs restent ouverts pour la plupart. Les mesures de déplacement sont également moins strictes, la population profite de son heure de déplacement à moins d'un kilomètre de chez soi pour profiter des espaces publics à proximité lorsqu'il y en a ou lorsque c'est possible. L'impact de ce confinement est donc moindre.
+
+Après ce deuxième confinement, on observe une légère hausse de fréquentation, montrant que malgré tout, la population est contente de retrouver pleinement sa liberté.
 
 #### Analyse de la différence de fréquentation entre la semaine et les weekends
 
@@ -539,62 +484,32 @@ plot(parks_ts,
      main = "Superposition des series aggrégées des parcs et jardins publics", col = rgb(0, 0, 0, alpha = 0.1))
 
 
-# Convertir la date en position sur l'axe x (fraction de l'année)
-x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
-abline(v = x_vert, col = "red", lwd = 1, lty = 2)
-x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
-abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
+# Ajouter une ligne verticale pour le 18 mars 2020
+abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
+abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
 
-# Ajouter un encadrement pour les vacances hiver
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_hiver)){
-  x_start <- 2020 + as.numeric(vacances_hiver$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_hiver$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(0.4,0.6,0.9,0.5), border = NA)
+draw_vacances <- function(vacances, col){
+  for(i in seq_len(nrow(vacances))){
+    x_start <- 2020 + as.numeric(vacances$start[i] - as.Date("2020-01-01"))/365
+    x_end   <- 2020 + as.numeric(vacances$end[i]   - as.Date("2020-01-01"))/365
+
+    rect(
+      xleft   = x_start,
+      xright  = x_end,
+      ybottom = par("usr")[3],
+      ytop    = par("usr")[4],
+      col     = col,
+      border  = NA
+    )
+  }
 }
 
-# Ajouter un encadrement pour les vacances été
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_ete)){
-  x_start <- 2020 + as.numeric(vacances_ete$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_ete$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(1,0.7,0.3,0.5), border = NA)
-}
-
-# Ajouter un encadrement pour les vacances paque
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_paques)){
-  x_start <- 2020 + as.numeric(vacances_paques$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_paques$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(1,0.5,0.5,0.5), border = NA)
-}
-
-# Ajouter un encadrement pour les vacances carnaval
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_carnaval)){
-  x_start <- 2020 + as.numeric(vacances_carnaval$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_carnaval$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(0.4,0.8,0.4,0.3), border = NA)
-}
-
-
-# Ajouter un encadrement pour les vacances toussaint
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_toussaint)){
-  x_start <- 2020 + as.numeric(vacances_toussaint$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_toussaint$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(0.7,0.4,0.8,0.5), border = NA)
-}
+# Ajouter un encadrement pour les vacances
+draw_vacances(vacances_hiver,     rgb(0.4,0.6,0.9,0.5))
+draw_vacances(vacances_carnaval,  rgb(0.4,0.8,0.4,0.3))
+draw_vacances(vacances_paques,    rgb(1,0.5,0.5,0.5))
+draw_vacances(vacances_ete,       rgb(1,0.7,0.3,0.5))
+draw_vacances(vacances_toussaint, rgb(0.7,0.4,0.8,0.5))
 
 #legend
 legend("topright", 
@@ -647,9 +562,46 @@ lines(parks_ts_agg, col = rgb(0, 1, 0, 0.5))
 #lines(parks_ts_agg, col = "black")
 ```
 
-Les effets du COVID-19 sur la fréquentation des parcs sont globalement similaires à ceux décrits précédemment. L’analyse spectrale confirme la présence d’un cycle hebdomadaire asymétrique, avec des fréquences significatives à 1, 2 et 3.
+De manière générale, nous pouvons affirmer que les weekends les parcs sont plus fréquentés que la semaine, ce qui coïncide avec le temps libre de la population. Nous pouvons également voir, comme expliqué précédemment que la saisonnalité et les vacances scolaires influencent le nombre de présences dans les parcs.
 
-La fréquence 1 correspond au cycle hebdomadaire classique. La fréquence 2 (≈ 3,5 jours) met en évidence un cycle non lisse, caractérisé par une hausse rapide de la fréquentation le samedi et une forte baisse le dimanche soir. La fréquence 3 (≈ 2,3 jours) révèle des variations intra-hebdomadaires plus fines, notamment une augmentation de l’affluence le mercredi après-midi.
+Au premier confinement, puisque les parcs étaient fermés, l'affluence est au plus bas. Il est donc difficile d'y observer une différence entre les jours de semaine et les weekends.
+
+Au déconfinement, certaines mesures restent en place pour éviter que la pandémie ne reprenne. Les entreprises sont invitées à favoriser le télétravail et la crise du COVID-19 implique que de nombreuses personnes se retrouvent en chômage technique ou perdent leur travail. Tous ces changements impactent la vie quotidienne de la population en répartissant le travail différement sur la semaine ou bien en donnant plus de temps libre. La différence de fréquentation des espaces publics entre la semaine et les weekends est alors peu visible.
+
+Le deuxième confinement a eu très peu d'impact sur l'affluence dans les parcs. Cependant, après celui-ci, une hausse de fréquentation des parcs est visibles les weekends. Le retour au travail, à la routine, incite à profiter d'avantage de son temps libre les weekends. Au fur et à mesure que les mois passent, on observe que l'écart entre la semaine et les weekends se creuse montrant un retour à la normale. Le travail reprend pour ceratins, le télétravail diminue, et la population se repose la semaine en rentrant du travail et profite des espaces publics le weekend.
+
+#### Analyse du cycle hebdomadaire
+
+La différence d'affluence entre la semaine et les weekends doit probablement impliquer qu'il y ait un cycle hebdomadaire, c'est ce que nous allons vérifier ici.
+
+```{r}
+# convertir en série temporelle journalière
+parks_ts_daily <- ts(parks_ts, frequency = 7)
+# il y a deux valeurs manquantes en position 158 et 186 à compléter si on veut travaillers sur la série complète et non aggréger 
+# on prend les 3 valeurs en amont et en aval de la valeur manquantes
+parks_ts_daily[158] <- 188  #(188+242+205+180+188+130)/6
+parks_ts_daily[186] <- 142  # (164+168+135+128+137+120)/6
+
+
+decomp_parks <- tsd(parks_ts_daily, s.window = 7, trend = TRUE, t.window = 7)
+
+
+plot(decomp_parks, col = 1:4)
+
+cycle_hebdo_parks<- extract(decomp_parks, components = "seasonal")
+
+spectrum(cycle_hebdo_parks, spans = c(5, 7), col = "aquamarine3")
+abline(v = seq(0, 200, by = 1), col = "grey90")
+abline(h = seq(0, 10000, by = 250), col = "grey80")
+
+
+```
+
+Les analyses concernant l'influence du COVID-19 sur la fréquentation des parcs restent similaire à ce qui a été évoqué au préalable.
+
+L'analyse spectrale permet non seulement de confirmer la présence d'un cycle hebdomadaire mais elle permet également de mettre en évidence que ce cycle est asymétrique puisqu'on observe un cycle significatif à une fréquence de 1,2 et 3.
+
+La fréquence de 1 montre que nous avons un cycle hebdomadaire classique. Cependant, la fréquence de 2, correspondant à un cycle de trois jours et demi, met en évidence le fait que ce cycle n’est pas lisse. Les variations du cycle sont brutales, alors que, lorsqu’un cycle est lisse et symétrique, les valeurs augmentent et diminuent de manière progressive. En effet, alors que la semaine est calme, on observe une augmentation rapide dès le samedi matin et une diminution importante le dimanche soir. La fréquence 3, quant à elle, indique des variations intra-hebdomadaires plus fines. Avec des cycles d’environ 2,3 jours, elle met en évidence une augmentation de l’affluence le mercredi après-midi, lorsque les jeunes n’ont souvent pas cours.
 
 #### Analyse du cycle annuel
 
@@ -667,18 +619,19 @@ abline(v = seq(0, 100, by = 1), col = "grey90")
 
 ```
 
-**Analyse du cycle saisonnier :** L’analyse spectrale confirme la présence d’un cycle annuel (fréquence 1). La significativité de la fréquence 2 révèle des variations interannuelles plus fines, montrant que le cycle n’est ni régulier ni symétrique, avec une activité plus élevée en été et plus faible en automne–hiver.
+**Analyse du cycle saisonnier :** L'analyse spectrale permet de confirmer qu'il y a un cycle annuel. La fréquence de 1 signifique nous permet de confirmer qu'il y a bel et bien un cycle saisonnier. Cependant, le fait que la fréquence de 2 soit elle aussi significative montre des variations inter-annuelles plus fines et moins marquées. Cela permet de mettre en évidence que notre cycle annuel n'est ni régulier, ni symétrique. En effet, en dehors du cycle annuel, la fréquence de 2 peut par exemple mettre en évidence la forte activité de la population en été avec les vacances scolaires et le beau temps alors que l'activité est plutôt réduite en automne/hiver avec des températures beaucoup plus basses.
 
-**Analyse de la tendance :** Après extraction du cycle saisonnier, la tendance met en évidence une chute brutale début 2020 liée au premier confinement, suivie d’une reprise progressive mais non stable. Contrairement aux attentes, la tendance n’est pas plane, traduisant un impact durable du COVID-19. La forte croissance au déconfinement reflète le besoin de profiter des espaces extérieurs, puis une alternance de phases de hausse et de baisse persiste en lien avec l’évolution des mesures sanitaires, du télétravail et de la situation épidémiologique.
+**Analyse de la tendance :** Après extraction de ce cycle, regardons la tendance. Une chute brutale en début de 2020 marque le début du premier confinement. Au déconfinement, la tendance évolue petit à petit. Bien que nous nous attendions à ce que la tendance soit plane après avoir désaisonnaliser, ce n'est pas le cas.
 
-**Analyse des résidus :** Les résidus restent très bruités, indiquant une part importante de variabilité aléatoire liée notamment à la météo, aux jours fériés et à l’actualité.
+Cette tendance permet donc de mettre en lumière l’impact du COVID-19 à long terme. Lors du déconfinement, on observe une croissance très rapide, montrant le besoin de la population de sortir de chez elle et de profiter du plein air. Ensuite, une alternance de phases d’augmentation et de diminution apparaît. Cette période montre que le COVID-19 ne s’est pas arrêté avec la fin des confinements. L’utilisation variable du télétravail, l’évolution des mesures sanitaires d’une semaine à l’autre, ainsi que les informations sur l’évolution de la pandémie ont continué à influencer le quotidien de la population pendant plusieurs mois après la crise sanitaire proprement dite.
+
+**Analyse des résidus :** Les résidus restent quant à eux très bruités. Cela met également en lumière que l'affluence dans les parcs est également aléatoire. En effet, la météo, les jours fériés ou les nouvelles affectent eux aussi, de manière ponctuelle, la population à se rendre dans les parcs et autres espaces publics.
 
 ### Évolution de la mobilité dans les commerces alimentaires et pharmacies
 
 #### **Série journalière agrégée (avec jours fériés mis en évidence)**
 
 ```{r}
-{r}
 grocery_ts_ag <- aggregate(grocery_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
 plot(grocery_ts_ag, 
@@ -737,7 +690,26 @@ legend("topright",
 #### Superposition des séries
 
 ```{r}
+```
 
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
 grocery_ts <- ts(mobil$grocery, start = c(2020, 46), frequency = 365)
 grocery_ts_ag <- aggregate(grocery_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
 grocery_nw_ts <- ts(mobil_nw$grocery,start = c(2020, 46),frequency = 365)
@@ -750,7 +722,7 @@ plot(grocery_ts,
   ylim = c(-95, 135),
      xlab = "Temps [année]", 
      ylab = "Magasins alimentaires et pharmacies (% par rapport à la référence)", 
-     main = "Superposition de la séries but et des series aggrégées", col = rgb(0, 0, 0, alpha = 0.1))
+     main = "Superposition de la série brute et des séries aggrégées", col = rgb(0, 0, 0, alpha = 0.1))
 
 # Ajouter la deuxième série : week-ends supprimés
 lines(grocery_nwe_ts2b, col = "red")
@@ -764,6 +736,8 @@ legend("topright",
        legend = c("Série originale","Série originale aggrégée ", "Série journalière aggrégée sans les week-ends ", "Série journalière aggrégée avec seulement les week-ends" ), 
        col = c("gray", rgb(0, 1, 0, 0.5), "red", "blue"), lty=1, cex = 0.7)
 ```
+
+Les commerces étudiés semblent plus sensibles aux jours fériés qui tombent des week-ends plutôt qu'en semaine. Logique si on considère les dimanches où la plupart des commerces sont fermés ou à horaires restreints, lorsqu'un férié tombe alors un samedi, tout le week-end est atteint et apparaît donc comme une chute sur le graphique
 
 ### Évolution de la mobilité vers les lieux de travail
 
@@ -798,7 +772,7 @@ legend("topright",
        col = c("gray", rgb(0, 1, 0, 0.5), "red", "blue"), lty=1, cex = 0.7)
 ```
 
-### Évolution de la mobilité dans les pharmacies
+Les déplacements vers les lieux de travail montrent une forte chute à partir du premier confinement de mars 2020, avec une baisse très marquée par rapport à la référence, particulièrement visible en semaine. On observe une reprise avant l’été 2020, mais les niveaux pré-confinement ne sont pas pleinement retrouvés jusqu’à la fin de la période étudiée. Les effets des vacances et des confinements affectent principalement les jours de semaine, tandis que les week-ends apparaissent moins sensibles aux variations saisonnières et aux mesures sanitaires, ce qui se traduit par des écarts plus marqués entre semaine et week-end en été.
 
 ## Discussion et Conclusion
 
