@@ -1739,7 +1739,6 @@ plot(grocery_ts_ag,
 # Ajouter une ligne verticale pour les confinements
 # Convertir la date en position sur l'axe x (fraction de l'année)
 
-<<<<<<< HEAD
 abline(v = x_conf1, col = "red", lwd = 2, lty = 2)
 x_conf2 <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
 abline(v = x_conf2, col = "red", lwd = 2, lty = 2)
@@ -1775,7 +1774,7 @@ x_nati2 <- 2022 + as.numeric(as.Date("2022-07-21") - as.Date("2022-01-01"))/365
 abline(v = x_nati2, col = "blue", lwd = 2, lty = 2)
 x_armi <- 2021 + as.numeric(as.Date("2021-11-11") - as.Date("2021-01-01"))/365
 abline(v = x_armi, col = "black", lwd = 2, lty = 2)
-=======
+
 abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
 
 abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
@@ -1787,7 +1786,6 @@ draw_vacances(vacances_paques,    rgb(1,0.5,0.5,0.5))
 draw_vacances(vacances_ete,       rgb(1,0.7,0.3,0.5))
 draw_vacances(vacances_toussaint, rgb(0.7,0.4,0.8,0.5))
 
->>>>>>> dc691dc87c0f0aa7ac3111df9d0d418daba1ce7d
 #legend
 legend("topright", 
        legend = c("Confinements", "Fêtes religieuses", "Fête nationale belge", "Armistice"),
@@ -1828,18 +1826,16 @@ abline(v = x_asso, col = "black", lwd = 1, lty = 2)
 x_lend <- 2020 + as.numeric(as.Date("2020-12-26") - as.Date("2020-01-01"))/365
 abline(v = x_lend, col = "blue", lwd = 1, lty = 2)
 x_fete <- 2021 + as.numeric(as.Date("2021-05-01") - as.Date("2021-01-01"))/365
-<<<<<<< HEAD
+
 abline(v = x_fete, col = "yellow", lwd = 2, lty = 2)
 x_noel <- 2021 + as.numeric(as.Date("2021-12-25") - as.Date("2021-01-01"))/365
 abline(v = x_noel, col = "green", lwd = 2, lty = 2)
 x_newy <- 2022 + as.numeric(as.Date("2022-01-01") - as.Date("2022-01-01"))/365
 abline(v = x_newy, col = "green", lwd = 2, lty = 2)
-=======
+
 abline(v = x_fete, col = "green", lwd = 1, lty = 2)
 x_noel <- 2021 + as.numeric(as.Date("2021-12-25") - as.Date("2021-01-01"))/365
 abline(v = x_noel, col = "yellow", lwd = 1, lty = 2)
-
->>>>>>> dc691dc87c0f0aa7ac3111df9d0d418daba1ce7d
 
 
 #legend
