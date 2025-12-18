@@ -251,9 +251,7 @@ legend("topright",
 
 **Influence du premier confinement :** Dès les premières mesures du confinement, avec la fermeture complète des commerces et activités de loisirs, l'affluence diminue de près de -80%. Le maintient de cette mesure tout au long du confinement explique le léger plateau observé ainsi que le manque d'influence des vacances de Pâques.
 
-=====\> **Influence du premier confinement :** La fermeture complète des commerces et loisirs entraîne une chute brutale de la
-fréquentation, proche de −80 %. Le maintien de ces mesures explique le plateau
-observé et l’absence d’effet des vacances de Pâques.
+=====\> **Influence du premier confinement :** La fermeture complète des commerces et loisirs entraîne une chute brutale de la fréquentation, proche de −80 %. Le maintien de ces mesures explique le plateau observé et l’absence d’effet des vacances de Pâques.
 
 **Influence post premier confinement :** Au déconfinement, les commerces et loisirs reprennent peu à peu leurs activités mais l'affluence ne revient pas à son seuil initial. En effet, certaines mesures sanitaires comme le port du masque ou les distances de sécurités limitent encore ce secteur et font varier son nombre de fréquentations. On observe malgré tout une augmentation des présences dans les commerces et loisirs en été 2020.
 
@@ -421,12 +419,7 @@ La fréquence de 1 montre que nous avons un cycle hebdomadaire classique. Cepend
 
 **Analyse de la tendance :** Même après avoir extrait le cycle hebdomadaire de cette série, la tendance reste marquée par de fortes variations. La première chute importante correspond évidement au premier confinement, suivie d'une autre un peu moins importante au deuxième confinement. Une autre chute importante est également visible en début 2022 avec la vague Omicron. Cependant, même en dehors de ces périodes de contaminations importantes, les fluctuations sont fortement marquées. En effet, le secteur des commerces et loisirs a été un de ceux les plus effectés par la crise sanitaire. Les différentes vagues de contaminations se reflètent particulièrement ici puisque qu'il fait partie des premiers a été limité voir supprimés en cas de crise. En effet, de nombreuses mesures sanitaires telles que la distanciation sociale ou les COVID pass ont impacté les habitudes quotidennes de la population à long terme.
 
-**=====\> Analyse de la tendance :** Même après extraction du cycle hebdomadaire, la tendance présente de fortes
-variations. Les principales chutes correspondent au premier confinement, au
-deuxième confinement, puis à la vague Omicron début 2022. En dehors de ces
-périodes, les fluctuations restent marquées, traduisant la forte sensibilité du
-secteur des commerces et loisirs aux mesures sanitaires, fréquemment restreint
-lors des vagues de contamination.
+**=====\> Analyse de la tendance :** Même après extraction du cycle hebdomadaire, la tendance présente de fortes variations. Les principales chutes correspondent au premier confinement, au deuxième confinement, puis à la vague Omicron début 2022. En dehors de ces périodes, les fluctuations restent marquées, traduisant la forte sensibilité du secteur des commerces et loisirs aux mesures sanitaires, fréquemment restreint lors des vagues de contamination.
 
 **Analyse des résidus :** Les résidus restent quant à eux assez bruités. Ils mettent en évidence les variations ponctuelles et aléatoires comme les anniversaires, la météo, ou atres occasiosn qui influence la population à se rendre dans les commerces et loisirs
 
