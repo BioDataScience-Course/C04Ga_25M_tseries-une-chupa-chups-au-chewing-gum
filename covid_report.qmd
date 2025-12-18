@@ -261,77 +261,6 @@ legend("topright",
 À priori, la population dispose de plus de temps libre les weekends. Ce temps, sert souvent à profiter avec ses proches dans les différents commerces et loisirs. C'est ce que nous allons vérifier ici.
 
 ```{r}
-# Premier graphique : série originale
-plot(mobil_ts2, ylim = c(-95, 200),
-     xlab = "Temps [année]", 
-     ylab = "% par rapport à la référence", 
-     main = "Superposition de séries agrégées pour les commerces et loisirs", col = rgb(0, 0, 0, alpha = 0.1))
-
-
-# Ajouter une ligne verticale pour le 18 mars 2020
-abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
-abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
-
-draw_vacances <- function(vacances, col){
-  for(i in seq_len(nrow(vacances))){
-    x_start <- 2020 + as.numeric(vacances$start[i] - as.Date("2020-01-01"))/365
-    x_end   <- 2020 + as.numeric(vacances$end[i]   - as.Date("2020-01-01"))/365
-
-    rect(
-      xleft   = x_start,
-      xright  = x_end,
-      ybottom = par("usr")[3],
-      ytop    = par("usr")[4],
-      col     = col,
-      border  = NA
-    )
-  }
-}
-
-
-# Convertir la date en position sur l'axe x (fraction de l'année)
-
-abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
-
-abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
-
-# Ajouter un encadrement pour les vacances
-draw_vacances(vacances_hiver,     rgb(0.4,0.6,0.9,0.5))
-draw_vacances(vacances_carnaval,  rgb(0.4,0.8,0.4,0.3))
-draw_vacances(vacances_paques,    rgb(1,0.5,0.5,0.5))
-draw_vacances(vacances_ete,       rgb(1,0.7,0.3,0.5))
-draw_vacances(vacances_toussaint, rgb(0.7,0.4,0.8,0.5))
-
-
-#legend
-legend("topright", 
-       legend = c("Confinement du 18 mars 2020",
-         "Confinement du 02 novembre 2020",
-                  "Vacances hiver", 
-                  "Vacances carnaval", 
-                  "Vacances Pâques", 
-                  "Vacances été", 
-                  "Vacances Toussaint"),
-       col = c("red", "blue",
-                 rgb(0.4,0.6,0.9,0.5),
-               rgb(0.4,0.8,0.5,0.5),
-               rgb(1,0.5,0.5,0.5),
-               rgb(1,0.7,0.3,0.5),
-               rgb(0.7,0.4,0.8,0.5)),
-       lty = c(2,2, NA, NA, NA, NA, NA),
-       pch = c(NA,NA, 15, 15, 15, 15, 15),
-       pt.cex = 1.2,
-       cex = 0.75,
-       bty = "o",
-       bg = "white")
-
-
-# Optionnel : ajouter une légende
-legend("topleft", 
-       c("Série originale","Série journalière aggrégée (weeks + week-ends", "Série journalière aggrégée sans les week-ends", "Série journalière aggrégée sans les semaines"), 
-       col = c("grey", "green", "red", "blue"), 
-  lty=1, , cex=0.75)
-
 #calcul de la courbe aggrégée sans les semaines 
 retail_nw_ts2 <- ts(mobil_nw$retail,start = c(2020, 46),frequency = 365)
 retail_nw_ts2  <- aggregate(retail_nw_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
@@ -344,12 +273,37 @@ retail_nwe_ts2 <- aggregate(retail_nwe_ts2, 52, FUN = collapse::fmean, ts.eps = 
 # calcul de la courbe agrégée semaines et weekends
 retail_ts2_ag <- aggregate(mobil_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
+# Premier graphique : série originale
+plot(mobil_ts2, ylim = c(-95, 200),xlab = "Temps [année]", ylab = "% par rapport à la référence",main = "Superposition de séries agrégées pour les commerces et loisirs", col = rgb(0, 0, 0, alpha = 0.1))
 
 # Ajouter les lignes
 lines(retail_nwe_ts2, col = "red")
 lines(retail_nw_ts2, col = "blue")
 lines(retail_ts2_ag, col = "green") 
 
+# Ajouter une ligne verticale pour le 18 mars 2020
+abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
+abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
+
+#crée fonction vacances
+draw_vacances <- function(vacances, col){
+for(i in seq_len(nrow(vacances))){
+x_start <- 2020 + as.numeric(vacances$start[i] - as.Date("2020-01-01"))/365
+x_end<- 2020 + as.numeric(vacances$end[i]- as.Date("2020-01-01"))/365
+rect(xleft= x_start,xright  = x_end,ybottom = par("usr")[3],ytop= par("usr")[4],col= col,border  = NA)}}
+# Convertir la date en position sur l'axe x (fraction de l'année)
+abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
+abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
+# Ajouter un encadrement pour les vacances
+draw_vacances(vacances_hiver,     rgb(0.4,0.6,0.9,0.5))
+draw_vacances(vacances_carnaval,  rgb(0.4,0.8,0.4,0.3))
+draw_vacances(vacances_paques,    rgb(1,0.5,0.5,0.5))
+draw_vacances(vacances_ete,       rgb(1,0.7,0.3,0.5))
+draw_vacances(vacances_toussaint, rgb(0.7,0.4,0.8,0.5))
+#legend
+legend("topright", legend = c("Confinement du 18 mars 2020","Confinement du 02 novembre 2020","Vacances hiver", "Vacances carnaval", "Vacances Pâques", "Vacances été", "Vacances Toussaint"),col = c("red", "blue", rgb(0.4,0.6,0.9,0.5),rgb(0.4,0.8,0.5,0.5),rgb(1,0.5,0.5,0.5),rgb(1,0.7,0.3,0.5),rgb(0.7,0.4,0.8,0.5)),lty = c(2,2, NA, NA, NA, NA, NA),pch = c(NA,NA, 15, 15, 15, 15, 15),pt.cex = 1.2,cex = 0.5,bty = "o",bg = "white")
+legend("topleft", 
+       c("Série originale","Série journalière aggrégée (weeks + week-ends", "Série journalière aggrégée sans les week-ends", "Série journalière aggrégée sans les semaines"), col = c("grey", "green", "red", "blue"), lty=1, , cex=0.5, bg = "white")
 ```
 
 Ici, l'influence du COVID-19 sur ce secteur est nette.
