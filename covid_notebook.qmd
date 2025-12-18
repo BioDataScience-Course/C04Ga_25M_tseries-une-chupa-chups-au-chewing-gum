@@ -1,5 +1,5 @@
 ---
-title: "___"
+title: "Carnet de notes sur l’analyse des effets du COVID-19 sur la mobilité durant les années 2020 et 2021 en Wallonie"
 author: "Amazone Pouillard, Hugo De Smet, Richard Dumont, Solène Joris "
 format:
   html:
