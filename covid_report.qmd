@@ -209,7 +209,7 @@ legend("topleft",
        c("Série originale","Série journalière aggrégée (weeks + week-ends", "Série journalière aggrégée sans les week-ends", "Série journalière aggrégée sans les semaines"), col = c("grey", "green", "red", "blue"), lty=1, , cex=0.5, bg = "white")
 ```
 
-Tendance général agrégé pour supprimé le bruit de fond:
+Analyse de la série d'origine agrégé pour supprimé le bruit de fond:
 
 **Influence du premier confinement :** La fermeture complète des commerces et loisirs entraîne une chute brutale de la fréquentation, proche de −80 %. Le maintien de ces mesures explique le plateau observé et l’absence d’effet des vacances de Pâques.
 
@@ -272,83 +272,15 @@ abline(v = seq(0, 100, by = 1), col = "grey90")
 
 Cette section reprend l'analyse de l'influence du COVID-19, notamment des deux confinements ainsi que celle des vacances scolaires sur les parcs nationaux, les plages publiques, les marinas, les parcs canins, les places et les jardins publics.
 
-#### Analyse générale de la série
+#### Analyse de la différence de fréquentation entre la semaine et les weekends
+
+Ayant remarqués que les vacances scolaires influençaient l'affluence dans les parcs, nous avons voulu mettre en évidence la différence de fréquentation entre la semaine et les weekends.
 
 ```{r}
 # Conversion en ts de mobil
 parks_ts <- ts(mobil$parks, start = c(2020, 46), frequency = 365)
 
 # Aggrégation par moyenne des valeurs par semaine
-parks_ts_agg <- aggregate(parks_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
-
-
-plot(parks_ts_agg, 
-     main = "Série journalière aggrégée des parcs 
-  et jardins publics", xlab = "Temps [année]",
-     ylab = "% par rapport à la référence", ylim = c(-80,400))
-
-# Ajouter une ligne verticale pour le 18 mars 2020
-abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
-abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
-
-draw_vacances <- function(vacances, col){
-  for(i in seq_len(nrow(vacances))){
-    x_start <- 2020 + as.numeric(vacances$start[i] - as.Date("2020-01-01"))/365
-    x_end   <- 2020 + as.numeric(vacances$end[i]   - as.Date("2020-01-01"))/365
-
-    rect(
-      xleft   = x_start,
-      xright  = x_end,
-      ybottom = par("usr")[3],
-      ytop    = par("usr")[4],
-      col     = col,
-      border  = NA
-    )
-  }
-}
-
-# Ajouter un encadrement pour les vacances
-draw_vacances(vacances_hiver,     rgb(0.4,0.6,0.9,0.5))
-draw_vacances(vacances_carnaval,  rgb(0.4,0.8,0.4,0.3))
-draw_vacances(vacances_paques,    rgb(1,0.5,0.5,0.5))
-draw_vacances(vacances_ete,       rgb(1,0.7,0.3,0.5))
-draw_vacances(vacances_toussaint, rgb(0.7,0.4,0.8,0.5))
-
-#legend
-legend("topright", 
-       legend = c("Confinement du 18 mars 2020",
-         "Confinement du 02 novembre 2020",
-                  "Vacances hiver", 
-                  "Vacances carnaval", 
-                  "Vacances Pâques", 
-                  "Vacances été", 
-                  "Vacances Toussaint"),
-       col = c("red", "blue",
-                 rgb(0.4,0.6,0.9,0.5),
-               rgb(0.4,0.8,0.5,0.5),
-               rgb(1,0.5,0.5,0.5),
-               rgb(1,0.7,0.3,0.5),
-               rgb(0.7,0.4,0.8,0.5)),
-       lty = c(2,2, NA, NA, NA, NA, NA),
-       pch = c(NA,NA, 15, 15, 15, 15, 15),
-       pt.cex = 1.2,
-       cex = 0.6,
-       bty = "o",
-       bg = "white")
-```
-
-**L'influence de la saisonnalité sur l'affluence dans les parcs :** . L’affluence dans les parcs varie fortement selon les saisons : elle est minimale en hiver, augmente progressivement avec le réchauffement des températures, atteint un maximum en été, puis diminue à l’automne.
-
-**L'influence des vacances scolaires sur l'affluence dans les parcs :** Les périodes de vacances scolaires sont généralement associées à une fréquentation plus élevée, les enfants et parents disposant de plus de temps libre. Toutefois, les vacances d’automne et d’hiver ont un impact limité en raison de conditions météorologiques moins favorables.
-
-**L'influence du COVID-19 sur l'affluence dans les parcs :** . Le premier confinement entraîne une chute brutale de la fréquentation dès mars 2020, liée aux restrictions strictes de déplacement et à la fermeture de nombreux espaces publics. Le déconfinement, combiné aux beaux jours et à l’envie de sortir après une longue période d’isolement, provoque une hausse rapide de l’affluence, malgré le maintien de certaines mesures sanitaires. Le deuxième confinement, plus souple et laissant la plupart des espaces extérieurs ouverts, a un impact plus modéré. Par la suite, une légère augmentation de la fréquentation est observée, traduisant le retour progressif à une plus grande liberté de déplacement.
-
-#### Analyse de la différence de fréquentation entre la semaine et les weekends
-
-Ayant remarqués que les vacances scolaires influençaient l'affluence dans les parcs, nous avons voulu mettre en évidence la différence de fréquentation entre la semaine et les weekends.
-
-```{r}
-# calcul de la courbe aggrégée semaine et weekends
 parks_ts_agg <- aggregate(parks_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
 #calcul de la courbe aggrégée de la semaine uniquement
@@ -380,17 +312,13 @@ draw_vacances <- function(vacances, col){
   for(i in seq_len(nrow(vacances))){
     x_start <- 2020 + as.numeric(vacances$start[i] - as.Date("2020-01-01"))/365
     x_end   <- 2020 + as.numeric(vacances$end[i]   - as.Date("2020-01-01"))/365
-
     rect(
       xleft   = x_start,
       xright  = x_end,
       ybottom = par("usr")[3],
       ytop    = par("usr")[4],
       col     = col,
-      border  = NA
-    )
-  }
-}
+      border  = NA)}}
 
 # Ajouter un encadrement pour les vacances
 draw_vacances(vacances_hiver,     rgb(0.4,0.6,0.9,0.5))
@@ -420,6 +348,13 @@ legend("topright",
 # Optionnel : ajouter une légende
 legend("topleft", legend = c("Série originale","Série originale aggrégée ", "Série journalière aggrégée sans les week-ends ", "Série journalière aggrégée avec seulement les week-ends" ), col = c("gray", rgb(0, 1, 0, 0.5), "red", "blue"), lty=1, cex=0.5, bg = "white")
 ```
+Analyse de la série d'origine agrégé pour supprimé le bruit de fond:
+**L'influence de la saisonnalité sur l'affluence dans les parcs :** . L’affluence dans les parcs varie fortement selon les saisons : elle est minimale en hiver, augmente progressivement avec le réchauffement des températures, atteint un maximum en été, puis diminue à l’automne.
+
+**L'influence des vacances scolaires sur l'affluence dans les parcs :** Les périodes de vacances scolaires sont généralement associées à une fréquentation plus élevée, les enfants et parents disposant de plus de temps libre. Toutefois, les vacances d’automne et d’hiver ont un impact limité en raison de conditions météorologiques moins favorables.
+
+**L'influence du COVID-19 sur l'affluence dans les parcs :** . Le premier confinement entraîne une chute brutale de la fréquentation dès mars 2020, liée aux restrictions strictes de déplacement et à la fermeture de nombreux espaces publics. Le déconfinement, combiné aux beaux jours et à l’envie de sortir après une longue période d’isolement, provoque une hausse rapide de l’affluence, malgré le maintien de certaines mesures sanitaires. Le deuxième confinement, plus souple et laissant la plupart des espaces extérieurs ouverts, a un impact plus modéré. Par la suite, une légère augmentation de la fréquentation est observée, traduisant le retour progressif à une plus grande liberté de déplacement.
+
 
 De manière générale, les parcs sont plus fréquentés le week-end que la semaine, en lien avec le temps libre de la population. La saisonnalité et les vacances scolaires influencent également la fréquentation.
 
@@ -439,9 +374,7 @@ parks_ts_daily <- ts(parks_ts, frequency = 7)
 parks_ts_daily[158] <- 188  #(188+242+205+180+188+130)/6
 parks_ts_daily[186] <- 142  # (164+168+135+128+137+120)/6
 
-
 decomp_parks <- tsd(parks_ts_daily, s.window = 7, trend = TRUE, t.window = 7)
-
 
 plot(decomp_parks, col = 1:4)
 
@@ -450,8 +383,6 @@ cycle_hebdo_parks<- extract(decomp_parks, components = "seasonal")
 spectrum(cycle_hebdo_parks, spans = c(5, 7), col = "aquamarine3")
 abline(v = seq(0, 200, by = 1), col = "grey90")
 abline(h = seq(0, 10000, by = 250), col = "grey80")
-
-
 ```
 
 Les effets du COVID-19 sur la fréquentation des parcs sont globalement similaires à ceux décrits précédemment. L’analyse spectrale confirme la présence d’un cycle hebdomadaire asymétrique, avec des fréquences significatives à 1, 2 et 3.
