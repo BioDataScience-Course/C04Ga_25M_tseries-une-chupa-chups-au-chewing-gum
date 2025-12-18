@@ -613,6 +613,8 @@ Enfin, l’analyse des résidus et de l’autocorrélation indique que, une fois
 
 ### Évolution de la mobilité dans les commerces et loisirs (Solene)
 
+**Graphique de l'objet ts : allure générale de la série**
+
 ```{r}
 # Conversion en ts de mobil
 mobil_ts2 <- ts(mobil$retail, start = c(2020, 46), frequency = 365)
@@ -731,18 +733,16 @@ retail_ts2_daily <- ts(mobil_ts2, frequency = 7)
 
 decomp_retail <- tsd(retail_ts2_daily, s.window = 7, trend = TRUE, t.window = 7)
 
-plot(decomp_work, col = 1:4)
+plot(decomp_retail, col = 1:4)
 ```
 
-On remarque
+On observe dans la série originale de fortes variations rapides liées au cycle hebdomadaire superposées à une évolution plus lente marquée par des chutes importantes lors des périodes de confinement.
 
--   De fortes variations rapides liées au rythme hebdomadaire, des chutes marquées lors des périodes de confinement et une évolution plus lente.
+La composante de tendance met en évidence les grandes phases de baisses et de hausses associées aux restrictions sanitaires liées à la pandémie.
 
--   La tendance reflète clairement les grandes phases de baisse et de hausse associées aux périodes de COVID-19.
+La composante saisonnière révèle un cycle hebdomadaire régulier et stable dans le temps. Cela confirme l’importance de l’analyse différente des comportements selon les jours (week-ends et semaines).
 
--   La composante saisonnière met en évidence un cycle hebdomadaire régulier.
-
--   Les résidus, globalement faibles, correspondent à des variations ponctuelles qu’on ne peut expliquer et indiquent que la décomposition isole bien un signal hebdomadaire fort.
+Enfin, les résidus sont globalement faibles et ne présentent pas de structure marquée ce qui suggère que la décomposition permet d’isoler efficacement un signal hebdomadaire dominant.
 
 #### Extraction des données :
 
@@ -778,7 +778,7 @@ Le périodogramme cumulatif montre des ruptures nettes dépassant l’enveloppe 
 
 #### Aggrégation des jours en semaine :
 
-##### Semaine + week-end
+**Séries agrégées générales: semaine + week-end**
 
 ```{r}
 # Aggrégation par moyenne des valeurs par semaine
@@ -786,10 +786,12 @@ retail_ts2_ag <- aggregate(mobil_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
 
 plot(retail_ts2_ag, 
-     main = "Série journalière aggrégée ", xlab = "Temps [année]",
+     main = "Série journalière aggrégée des commerces et loisirs ", xlab = "Temps [année]",
      ylab = "Commerces et loisirs (% par rapport à la référence)", ylim = c(-90, 140))
 # Ajouter une ligne verticale pour le 18 mars 2020
 abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
+abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
+
 
 # Ajouter un encadrement pour les vacances
 draw_vacances(vacances_hiver,     rgb(0.4,0.6,0.9,0.5))
@@ -800,29 +802,31 @@ draw_vacances(vacances_toussaint, rgb(0.7,0.4,0.8,0.5))
 
 #legend
 legend("topright", 
-       legend = c("Confinement du 18 mars 2020", 
+       legend = c("Confinement du 18 mars 2020",
+         "Confinement du 02 novembre 2020",
                   "Vacances hiver", 
                   "Vacances carnaval", 
                   "Vacances Pâques", 
                   "Vacances été", 
                   "Vacances Toussaint"),
-       col = c("red", 
+       col = c("red", "blue",
                  rgb(0.4,0.6,0.9,0.5),
                rgb(0.4,0.8,0.5,0.5),
                rgb(1,0.5,0.5,0.5),
                rgb(1,0.7,0.3,0.5),
                rgb(0.7,0.4,0.8,0.5)),
-       lty = c(2, NA, NA, NA, NA, NA),
-       pch = c(NA, 15, 15, 15, 15, 15),
+       lty = c(2,2, NA, NA, NA, NA, NA),
+       pch = c(NA,NA, 15, 15, 15, 15, 15),
        pt.cex = 1.2,
        cex = 0.8,
        bty = "o",
        bg = "white")
+
 ```
 
 Après une importante chute de la courbe liée au confinement de mars 2020, la mobilité vers les commerces et loisirs remonte progressivement mais reste toujours inférieure à la référence et ce, pendant une longue période. Plusieurs périodes de vacances scolaires (été, hiver, Pâques, carnaval) coïncident avec des phases de hausse de la fréquentation. Cela suggère une influence non négligeable de ces périodes sur cette mobilité vers les commerces. À partir de 2022, la tendance se stabilise autour de zéro, traduisant un retour vers des niveaux de mobilité pré-pandémiques. Par conséquence, l’analyse des données agrégées met en évidence l’effet des confinements, des vagues successives de la pandémie et des périodes de vacances sur la dynamique de fréquentation des commerces et loisirs.
 
-##### Weekend seuls
+**Séries agrégées: weekend uniquement**
 
 ```{r}
 retail_nw_ts2 <- ts(mobil_nw$retail,start = c(2020, 46),frequency = 365)
@@ -835,11 +839,13 @@ plot(retail_nw_ts2,
 # Aggrégation par moyenne des valeurs par semaine et suppression des NA
 retail_nw_ts2b  <- aggregate(retail_nw_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
-plot(work_nw_ts1b, 
+plot(retail_nw_ts2b, 
      main = "Série journalière aggrégée sans les jours de la semaines", xlab = "Temps [année]",
      ylab = "Commerces et loisirs (% par rapport à la référence)", ylim = c(-95, 160))
 # Ajouter une ligne verticale pour le 18 mars 2020
 abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
+abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
+
 
 # Ajouter un encadrement pour les vacances
 draw_vacances(vacances_hiver,     rgb(0.4,0.6,0.9,0.5))
@@ -850,29 +856,31 @@ draw_vacances(vacances_toussaint, rgb(0.7,0.4,0.8,0.5))
 
 #legend
 legend("topright", 
-       legend = c("Confinement du 18 mars 2020", 
+       legend = c("Confinement du 18 mars 2020",
+         "Confinement du 02 novembre 2020",
                   "Vacances hiver", 
                   "Vacances carnaval", 
                   "Vacances Pâques", 
                   "Vacances été", 
                   "Vacances Toussaint"),
-       col = c("red", 
+       col = c("red", "blue",
                  rgb(0.4,0.6,0.9,0.5),
                rgb(0.4,0.8,0.5,0.5),
                rgb(1,0.5,0.5,0.5),
                rgb(1,0.7,0.3,0.5),
                rgb(0.7,0.4,0.8,0.5)),
-       lty = c(2, NA, NA, NA, NA, NA),
-       pch = c(NA, 15, 15, 15, 15, 15),
+       lty = c(2,2, NA, NA, NA, NA, NA),
+       pch = c(NA,NA, 15, 15, 15, 15, 15),
        pt.cex = 1.2,
        cex = 0.8,
        bty = "o",
        bg = "white")
+
 ```
 
-La série agrégée sans les jours de semaine met en évidence l’évolution de la fréquentation des commerces et loisirs durant les week-ends. Cette période est particulièrement sensible aux mesures sanitaires et aux rythmes de loisirs. Après une chute très marquée des déplacements vers les commerces lors du confinement de mars 2020, la mobilité augmente durant l’été 2020 et ensuite, présente d’importantes fluctuations en 2021. Ces fluctuations sont en lien avec les différentes vagues de COVID-19 et les restrictions associées à ces vagues. En 2022, malgré un creux en début d’année, la fréquentation des week-ends retrouve rapidement des niveaux proches à supérieurs à la référence. Cela se passe notamment durant les périodes d’été suggérant une normalisation progressive des activités de loisir.
+La série agrégée sans les jours de semaine met en évidence l’évolution de la fréquentation des commerces et loisirs durant les week-ends. Cette période est particulièrement sensible aux mesures sanitaires. Après une chute très marquée des déplacements lors du confinement de mars 2020, la courbe de mobilité montre un rebond durant l’été 2020. L’année 2021 est montre par des fluctuations indiquant une situation encore instable liée aux restrictions sanitaires fluctuantes elles aussi. En 2022, même si on aperçoit un léger creux en début d’année, la fréquentation des week-ends retrouve rapidement des niveaux proches à supérieurs à la référence et ce, notamment durant les périodes estivales, suggérant une normalisation progressive des activités de loisir.
 
-##### Semaine seule
+**Séries agrégées: semaines uniquement**
 
 ```{r}
 retail_nwe_ts2 <- ts(mobil_nwe$retail,start = c(2020, 46),frequency = 365)
@@ -949,16 +957,18 @@ plot(mobil_nw_ts2,
 mobil_nw_ts2b <- aggregate(mobil_nw_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
 plot(mobil_nw_ts2b, 
-     main = "Série journalière aggrégée (week-ends = NA)", xlab = "Temps [année]",
+     main = "Série journalière aggrégée (weeks = NA)", xlab = "Temps [année]",
      ylab = "Commerces et loisirs (% par rapport à la référence)")
 ```
+
+**Superposition des séries agrégées avec périodes de couleurs**
 
 ```{r}
 # Premier graphique : série originale
 plot(mobil_ts2, ylim = c(-95, 200),
      xlab = "Temps [année]", 
      ylab = "Commerces et loisirs (% par rapport à la référence)", 
-     main = "Superposition de séries agrégées", col = rgb(0, 0, 0, alpha = 0.1))
+     main = "Superposition de la brute et des séries agrégées", col = rgb(0, 0, 0, alpha = 0.1))
 
 # Convertir la date en position sur l'axe x (fraction de l'année)
 
@@ -1014,6 +1024,8 @@ L’ajout des périodes de vacances scolaires met en évidence leur rôle au niv
 
 En 2022, la fréquentation durant les week-ends dépasse fréquemment la référence pré-pandémique. On suppose un effet de « rattrapage des activités de loisirs » tandis que alors que la fréquentation en semaine suit une évolution plus progressive et régulière. Dans l’ensemble, cette superposition montre que les week-ends concentrent l’essentiel des pics et de la variation de la série originale, amplifiés lors des périodes de vacances, tandis que les jours de semaine traduisent principalement la tendance lente et évolutive de la fréquentation des commerces et loisirs en Wallonie sur la période étudiée.
 
+#### Extraction du cycle annuelle
+
 ```{r}
 retail_tsd_weekly <- tsd(retail_ts2_ag, s.window = 52, 
   trend = TRUE, t.window = 13)
@@ -1032,6 +1044,8 @@ abline(v = seq(0, 100, by = 1), col = "grey90")
 Les graphiques montrent que la mobilité vers les commerces est structurée par une saisonnalité annuelle marquée et une tendance à long terme fortement perturbée par la pandémie. Après une chute brutale lors du premier confinement, la reprise s’effectue de manière irrégulière, traduisant des effets durables du contexte sanitaire au-delà des seuls cycles saisonniers.
 
 L’analyse spectrale confirme la dominance du cycle annuel, tandis que les résidus indiquent des variations ponctuelles liées à des événements exceptionnels.
+
+**Statistiques glissantes**
 
 ```{r}
 retail_ts1_window_b <- window(retail_ts2_ag, start = c(2020, 27), end = c(2022,39))

@@ -37,27 +37,31 @@ Les données analysées proviennent des Google COVID-19 Community Mobility Repor
 
 Les variations quotidiennes sont exprimées en pourcentage par rapport à un niveau de référence propre à chaque jour de la semaine. Cette référence correspond à la médiane des valeurs observées entre le 3 janvier et le 6 février 2020 [@google_documentation].
 
-Dans ce travail, nous nous focalisons principalement sur les années 2020 et 2021, à partir du premier confinement ordonné par le gouvernement belge le 18 mars 2020 [@unric_belgique_confinement_2020], afin de suivre les périodes de confinement, de post-confinement et les perturbations de mobilité directement liées aux restrictions COVID-19. L’année 2022 est utilisée comme témoin d’une situation progressivement stabilisée post-pandémie.
+Dans ce travail, nous nous focalisons principalement sur les années 2020 et 2021, à partir du premier confinement ordonné par le gouvernement belge le 18 mars 2020 [@unric_belgique_confinement_2020] afin de suivre les périodes de confinement, de post-confinement ainsi que les perturbations de mobilité directement liées aux restrictions COVID-19. L’année 2022 est utilisée comme point de référence afin d'illustrer une situation progressivement stabilisée post-pandémie.
 
-Parmi les indicateurs disponibles, nous retenons quatre catégories de lieux : commerces et loisirs (retail), parcs, lieux de travail (workplaces) et épiceries/pharmacies (grocery & pharmacy). Pour étudier les différences de comportements, les séries ont été déclinées en sous-ensembles distinguant les week-ends (samedi–dimanche) des jours de semaine (lundi–vendredi), et annotées en fonction des périodes de vacances scolaires en Fédération Wallonie-Bruxelles (carnaval, Pâques, été, Toussaint, hiver) \[\@.. références à insérer + tard\].
+Parmi les indicateurs disponibles, nous retenons quatre catégories de lieux : commerces et loisirs (retail), parcs (parks), lieux de travail (workplaces) et épiceries/pharmacies (grocery & pharmacy). Pour étudier les différences de comportements, les séries ont été séparées en sous-ensembles mettant en évidence les week-ends (samedi–dimanche) et les jours de semaine (lundi–vendredi). Celles-ci ont été annotées en fonction des périodes de vacances scolaires en Fédération Wallonie-Bruxelles (carnaval, Pâques, été, Toussaint, hiver), celles-ci variant bien évidemment selon les années.
 
 ### Analyses réalisées et logiciels employés
 
 L’ensemble des analyses a été réalisé dans la SciViews Box 2025 sur la plateforme Saturn Cloud, à l’aide du logiciel R et de l’environnement SciViews::R. Les séries temporelles ont été manipulées et étudiées à l’aide notamment du package pastecs (r packageVersion("pastecs")), ainsi que des fonctions de base de R pour les objets ts.
 
-Pour chaque catégorie de lieu, les pourcentages de variation ont d’abord été convertis en séries temporelles journalières (ts, fréquence = 365, début = 15 février 2020). Nous avons réalisé :
+Pour chaque catégorie de lieu, les pourcentages de variation ont d’abord été convertis en séries temporelles journalières (ts, fréquence = 365, début = 15 février 2020). Suite à ces convertions, nous avons réalisé pour chacune de nos 4 variables :
 
-1\) Une visualisation exploratoire des séries brutes, avec ajout de lignes verticales aux dates de confinement et de bandes colorées pour les périodes de vacances scolaires, afin de situer les principaux événements contextuels dans le temps.
+1\) Une visualisation des séries brutes, avec ajout de lignes verticales pointillées aux dates de confinement et de bandes colorées pour les périodes de vacances scolaires, afin de situer les principaux événements contextuels dans le temps. Cette analyse est faite dans un but d'explorer la série brute.
 
 2\) Une analyse de la saisonnalité hebdomadaire, en extrayant la composante saisonnière à l’aide de la décomposition de séries temporelles (tsd, avec estimation de la tendance et de la composante saisonnière) puis en représentant le cycle moyen sur plusieurs semaines.
 
-3\) Une analyse spectrale (périodogramme lissé via spectrum et cumulative periodogram via cpgram) pour identifier les fréquences dominantes (comme le cycle hebdomadaire) et vérifier que la saisonnalité constitue bien la structure principale des séries.
+3\) Une analyse spectrale (périodogramme lissé via un "spectrum" et periodogramme cumulatif via un "cpgram") pour identifier les fréquences dominantes (comme le cycle hebdomadaire) et vérifier que la saisonnalité constitue bien la structure principale des séries.
 
-4\) Une agrégation hebdomadaire des séries journalières à l’aide de la fonction aggregate et de la moyenne pondérée, afin de lisser les fluctuations quotidiennes et de mettre en évidence les tendances à plus long terme.
+4\) Une agrégation hebdomadaire (c'est à dire la réduction du nombre d'observations) des séries journalières à l’aide de la fonction "aggregate" et de la moyenne pondérée, afin de lisser les fluctuations quotidiennes et de mettre en évidence les tendances à plus long terme. L'analyse de l'agrégation a été faite sur 3 jeux de données différents : les semaines sans les week-ends, les week-ends seuls ainsi que les week-ends et les semaines regroupés.
 
 5\) Une séparation des dynamiques de semaine et de week-end, en construisant trois versions de chaque série : la série complète, une série ne conservant que les week-ends (jours de semaine remplacés par NA puis agrégation hebdomadaire), une série ne conservant que les jours de semaine (week-ends remplacés par NA puis agrégation hebdomadaire).
 
-Ces différentes étapes ont été appliquées de manière similaire aux catégories commerces et loisirs, parcs, lieux de travail et épiceries/pharmacies, afin de comparer systématiquement l’évolution de la mobilité entre week-ends et jours de semaine pour chacun de ces types de lieux.
+6\) Une extraction du cycle annuel par décomposition de la série agrégée a été faite afin d’identifier et d’analyser la saisonnalité annuelle de la fréquentation des différents lieux et ce, indépendamment des fluctuations à court terme.
+
+7\) Une analyse conjointe de la tendance locale et de statistiques glissantes appliquées à la composante saisonnière a également été faite pour finaliser l’analyse. Cela a été réalisé afin de suivre l’évolution de la variation à long terme et de l’intensité du cycle annuel pendant de la période étudiée.
+
+Ces différentes étapes ont été appliquées de manière similaire aux catégories commerces et loisirs, parcs, lieux de travail et épiceries/pharmacies afin de comparer systématiquement l’évolution de la mobilité entre week-ends et jours de semaine pour chacun de ces types de lieux.
 
 ## Résultats
 
