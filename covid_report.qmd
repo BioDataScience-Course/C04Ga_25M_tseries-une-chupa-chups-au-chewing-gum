@@ -673,19 +673,7 @@ legend("topright",
        bg = "white")
 ```
 
-#### Superposition des séries
-
-```{r}
-```
-
-```{r}
-```
-
-```{r}
-```
-
-```{r}
-```
+#### Superposition des séries{r}
 
 ```{r}
 grocery_ts <- ts(mobil$grocery, start = c(2020, 46), frequency = 365)
