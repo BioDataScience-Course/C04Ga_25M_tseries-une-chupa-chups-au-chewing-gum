@@ -134,7 +134,7 @@ numeric_cols <- setdiff(numeric_cols, "date")
 mobil_nw[mobil_nw$wday %in% c(1:5), numeric_cols] <- NA
 ```
 
-### Évolution de la mobilité au travail 
+### Évolution de la mobilité au travail
 
 ### Évolution de la mobilité dans les commerces et loisirs
 
@@ -357,7 +357,7 @@ Aux alentours de juillet 2021, lorsque la situation redevient plus ou moins à l
 
 De manière générale, on peut voir que l'affluence en jours de semaine reste beaucoup plus stable que celle des weekends montrant que le COVID-19 impacte principalement cette dernière. En regardant d'un peu plus près les weekends, un pic de décroissante fortement prononcé apparait au début de 2022. Cette chute brutale mais courte est probablement due à la vague Omicron, une vague de recontamination intense qui est apparue après les fêtes de fin d'année. Même si aucun confinement stricte n'a été appliqué, cette hausse de contamination a provoqué plusieurs restrictions sanitaires ainsi qu'une prudence accrue au sein de la population. Vers la moitié de l'année 2022, le retour à la normale de la vie quotidienne donne à la population l'occasion de rattraper le temps perdu pendant cette période difficile, se reflétant par une forte affluence dans les commerces et loisirs les weekends.
 
-#### Analyse du cycle hebdomadaire 
+#### Analyse du cycle hebdomadaire
 
 ```{r}
 # convertir en série temporelle journalière
@@ -653,7 +653,130 @@ Cette tendance permet donc de mettre en lumière l’impact du COVID-19 à long 
 
 Les résidus restent quant à eux très bruités. Cela met également en lumière que l'affluence dans les parcs est également aléatoire. En effet, la météo, les jours fériés ou les nouvelles affectent eux aussi, de manière ponctuelle, la population à se rendre dans les parcs et autres espaces publics.
 
-### Évolution de la mobilité dans les pharmacies 
+### Évolution de la mobilité dans les commerces alimentaires et pharmacies
+
+#### **Série journalière agrégée (avec jours fériés mis en évidence)**
+
+```{r}
+{r}
+grocery_ts_ag <- aggregate(grocery_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
+
+plot(grocery_ts_ag, 
+     main = "Série journalière agrégée ", xlab = "Temps [année]",
+     ylab = "Mobilité liée aux magasins d'alimentation et pharmacies (% par rapport à la référence)", ylim = c(-60,70))
+# Ajouter une ligne verticale pour les confinements
+# Convertir la date en position sur l'axe x (fraction de l'année)
+
+abline(v = x_conf1, col = "red", lwd = 2, lty = 2)
+x_conf2 <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
+abline(v = x_conf2, col = "red", lwd = 2, lty = 2)
+x_lundpa <- 2021 + as.numeric(as.Date("2021-04-05") - as.Date("2021-01-01"))/365
+abline(v = x_lundpa, col = "green", lwd = 2, lty = 2)
+x_asso <- 2020 + as.numeric(as.Date("2020-08-15") - as.Date("2020-01-01"))/365
+abline(v = x_asso, col = "green", lwd = 2, lty = 2)
+x_asso2 <- 2021 + as.numeric(as.Date("2021-08-15") - as.Date("2021-01-01"))/365
+abline(v = x_asso2, col = "green", lwd = 2, lty = 2)
+x_asso3 <- 2022 + as.numeric(as.Date("2022-08-15") - as.Date("2022-01-01"))/365
+abline(v = x_asso3, col = "green", lwd = 2, lty = 2)
+x_lend <- 2020 + as.numeric(as.Date("2020-12-26") - as.Date("2020-01-01"))/365
+abline(v = x_lend, col = "green", lwd = 2, lty = 2)
+x_asce <- 2021 + as.numeric(as.Date("2021-05-13") - as.Date("2021-01-01"))/365
+abline(v = x_asce, col = "green", lwd = 2, lty = 2)
+x_lundpe <- 2021 + as.numeric(as.Date("2021-05-24") - as.Date("2021-01-01"))/365
+abline(v = x_lundpe, col = "green", lwd = 2, lty = 2)
+x_touss <- 2021 + as.numeric(as.Date("2021-11-01") - as.Date("2021-01-01"))/365
+abline(v = x_touss, col = "green", lwd = 2, lty = 2)
+x_noel21 <- 2021 + as.numeric(as.Date("2021-12-25") - as.Date("2021-01-01"))/365
+abline(v = x_noel21, col = "green", lwd = 2, lty = 2)
+x_na22 <- 2022 + as.numeric(as.Date("2022-01-01") - as.Date("2022-01-01"))/365
+abline(v = x_na22, col = "green", lwd = 2, lty = 2)
+x_lundpa2 <- 2022 + as.numeric(as.Date("2022-04-18") - as.Date("2022-01-01"))/365
+abline(v = x_lundpa2, col = "green", lwd = 2, lty = 2)
+x_asce2 <- 2022 + as.numeric(as.Date("2022-05-26") - as.Date("2022-01-01"))/365
+abline(v = x_asce2, col = "green", lwd = 2, lty = 2)
+x_lundpe2 <- 2022 + as.numeric(as.Date("2022-06-06") - as.Date("2022-01-01"))/365
+abline(v = x_lundpe2, col = "green", lwd = 2, lty = 2)
+x_nati <- 2021 + as.numeric(as.Date("2021-07-21") - as.Date("2021-01-01"))/365
+abline(v = x_nati, col = "blue", lwd = 2, lty = 2)
+x_nati2 <- 2022 + as.numeric(as.Date("2022-07-21") - as.Date("2022-01-01"))/365
+abline(v = x_nati2, col = "blue", lwd = 2, lty = 2)
+x_armi <- 2021 + as.numeric(as.Date("2021-11-11") - as.Date("2021-01-01"))/365
+abline(v = x_armi, col = "black", lwd = 2, lty = 2)
+#legend
+legend("topright", 
+       legend = c("Confinements", "Fêtes religieuses", "Fête nationale belge", "Armistice"),
+       col = c("red", "green", "blue", "black"),
+       lty = c(2,2,2,2),
+       pch = c(NA,NA,NA,NA),
+       pt.cex = 1.2,
+       cex = 0.5,
+       bty = "o",
+       bg = "white")
+```
+
+#### Superposition des séries
+
+```{r}
+
+grocery_ts <- ts(mobil$grocery, start = c(2020, 46), frequency = 365)
+grocery_ts_ag <- aggregate(grocery_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
+grocery_nw_ts <- ts(mobil_nw$grocery,start = c(2020, 46),frequency = 365)
+grocery_nw_tsb  <- aggregate(grocery_nw_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
+grocery_nwe_ts2 <- ts(mobil_nwe$grocery,start = c(2020, 46),frequency = 365)
+grocery_nwe_ts2b <- aggregate(grocery_nwe_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
+
+# Premier graphique : série originale
+plot(grocery_ts, 
+  ylim = c(-95, 135),
+     xlab = "Temps [année]", 
+     ylab = "Magasins alimentaires et pharmacies (% par rapport à la référence)", 
+     main = "Superposition de la séries but et des series aggrégées", col = rgb(0, 0, 0, alpha = 0.1))
+
+# Ajouter la deuxième série : week-ends supprimés
+lines(grocery_nwe_ts2b, col = "red")
+
+lines(grocery_nw_tsb, col = "blue")
+
+lines(grocery_ts_ag, col = rgb(0, 1, 0, 0.5))
+
+# Optionnel : ajouter une légende
+legend("topright", 
+       legend = c("Série originale","Série originale aggrégée ", "Série journalière aggrégée sans les week-ends ", "Série journalière aggrégée avec seulement les week-ends" ), 
+       col = c("gray", rgb(0, 1, 0, 0.5), "red", "blue"), lty=1, cex = 0.7)
+```
+
+### Évolution de la mobilité vers les lieux de travail
+
+```{r}
+# Conversion en ts de mobil
+work_ts1 <- ts(mobil$workplaces, start = c(2020, 46), frequency = 365)
+# Aggrégation par moyenne des valeurs par semaine
+work_ts1_ag <- aggregate(work_ts1, 52, FUN = collapse::fmean, ts.eps = 1/52)
+
+work_nwe_ts1 <- ts(mobil_nwe$workplaces,start = c(2020, 46),frequency = 365)
+# Aggrégation par moyenne des valeurs par semaine
+work_nwe_ts1b <- aggregate(work_nwe_ts1, 52, FUN = collapse::fmean, ts.eps = 1/52)
+work_nw_ts1 <- ts(mobil_nw$workplaces,start = c(2020, 46),frequency = 365)
+work_nw_ts1b <- aggregate(work_nw_ts1, 52, FUN = collapse::fmean, ts.eps = 1/52)
+# Premier graphique : série originale
+plot(work_ts1, 
+  ylim = c(-95, 65),
+     xlab = "Temps [année]", 
+     ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)", 
+     main = "Superposition de la séries but et des series aggrégées", col = rgb(0, 0, 0, alpha = 0.1))
+
+# Ajouter la deuxième série : week-ends supprimés
+lines(work_nwe_ts1b, col = "red")
+
+lines(work_nw_ts1b, col = "blue")
+
+lines(work_ts1_ag, col = rgb(0, 1, 0, 0.5))
+
+# Optionnel : ajouter une légende
+legend("topright", 
+       legend = c("Série originale","Série originale aggrégée ", "Série journalière aggrégée sans les week-ends ", "Série journalière aggrégée avec seulement les week-ends" ), 
+       col = c("gray", rgb(0, 1, 0, 0.5), "red", "blue"), lty=1, cex = 0.7)
+```
 
 ## Discussion et Conclusion
 

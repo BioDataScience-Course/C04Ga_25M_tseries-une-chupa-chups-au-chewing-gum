@@ -587,7 +587,6 @@ legend("topright",
 La variation de la fréquentation des lieux de travail en fonction des vacances est beaucoup plus marquée sur la semaine lorsque l’on exclut les week-ends. Les niveaux pré–premier confinement ne semblent pas avoir été totalement retrouvés à la fin de l’année 2022.
 
 ```{r}
-
 # Premier graphique : série originale
 plot(work_ts1, 
   ylim = c(-95, 65),
@@ -2439,9 +2438,9 @@ plot(grocery_ts, xlab = "Temps [année]", ylab = "Mobilité liée aux supermarch
 On devine un cycle annuel avec quelques valeurs extrêmes de mobilité aux alentours des fêtes de fin d'années et d'autres plus ou moins régulières dispersées au sein des années (probablement liées aux jours fériés).\
 On remarque néanmoins une tendance globable à la hausse par rapport au début de la série
 
-**1. Exploration des différentes séries**
+#### **Exploration des différentes séries**
 
-**1.1 Série brute**
+#### **Série brute**
 
 ```{r}
 # Graphique de l'objet ts
@@ -2557,98 +2556,68 @@ legend("topright",
 
 ```
 
-On observe ici que notre première grosse baisse de fréquentation des magasins alimentaires et des pharmacies correspond au premier confinement de mars 2020, le léger pic le précédant peut être lié à une panique de pénurie de denrées alimentaires et médicaments de la population.
+On observe ici que notre première grosse baisse de fréquentation des magasins alimentaires et des pharmacies correspond au premier confinement de mars 2020, le léger pic qui le précède peut être lié à une panique de pénurie de denrées alimentaires et médicaments de la population qui engendre une surfréquentation des commerces de première importance.\
+On pourrait globalement attitrer les valeurs extrêmes aux jours fériés de l'année mais la série est encore trop bruitée pour pouvoir commenter d'avantage.
 
-**1.2 Série journalière agrégée**
+##### **Série journalière agrégée (avec jours fériés mis en évidence)**
 
 ```{r}
 grocery_ts_ag <- aggregate(grocery_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
 plot(grocery_ts_ag, 
      main = "Série journalière agrégée ", xlab = "Temps [année]",
-     ylab = "Mobilité liée aux magasins d'alimentation et pharmacies (% par rapport à la référence)", ylim = c(-60,160))
+     ylab = "Mobilité liée aux magasins d'alimentation et pharmacies (% par rapport à la référence)", ylim = c(-60,70))
 # Ajouter une ligne verticale pour les confinements
 # Convertir la date en position sur l'axe x (fraction de l'année)
 
 abline(v = x_conf1, col = "red", lwd = 2, lty = 2)
-
-abline(v = x_conf2, col = "blue", lwd = 2, lty = 2)
-
-# Ajouter un encadrement pour les vacances hiver
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_hiver)){
-  x_start <- 2020 + as.numeric(vacances_hiver$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_hiver$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(0.4,0.6,0.9,0.5), border = NA)
-}
-
-# Ajouter un encadrement pour les vacances été
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_ete)){
-  x_start <- 2020 + as.numeric(vacances_ete$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_ete$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(1,0.7,0.3,0.5), border = NA)
-}
-
-# Ajouter un encadrement pour les vacances paque
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_paques)){
-  x_start <- 2020 + as.numeric(vacances_paques$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_paques$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(1,0.5,0.5,0.5), border = NA)
-}
-
-# Ajouter un encadrement pour les vacances carnaval
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_carnaval)){
-  x_start <- 2020 + as.numeric(vacances_carnaval$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_carnaval$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(0.4,0.8,0.4,0.3), border = NA)
-}
-
-
-# Ajouter un encadrement pour les vacances toussaint
-## Ajouter des rectangles pour chaque période
-for(i in 1:nrow(vacances_toussaint)){
-  x_start <- 2020 + as.numeric(vacances_toussaint$start[i] - as.Date("2020-01-01"))/365
-  x_end   <- 2020 + as.numeric(vacances_toussaint$end[i] - as.Date("2020-01-01"))/365
-  rect(xleft = x_start, xright = x_end, 
-       ybottom = par("usr")[3], ytop = par("usr")[4], 
-       col = rgb(0.7,0.4,0.8,0.5), border = NA)
-}
-
+x_conf2 <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
+abline(v = x_conf2, col = "red", lwd = 2, lty = 2)
+x_lundpa <- 2021 + as.numeric(as.Date("2021-04-05") - as.Date("2021-01-01"))/365
+abline(v = x_lundpa, col = "green", lwd = 2, lty = 2)
+x_asso <- 2020 + as.numeric(as.Date("2020-08-15") - as.Date("2020-01-01"))/365
+abline(v = x_asso, col = "green", lwd = 2, lty = 2)
+x_asso2 <- 2021 + as.numeric(as.Date("2021-08-15") - as.Date("2021-01-01"))/365
+abline(v = x_asso2, col = "green", lwd = 2, lty = 2)
+x_asso3 <- 2022 + as.numeric(as.Date("2022-08-15") - as.Date("2022-01-01"))/365
+abline(v = x_asso3, col = "green", lwd = 2, lty = 2)
+x_lend <- 2020 + as.numeric(as.Date("2020-12-26") - as.Date("2020-01-01"))/365
+abline(v = x_lend, col = "green", lwd = 2, lty = 2)
+x_asce <- 2021 + as.numeric(as.Date("2021-05-13") - as.Date("2021-01-01"))/365
+abline(v = x_asce, col = "green", lwd = 2, lty = 2)
+x_lundpe <- 2021 + as.numeric(as.Date("2021-05-24") - as.Date("2021-01-01"))/365
+abline(v = x_lundpe, col = "green", lwd = 2, lty = 2)
+x_touss <- 2021 + as.numeric(as.Date("2021-11-01") - as.Date("2021-01-01"))/365
+abline(v = x_touss, col = "green", lwd = 2, lty = 2)
+x_noel21 <- 2021 + as.numeric(as.Date("2021-12-25") - as.Date("2021-01-01"))/365
+abline(v = x_noel21, col = "green", lwd = 2, lty = 2)
+x_na22 <- 2022 + as.numeric(as.Date("2022-01-01") - as.Date("2022-01-01"))/365
+abline(v = x_na22, col = "green", lwd = 2, lty = 2)
+x_lundpa2 <- 2022 + as.numeric(as.Date("2022-04-18") - as.Date("2022-01-01"))/365
+abline(v = x_lundpa2, col = "green", lwd = 2, lty = 2)
+x_asce2 <- 2022 + as.numeric(as.Date("2022-05-26") - as.Date("2022-01-01"))/365
+abline(v = x_asce2, col = "green", lwd = 2, lty = 2)
+x_lundpe2 <- 2022 + as.numeric(as.Date("2022-06-06") - as.Date("2022-01-01"))/365
+abline(v = x_lundpe2, col = "green", lwd = 2, lty = 2)
+x_nati <- 2021 + as.numeric(as.Date("2021-07-21") - as.Date("2021-01-01"))/365
+abline(v = x_nati, col = "blue", lwd = 2, lty = 2)
+x_nati2 <- 2022 + as.numeric(as.Date("2022-07-21") - as.Date("2022-01-01"))/365
+abline(v = x_nati2, col = "blue", lwd = 2, lty = 2)
+x_armi <- 2021 + as.numeric(as.Date("2021-11-11") - as.Date("2021-01-01"))/365
+abline(v = x_armi, col = "black", lwd = 2, lty = 2)
 #legend
 legend("topright", 
-       legend = c("Confinement du 18 mars 2020",
-         "Confinement du 02 novembre 2020",
-                  "Vacances hiver", 
-                  "Vacances carnaval", 
-                  "Vacances Pâques", 
-                  "Vacances été", 
-                  "Vacances Toussaint"),
-       col = c("red", "blue",
-                 rgb(0.4,0.6,0.9,0.5),
-               rgb(0.4,0.8,0.5,0.5),
-               rgb(1,0.5,0.5,0.5),
-               rgb(1,0.7,0.3,0.5),
-               rgb(0.7,0.4,0.8,0.5)),
-       lty = c(2,2, NA, NA, NA, NA, NA),
-       pch = c(NA,NA, 15, 15, 15, 15, 15),
+       legend = c("Confinements", "Fêtes religieuses", "Fête nationale belge", "Armistice"),
+       col = c("red", "green", "blue", "black"),
+       lty = c(2,2,2,2),
+       pch = c(NA,NA,NA,NA),
        pt.cex = 1.2,
-       cex = 0.8,
+       cex = 0.5,
        bty = "o",
        bg = "white")
 ```
 
-**1.3 Série journalière avec uniquement les week-ends**
+##### **Série journalière avec uniquement les week-ends (avec jours fériés mis en évidence)**
 
 ```{r}
 grocery_nw_ts <- ts(mobil_nw$grocery,start = c(2020, 46),frequency = 365)
@@ -2676,28 +2645,29 @@ abline(v = x_asso, col = "black", lwd = 2, lty = 2)
 x_lend <- 2020 + as.numeric(as.Date("2020-12-26") - as.Date("2020-01-01"))/365
 abline(v = x_lend, col = "blue", lwd = 2, lty = 2)
 x_fete <- 2021 + as.numeric(as.Date("2021-05-01") - as.Date("2021-01-01"))/365
-abline(v = x_fete, col = "green", lwd = 2, lty = 2)
+abline(v = x_fete, col = "yellow", lwd = 2, lty = 2)
 x_noel <- 2021 + as.numeric(as.Date("2021-12-25") - as.Date("2021-01-01"))/365
-abline(v = x_noel, col = "yellow", lwd = 2, lty = 2)
-
+abline(v = x_noel, col = "green", lwd = 2, lty = 2)
+x_newy <- 2022 + as.numeric(as.Date("2022-01-01") - as.Date("2022-01-01"))/365
+abline(v = x_newy, col = "green", lwd = 2, lty = 2)
 
 
 #legend
 legend("topright", 
        legend = c("Confinement du 18 mars 2020","Assomption",
-         "Lendemain de Noël", "Fête du travail", "Noël"),
-       col = c("red", "black", "blue","green", "yellow"),
+         "Lendemain de Noël", "Fête du travail", "Fêtes de fin d'année"),
+       col = c("red", "black", "blue","yellow", "green"),
        lty = c(2,2,2,2),
        pch = c(NA,NA,NA,NA),
        pt.cex = 1.2,
-       cex = 0.8,
+       cex = 0.7,
        bty = "o",
        bg = "white")
 ```
 
-Le premier confinement apparait toujours bien sur ce graphique avec simplement les weekends. Les différents jours fériés qui tombaient des samedis ont été mis en avant (les dimanches ayant souvent le même impact qu'un jour férié). La grosse chute de la fin d'année 2021 correspond aux week-ends de Noël et du nouvel an 2022 où les 2 jours fériés sont tombés des samedis.
+Le premier confinement apparaît toujours bien sur ce graphique avec simplement les weekends. Les différents jours fériés qui tombaient des samedis ont été mis en avant (les dimanches ayant souvent le même impact qu'un jour férié). La grosse chute de la fin d'année 2021 correspond aux week-ends de Noël et du nouvel an 2022 où les deux jours fériés sont tombés des samedis.
 
-**1.3 Série journalière agrégée sans weekend**
+##### **Série journalière agrégée sans weekend (avec jours fériés mis en évidence)**
 
 ```{r}
 grocery_nwe_ts2 <- ts(mobil_nwe$grocery,start = c(2020, 46),frequency = 365)
@@ -2707,7 +2677,7 @@ plot(grocery_nwe_ts2,
      ylab = "Magasins alimentaires et pharmacies (% par rapport à la référence)")
 
 # Aggrégation par moyenne des valeurs par semaine
-grocery_nwe_ts2b <- aggregate(retail_nwe_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
+grocery_nwe_ts2b <- aggregate(grocery_nwe_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
 plot(grocery_nwe_ts2b, 
      main = "Série journalière aggrégée sans week-end", xlab = "Temps [année]",
@@ -2753,9 +2723,11 @@ legend("topright",
 ```
 
 On note différentes chutes ponctuelles de mobilités aux moments des différents jours fériés (fêtes religieuses / nationales belge) avec des intensités différentes (certains commerces restent ouverts avec des horaires restreints malgré le jour férié).\
-Le pic de mobilité le plus notable pré-Noël 2022 probablement dû aux affluences de courses pour le repas du réveillon de Noêl et celui du nouvel an tombaient tous les deux un vendredi (24 décembre et 31 décembre) pour cette année.
+Le pic de mobilité le plus notable pré-Noël 2022 probablement dû aux affluences de courses pour le repas du réveillon de Noël et celui du Nouvel-An tombaient tous les deux un vendredi (24 décembre et 31 décembre) pour cette année.
 
-Les 2 baisses les plus importantes de mobilité sont liées aux 2 confinements nationaux de 2020. On observe une reprise de cette mobilité aux alentours de mai 2020 jusqu'à atteindre un plateau en juin/juillet 2020 coïncidant avec le déconfinement progressif et le relâchement des mesures de distanciations. La rechute qui suit, pas aussi brutale que la première, est liée à la ressurgence des cas de Covid-19 commençant mi-septembre auxquelles on ajoute les annonces de saturation hospitalière et la reprise progressive de mesures de distanciations pour ensuite arriver au 2e confinement de novembre 2020.
+On note deux baisses importantes de mobilité dues confinements nationaux de 2020. Une première reprise de cette mobilité apparait aux alentours de mai 2020 jusqu'à atteindre un plateau en juin/juillet 2020 coïncidant avec le déconfinement progressif et le relâchement des mesures de distanciations. La rechute qui suit, pas aussi brutale que la première, est liée à la ressurgence des cas de Covid-19 commençant mi-septembre auxquelles on ajoute les annonces alarmantes de possibles saturations hospitalières et la reprise progressive de mesures de distanciations qui vont globalement limiter les mouvements des gens pour ensuite arriver au 2e confinement de novembre 2020.
+
+#### Superposition des séries
 
 ```{r}
 # Premier graphique : série originale
@@ -2775,40 +2747,62 @@ lines(grocery_ts_ag, col = rgb(0, 1, 0, 0.5))
 # Optionnel : ajouter une légende
 legend("topright", 
        legend = c("Série originale","Série originale aggrégée ", "Série journalière aggrégée sans les week-ends ", "Série journalière aggrégée avec seulement les week-ends" ), 
-       col = c("gray", rgb(0, 1, 0, 0.5), "red", "blue"), lty=1)
+       col = c("gray", rgb(0, 1, 0, 0.5), "red", "blue"), lty=1, cex = 0.7)
 ```
 
-Ce graphique résumé nous permet d'observer que les commerces étudiés semblent plus fréquentés les week-ends que en semaine. On peut l'expliquer par le fait que la fréquentation agrégée est dominée par les commerces alimentaires, beaucoup plus fréquemment visités que les pharmacies. Même si les pharmacies sont probablement davantage fréquentées en semaine, leur "poids relatif" est insuffisant pour compenser celui plus important de l’alimentaire, ce qui tire la courbe des week-ends vers le haut.
+Ce graphique résumé nous permet d'observer que les commerces étudiés semblent légèrement plus fréquentés en semaine que les week-ends mais les deux courbes restent très proches l'une de l'autre. Suite à la première chute de fréquentation due au premier confinement, on observe un regain de mobilité jusqu'à arriver à un plateau (de mai 2020 jusqu'au deuxième confinement) probablement lié au maintien des consignes sanitaires de distanciations et de l'ouverture des commerces jugés essentiels. \
+Le second confinement provoque une nouvelle chute de mobilité mais celle-ci est bien moindre comparée à celle du premier confinement.\
+La tendance repart ensuite à la hausse, entre-coupée des différents jours fériés qui perturbent l'ouverture des commerces alimentaires et pharmacies.
 
-On remarque aussi que la hausse et la rechute de fréquentation entre les deux confinements apparaissent plus lissées le week-end que en semaine, les sorties y sont en fait moins fréquentes mais plus longues et concentrées sur moins de points, tandis qu’en semaine, les déplacements sont plus nombreux et surtout plus sensibles aux restrictions ce qui produit des variations plus abruptes.
+#### Extraction des cycles
 
 ```{r}
-# convertir en série temporelle journalière
-grocery_ts_daily <- ts(grocery_ts, frequency = 7)
+grocery_tsd_weekly <- tsd(grocery_ts_ag, s.window = 52, 
+  trend = TRUE, t.window = 13)
+plot(grocery_tsd_weekly, col = 1:4)
 
+cycle_annuel_grocery <- extract(grocery_tsd_weekly, components = "seasonal")
+plot(cycle_annuel_grocery, col = "blue")
+spectrum(cycle_annuel_grocery, spans = c(3,5))
+abline(v = seq(0, 100, by = 1), col = "grey90")
+abline(h = seq(0, 100, by = 1), col = "grey80")
 
-decomp_grocery <- tsd(grocery_ts_daily, s.window = 7, trend = TRUE, t.window = 7)
-
-plot(decomp_grocery, col = 1:4)
-
-cycle_hebdo_grocery <- extract(decomp_grocery, components = "seasonal")
-
-
-plot(window(cycle_hebdo_grocery, start = 30, end = 110))
-abline(v = seq(0, 200, by = 1), col = "grey90")
-
-spectrum(cycle_hebdo_grocery, spans = c(5, 7), col = "aquamarine3")
-abline(v = seq(0, 200, by = 1), col = "grey90")
-abline(h = seq(0, 10000, by = 250), col = "grey80")
-
-cpgram(cycle_hebdo_grocery) 
-abline(v = seq(0, 200, by = 1), col = "grey90")
-
+cpgram(cycle_annuel_grocery)
+abline(v = seq(0, 100, by = 1), col = "grey90")
 ```
 
-**L'analyse de tendance** montre clairement une hausse de fréquentation des commerces alimentaires et pharmacies sans besoin de lissage même si on considère la période pré confinement début 2020
+On constate toujours une très nette tendance à la hausse post premier confinement qui va carrément dépasser la référence. Un cycle annuel est bien mis en évidence mais les résidus du premier confinement montre qu'il est encore nécessaire de purifier la série.\
+L'analyse spectrale confirme l'existence de ce cycle annuel (fréquence de 1) mais les pics plus irréguliers et faibles du graphique sont sûrement dûs aux jours fériés dont certaines dates varient d'une année à l'autre.
 
-**L'analyse spectrale** confirme un cycle hebdomadaire dominant semaine vs week-end (pic à 1 de fréquence) mais les 2 autres pics (à 2 et 3 de fréquence) montrent qu'il existe des sous-cycles hebdomadaires sûrement liés aux différentes habitudes de courses des gens. Certains font régulièrement des petites courses, d'autres attendent le week-end pour faire de plus grosses courses.
+```{r}
+grocery_ts1_nona_b <- window(grocery_ts_ag, start = c(2020, 27), end = c(2022,39))
+grocery_tsd1_b <- tsd(grocery_ts1_nona_b, s.window = 52, trend = TRUE, t.window = 13)
+plot(grocery_tsd1_b, col = 1:4)
+
+# Extraction du cycle annuel
+cycle_annuel_grocery_b <- extract(grocery_tsd1_b, components = "seasonal")
+
+grocery_sl1_b <- stat.slide(time(cycle_annuel_grocery_b), cycle_annuel_grocery_b, xmin = 2020, deltat = 1/24)
+# Graphique des statistiques glissantes
+plot(grocery_sl1_b, main = "Statistiques glissante de 2 semaines
+  sur le cycle annuelle", xlab = "Temps [année]", ylab = "Mobilité vers les commerces alimentaires et pharmacies 
+  (% par rapport à la référence)", col = c(rgb(0, 0, 0,0.2),rgb(1, 0, 0,1)),   ylim = c(-35, 45), xlim = c(2020.5, 2022.15))
+```
+
+Un cycle annuel a pu être isolé mais celui ci est assez furtifs. Les extrêmes des fêtes de fin d'années sont toujours présents et les fluctuations présentes dans le cours de l'année sont majoritairement attribuables aux jours fériés, ceux-ci ne sont d'ailleurs pas toujours fixes et à des dates régulières, la date de Pâques et du lundi de Pâques fluctuant parfois jusqu'à 20 jours, ce qui peut expliquer certaines asymétries dans le cycle d'une année à l'autre.
+
+#### Analyse des tendance locales
+
+```{r}
+local_grocery <- local.trend(grocery_ts_ag, ylim = c(-1200, 250))
+abline(v = x_conf1, col = "red", lwd = 2, lty = 2)
+abline(v = x_conf2, col = "blue", lwd = 2, lty = 2)
+legend("topright", 
+       legend = c("Courbe", "Tendance local", "Confinement du 18 mars 2020", "Confinement du 02 novembre 2020"),
+       col = c("black", "red", "red", "blue"), lty = c(3, 1, 2,2), cex = 0.5)
+```
+
+On observe bien la baisse de fréquentation des commerces alimentaires et des pharmacies par rapport à la moyenne à partir du 1er confinement jusque fin avril / début mai 2020 où la fréquentation repasse au dessus de la moyenne et continue de croître jusqu'à a fin de la série.
 
 ## Conclusion
 
