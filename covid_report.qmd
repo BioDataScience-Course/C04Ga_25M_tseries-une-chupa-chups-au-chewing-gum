@@ -175,6 +175,117 @@ Les commerces et loisirs ferment à nouveau, mais partiellement. Les mesures son
 
 La mobilité reste en dessous de zéro pourcent jusque fin 2021 dû aux mesures sanitaires variables. Ensuite, fin 2021 et début 2022, la réouverture progressive de tous les commerces fait remonter le nombre de fréquentations au dessus des 0%. Les fréquentaions restent encore très variables mais les vacances scolaires recommencent à influencer positivement la fréquentation. Fin 2022, la situation semble se stabiliser avce un taux de fréquentation similaire à la normale voire un peu plus (+30%). Ce taux supérieur à la normale est probablement dû à un phénomène de rattrapage de la part de la population dû à l’arrêt prolongé des commerces et loisirs. Une fois la situation revenue à la normale, on peut observer que les vacances scolaires ont un réel impact positif sur les commerces et loisirs.
 
+#### Analyse de la différence de fréquentation entre la semaine et les weekends
+
+À priori, la population dispose de plus de temps libre les weekends. Ce temps, sert souvent à profiter avec ses proches dans les différents commerces et loisirs. C'est ce que nous allons vérifier ici.
+
+```{r}
+# Premier graphique : série originale
+plot(mobil_ts2, ylim = c(-95, 200),
+     xlab = "Temps [année]", 
+     ylab = "Commerces et loisirs (% par rapport à la référence)", 
+     main = "Superposition de séries agrégées", col = rgb(0, 0, 0, alpha = 0.1))
+
+# Convertir la date en position sur l'axe x (fraction de l'année)
+
+abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
+
+abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
+
+# Ajouter un encadrement pour les vacances hiver
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_hiver)){
+  x_start <- 2020 + as.numeric(vacances_hiver$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_hiver$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.4,0.6,0.9,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances été
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_ete)){
+  x_start <- 2020 + as.numeric(vacances_ete$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_ete$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(1,0.7,0.3,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances paque
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_paques)){
+  x_start <- 2020 + as.numeric(vacances_paques$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_paques$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(1,0.5,0.5,0.5), border = NA)
+}
+
+# Ajouter un encadrement pour les vacances carnaval
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_carnaval)){
+  x_start <- 2020 + as.numeric(vacances_carnaval$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_carnaval$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.4,0.8,0.4,0.3), border = NA)
+}
+
+
+# Ajouter un encadrement pour les vacances toussaint
+## Ajouter des rectangles pour chaque période
+for(i in 1:nrow(vacances_toussaint)){
+  x_start <- 2020 + as.numeric(vacances_toussaint$start[i] - as.Date("2020-01-01"))/365
+  x_end   <- 2020 + as.numeric(vacances_toussaint$end[i] - as.Date("2020-01-01"))/365
+  rect(xleft = x_start, xright = x_end, 
+       ybottom = par("usr")[3], ytop = par("usr")[4], 
+       col = rgb(0.7,0.4,0.8,0.5), border = NA)
+}
+
+#legend
+legend("topright", 
+       legend = c("Confinement du 18 mars 2020",
+         "Confinement du 02 novembre 2020",
+                  "Vacances hiver", 
+                  "Vacances carnaval", 
+                  "Vacances Pâques", 
+                  "Vacances été", 
+                  "Vacances Toussaint"),
+       col = c("red", "blue",
+                 rgb(0.4,0.6,0.9,0.5),
+               rgb(0.4,0.8,0.5,0.5),
+               rgb(1,0.5,0.5,0.5),
+               rgb(1,0.7,0.3,0.5),
+               rgb(0.7,0.4,0.8,0.5)),
+       lty = c(2,2, NA, NA, NA, NA, NA),
+       pch = c(NA,NA, 15, 15, 15, 15, 15),
+       pt.cex = 1.2,
+       cex = 0.75,
+       bty = "o",
+       bg = "white")
+
+# Optionnel : ajouter une légende
+legend("topleft", 
+       c("Série originale","Série journalière aggrégée (weeks + week-ends", "Série journalière aggrégée sans les week-ends", "Série journalière aggrégée sans les semaines"), 
+       col = c("grey", "green", "red", "blue"), 
+  lty=1, , cex=0.75)
+
+# Ajouter les lignes
+lines(retail_nwe_ts2b, col = "red")
+lines(retail_nw_ts2b, col = "blue")
+lines(retail_ts2_ag, col = "green") 
+
+```
+
+Ici, l'influence du COVID-19 sur ce secteur est nette.
+
+Le premier confinement, avec la fermeture totale des commerces et loisirs, fait chuter de plus de 80% les fréquentations. Au déconfinement, les mesures en vigueurs tel que le COVID pass et les distanciations sociales limitent encore ce secteur. Le hausse du chomage technique et du télétravail influence également les habitudes quotidiennes de la population. En effet, contrairement à ce que nous pourrions penser, les fréquentations dans les commerces et loisirs sont plus hautes la semaine que les weekends pendant toute la période entre les deux confinements et même après ceux-ci. Cependant, à partir de l'été 2020, les vacances recommenecent à influencer positivement ce secteur.
+
+Aux alentours de juillet 2021, lorsque la situation redevient plus ou moins à la normale, on observe un retour d'une plus grande fréquentation les weekends plutôt que la semaine.
+
+De manière générale, on peut voir que l'affluence en jours de semaine reste beaucoup plus stable que celle des weekends montrant que le COVID-19 impacte principalement cette dernière. En regardant d'un peu plus près les weekends, un pic de décroissante fortement prononcé apparait au début de 2022. Cette chute brutale mais courte est probablement due à la vague Omicron, une vague de recontamination intense qui est apparue après les fêtes de fin d'année. Même si aucun confinement stricte n'a été appliqué, cette hausse de contamination a provoqué plusieurs restrictions sanitaires ainsi qu'une prudence accrue au sein de la population. Vers la moitié de l'année 2022, le retour à la normale de la vie quotidienne donne à la population l'occasion de rattraper le temps perdu pendant cette période difficile, se reflétant par une forte affluence dans les commerces et loisirs les weekends.
+
 ### Évolution de la mobilité dans les parcs et espaces publics
 
 Cette section reprend l'analyse de l'influence du COVID-19, notamment des deux confinements ainsi que celle des vacances scolaires sur les parcs nationaux, les plages publiques, les marinas, les parcs canins, les places et les jardins publics.
