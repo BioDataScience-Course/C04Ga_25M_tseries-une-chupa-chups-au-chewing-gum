@@ -1936,8 +1936,8 @@ legend("topright",
        col = c("gray", rgb(0, 1, 0, 0.5), "red", "blue"), lty=1, cex = 0.7)
 ```
 
-Ce graphique résumé nous permet d'observer que les commerces étudiés semblent légèrement plus fréquentés en semaine que les week-ends mais les deux courbes restent très proches l'une de l'autre. Suite à la première chute de fréquentation due au premier confinement, on observe un regain de mobilité jusqu'à arriver à un plateau (de mai 2020 jusqu'au deuxième confinement) probablement lié au maintien des consignes sanitaires de distanciations et de l'ouverture des commerces jugés essentiels.\
-Le second confinement provoque une nouvelle chute de mobilité mais celle-ci est bien moindre comparée à celle du premier confinement.\
+Ce graphique résumé nous permet d'observer que les commerces étudiés semblent plus sensibles aux jours fériés qui tombent des week-ends plutôt qu'en semaine. Suite à la première chute de fréquentation due au premier confinement, on observe un regain de mobilité jusqu'à arriver à un plateau (de mai 2020 jusqu'au deuxième confinement) probablement lié au maintien des consignes sanitaires de distanciations et de l'ouverture des commerces jugés essentiels
+Le second confinement provoque une nouvelle chute de mobilité mais celle-ci est bien moindre comparée à celle du premier confinement
 La tendance repart ensuite à la hausse, entre-coupée des différents jours fériés qui perturbent l'ouverture des commerces alimentaires et pharmacies.
 
 #### Extraction des cycles
@@ -1958,7 +1958,7 @@ abline(v = seq(0, 100, by = 1), col = "grey90")
 ```
 
 On constate toujours une très nette tendance à la hausse post premier confinement qui va carrément dépasser la référence. Un cycle annuel est bien mis en évidence mais les résidus du premier confinement montre qu'il est encore nécessaire de purifier la série.\
-L'analyse spectrale confirme l'existence de ce cycle annuel (fréquence de 1) mais les pics plus irréguliers et faibles du graphique sont sûrement dûs aux jours fériés dont certaines dates varient d'une année à l'autre.
+L'analyse spectrale confirme l'existence de ce cycle annuel (fréquence de 1) mais les pics plus irréguliers et faibles du graphique sont sûrement dus aux jours fériés dont certaines dates varient d'une année à l'autre.
 
 ```{r}
 grocery_ts1_nona_b <- window(grocery_ts_ag, start = c(2020, 27), end = c(2022,39))
