@@ -251,11 +251,21 @@ legend("topright",
 
 **Influence du premier confinement :** Dès les premières mesures du confinement, avec la fermeture complète des commerces et activités de loisirs, l'affluence diminue de près de -80%. Le maintient de cette mesure tout au long du confinement explique le léger plateau observé ainsi que le manque d'influence des vacances de Pâques.
 
+=====\> **Influence du premier confinement :** La fermeture complète des commerces et loisirs entraîne une chute brutale de la
+fréquentation, proche de −80 %. Le maintien de ces mesures explique le plateau
+observé et l’absence d’effet des vacances de Pâques.
+
 **Influence post premier confinement :** Au déconfinement, les commerces et loisirs reprennent peu à peu leurs activités mais l'affluence ne revient pas à son seuil initial. En effet, certaines mesures sanitaires comme le port du masque ou les distances de sécurités limitent encore ce secteur et font varier son nombre de fréquentations. On observe malgré tout une augmentation des présences dans les commerces et loisirs en été 2020.
+
+====\> **Influence post premier confinement :**Lors du déconfinement, l’activité reprend progressivement mais reste inférieure au niveau initial en raison des mesures sanitaires (masque, distanciation). Une hausse est néanmoins observée durant l’été 2020.
 
 **Influence du deuxième confinement :** Les commerces et loisirs ferment à nouveau, mais partiellement. Les mesures sont plus souples et permettent les évènements en plein air. L'horeca s'est adapté aux mesures COVID-19; les restaurateurs effectuent désormais des click&collects. Ces adaptations permettent au secteur de moins subir les mesures sanitaires appliquées ce qui explique la baisse beaucoup moins importante de fréquentation (-40%).
 
+=====\> **Influence du deuxième confinement :** Les fermetures sont partielles et les mesures plus souples (événements en plein air, click&collect), ce qui limite l’impact sur la fréquentation, avec une baisse plus modérée d’environ −40 %.
+
 **Influence post deuxième confinement :** La mobilité reste en dessous de zéro pourcent jusque fin 2021 dû aux mesures sanitaires variables. Ensuite, fin 2021 et début 2022, la réouverture progressive de tous les commerces fait remonter le nombre de fréquentations au dessus des 0%. Les fréquentaions restent encore très variables mais les vacances scolaires recommencent à influencer positivement la fréquentation. Fin 2022, la situation semble se stabiliser avce un taux de fréquentation similaire à la normale voire un peu plus (+30%). Ce taux supérieur à la normale est probablement dû à un phénomène de rattrapage de la part de la population dû à l’arrêt prolongé des commerces et loisirs. Une fois la situation revenue à la normale, on peut observer que les vacances scolaires ont un réel impact positif sur les commerces et loisirs.
+
+===\> **Influence post deuxième confinement :** La fréquentation demeure inférieure à 0 % jusqu’à fin 2021 en raison de mesures sanitaires fluctuantes. La réouverture progressive fin 2021–début 2022 fait repasser la fréquentation au-dessus de 0 %, avec une influence à nouveau positive des vacances scolaires. Fin 2022, la situation se stabilise à un niveau proche, voire supérieur à la normale (+30 %), probablement lié à un effet de rattrapage.
 
 #### Analyse de la différence de fréquentation entre la semaine et les weekends
 
@@ -381,10 +391,11 @@ Aux alentours de juillet 2021, lorsque la situation redevient plus ou moins à l
 
 De manière générale, on peut voir que l'affluence en jours de semaine reste beaucoup plus stable que celle des weekends montrant que le COVID-19 impacte principalement cette dernière. En regardant d'un peu plus près les weekends, un pic de décroissante fortement prononcé apparait au début de 2022. Cette chute brutale mais courte est probablement due à la vague Omicron, une vague de recontamination intense qui est apparue après les fêtes de fin d'année. Même si aucun confinement stricte n'a été appliqué, cette hausse de contamination a provoqué plusieurs restrictions sanitaires ainsi qu'une prudence accrue au sein de la population. Vers la moitié de l'année 2022, le retour à la normale de la vie quotidienne donne à la population l'occasion de rattraper le temps perdu pendant cette période difficile, se reflétant par une forte affluence dans les commerces et loisirs les weekends.
 
+====\> L’influence du COVID-19 sur ce secteur est très marquée. Le premier confinement, avec la fermeture totale des commerces et loisirs, entraîne une chute de fréquentation supérieure à 80 %. Lors du déconfinement, les mesures sanitaires (COVID pass, distanciation), ainsi que l’augmentation du chômage technique et du télétravail, continuent de limiter l’activité. Contrairement aux attentes, la fréquentation est alors plus élevée en semaine que le week-end entre les deux confinements, tendance qui persiste quelque temps après. À partir de l’été 2020, les vacances scolaires recommencent toutefois à avoir un effet positif. Vers juillet 2021, avec un retour progressif à une situation plus normale, la fréquentation du week-end redevient supérieure à celle de la semaine. Globalement, l’affluence en semaine reste plus stable, indiquant que l’impact du COVID-19 touche principalement les week-ends. Début 2022, une chute brutale mais brève est observée le week-end, probablement liée à la vague Omicron. À partir de la mi-2022, un effet de rattrapage se traduit par une forte affluence des commerces et loisirs le week-end.
+
 #### Analyse du cycle hebdomadaire
 
 À travers cette analyse, nous essayons de mettre en évidence à quel point les weekends influence les fréquentations dans ce secteur et essayant de déterminer si nous avons bel et bien un cycle hebdomadaire.
-
 
 ```{r}
 # convertir en série temporelle journalière
@@ -406,9 +417,20 @@ abline(h = c(1e-5, 1e-3, 1e-1, 1e+1), col = "grey80")
 
 La fréquence de 1 montre que nous avons un cycle hebdomadaire classique. Cependant, la fréquence de 2, correspondant à un cycle de trois jours et demi, met en évidence le fait que ce cycle n’est pas lisse. Les variations du cycle sont brutales, alors que, lorsqu’un cycle est lisse et symétrique, les valeurs augmentent et diminuent de manière progressive. En effet, alors que la semaine est calme, on observe une augmentation rapide dès le samedi matin et une diminution importante le dimanche soir. La fréquence 3, quant à elle, indique des variations intra-hebdomadaires plus fines. Avec des cycles d’environ 2,3 jours, elle met en évidence une augmentation de l’affluence le mercredi après-midi, lorsque les jeunes n’ont souvent pas cours.
 
+=====\> **Analyse du cycle hebdomadaire :** L’analyse spectrale confirme un cycle hebdomadaire asymétrique, avec des fréquences significatives à 1, 2 et 3. La fréquence 1 correspond au cycle hebdomadaire classique. La fréquence 2 (+- 3,5 jours) indique un cycle non lisse, avec une hausse rapide le samedi et une chute marquée le dimanche soir. La fréquence 3 (+- 2,3 jours) révèle des variations intra-hebdomadaires plus fines, notamment une hausse de fréquentation le mercredi après-midi.
+
 **Analyse de la tendance :** Même après avoir extrait le cycle hebdomadaire de cette série, la tendance reste marquée par de fortes variations. La première chute importante correspond évidement au premier confinement, suivie d'une autre un peu moins importante au deuxième confinement. Une autre chute importante est également visible en début 2022 avec la vague Omicron. Cependant, même en dehors de ces périodes de contaminations importantes, les fluctuations sont fortement marquées. En effet, le secteur des commerces et loisirs a été un de ceux les plus effectés par la crise sanitaire. Les différentes vagues de contaminations se reflètent particulièrement ici puisque qu'il fait partie des premiers a été limité voir supprimés en cas de crise. En effet, de nombreuses mesures sanitaires telles que la distanciation sociale ou les COVID pass ont impacté les habitudes quotidennes de la population à long terme.
 
+**=====\> Analyse de la tendance :** Même après extraction du cycle hebdomadaire, la tendance présente de fortes
+variations. Les principales chutes correspondent au premier confinement, au
+deuxième confinement, puis à la vague Omicron début 2022. En dehors de ces
+périodes, les fluctuations restent marquées, traduisant la forte sensibilité du
+secteur des commerces et loisirs aux mesures sanitaires, fréquemment restreint
+lors des vagues de contamination.
+
 **Analyse des résidus :** Les résidus restent quant à eux assez bruités. Ils mettent en évidence les variations ponctuelles et aléatoires comme les anniversaires, la météo, ou atres occasiosn qui influence la population à se rendre dans les commerces et loisirs
+
+===\> **Analyse des résidus :** Les résidus demeurent bruités et reflètent des variations ponctuelles et aléatoires liées à des facteurs tels que la météo, les événements personnels ou d’autres occasions exceptionnelles.
 
 #### Analyse du cycle annuel
 
@@ -427,9 +449,15 @@ abline(v = seq(0, 100, by = 1), col = "grey90")
 
 **Analyse du cycle saisonnier :** L'analyse spectrale permet de mettre en lumière un phénomène particulier. La fréquence de 1 signifique nous permet de confirmer qu'il y a bel et bien un cycle saisonnier. Cependant, le fait que les fréquences de 2 et de 3 soient elles aussi significatives montrent des variations inter-annuelles plus fines et moins marquées. Cela permet de mettre en évidence que notre cycle annuel n'est ni régulier, ni symétrique. En effet, en dehors du cycle annuel, la fréquence de 2 peut par exemple mettre en évidence la forte activité de la population en été avec les vacances scolaires et le beau temps alors que l'activité est plutôt réduite en automne/hiver avec des températures beaucoup plus basses. La fréquence de 3 peut quant à elle mettre en évidence un cycle moins marqué de 4 mois qui se termine toujours généralement par une période de vacances scolaires influençant la population à se rendre dans les commerces et loisirs
 
+====\> L’analyse spectrale confirme la présence d’un cycle annuel (fréquence 1), mais la significativité des fréquences 2 et 3 révèle des variations interannuelles plus fines. Le cycle annuel n’est donc ni régulier ni symétrique. La fréquence 2 met en évidence une activité plus élevée en été, liée aux vacances scolaires et au beau temps, et plus faible en automne–hiver. La fréquence 3 suggère un cycle d’environ quatre mois, souvent associé à des périodes de vacances scolaires influençant la fréquentation.
+
 **Analyse de la tendance :** Cette courbe met en évidence la reprise graduelle des activités après le premier confinement. Ce reprise n'étant pas stable dû aux différentes vagues de contamination et aux mesures sanitaires variables, de nombreuses fluctuations sont visibles. À long terme, les activités reprennent leur rythme habituel. Ceratines personnes voulant même rattraper le temps perdu après ces nombreuses restrictions font augmenter a'fflence dans les commerces et loisirs à un niveau supérieur à ce qui était observé avant le COVID-19.
 
+====\> La tendance montre une reprise progressive des activités après le premier confinement, marquée par de fortes fluctuations dues aux vagues de contamination et aux mesures sanitaires variables. À long terme, l’activité retrouve un rythme proche de la normale, voire supérieur, traduisant un possible effet de rattrapage.
+
 **Analyse des résidus :** Les résidus restent quant à eux assez bruités. Ils mettent en évidence les variations ponctuelles et aléatoires comme les anniversaires, la météo, ou atres occasiosn qui influence la population à se rendre dans les commerces et loisirs
+
+===\> Les résidus restent bruités et reflètent des variations ponctuelles et aléatoires liées notamment à la météo, aux événements personnels ou à d’autres occasions exceptionnelles.
 
 ### Évolution de la mobilité dans les parcs et espaces publics
 
@@ -853,7 +881,6 @@ legend("topright",
 ```
 
 ### Évolution de la mobilité dans les pharmacies
-
 
 ## Discussion et Conclusion
 
