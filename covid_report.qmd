@@ -359,6 +359,8 @@ De manière générale, on peut voir que l'affluence en jours de semaine reste b
 
 #### Analyse du cycle hebdomadaire
 
+À travers cette analyse, nous essayons de mettre en évidence à quel point les weekends influence les fréquentations dans ce secteur et essayant de déterminer si nous avons bel et bien un cycle hebdomadaire.
+
 ```{r}
 # convertir en série temporelle journalière
 retail_ts2_daily <- ts(mobil_ts2, frequency = 7)
@@ -372,6 +374,46 @@ spectrum(cycle_hebdo_retail, spans = c(5, 7), col = "aquamarine3")
 abline(v = 1:3, col = "grey90")
 abline(h = c(1e-5, 1e-3, 1e-1, 1e+1), col = "grey80")
 ```
+
+**Analyse du cycle hebdomadaire**
+
+L'analyse spectrale permet non seulement de confirmer la présence d'un cycle hebdomadaire mais elle permet également de mettre en évidence que ce cycle est asymétrique puisqu'on observe un cycle significatif à une fréquence de 1,2 et 3.
+
+La fréquence de 1 montre que nous avons un cycle hebdomadaire classique. Cependant, la fréquence de 2, correspondant à un cycle de trois jours et demi, met en évidence le fait que ce cycle n’est pas lisse. Les variations du cycle sont brutales, alors que, lorsqu’un cycle est lisse et symétrique, les valeurs augmentent et diminuent de manière progressive. En effet, alors que la semaine est calme, on observe une augmentation rapide dès le samedi matin et une diminution importante le dimanche soir. La fréquence 3, quant à elle, indique des variations intra-hebdomadaires plus fines. Avec des cycles d’environ 2,3 jours, elle met en évidence une augmentation de l’affluence le mercredi après-midi, lorsque les jeunes n’ont souvent pas cours.
+
+**Analyse de la tendance**
+
+Même après avoir extrait le cycle hebdomadaire de cette série, la tendance reste marquée par de fortes variations. La première chute importante correspond évidement au premier confinement, suivie d'une autre un peu moins importante au deuxième confinement. Une autre chute importante est également visible en début 2022 avec la vague Omicron. Cependant, même en dehors de ces périodes de contaminations importantes, les fluctuations sont fortement marquées. En effet, le secteur des commerces et loisirs a été un de ceux les plus effectés par la crise sanitaire. Les différentes vagues de contaminations se reflètent particulièrement ici puisque qu'il fait partie des premiers a été limité voir supprimés en cas de crise. En effet, de nombreuses mesures sanitaires telles que la distanciation sociale ou les COVID pass ont impacté les habitudes quotidennes de la population à long terme.
+
+**Analyse des résidus**
+
+Les résidus restent quant à eux assez bruités. Ils mettent en évidence les variations ponctuelles et aléatoires comme les anniversaires, la météo, ou atres occasiosn qui influence la population à se rendre dans les commerces et loisirs
+
+#### Analyse du cycle annuel 
+
+À travers cette analyse, nous avons essayé de mettre en évidence si le cycle annuel influençait les fréquentations dans ce secteur
+
+```{r}
+retail_tsd_weekly <- tsd(retail_ts2_ag, s.window = 52, 
+  trend = TRUE, t.window = 13)
+plot(retail_tsd_weekly, col = 1:4)
+
+
+spectrum(cycle_annuel_retail, spans = c(3,5))
+abline(v = seq(0, 100, by = 1), col = "grey90")
+```
+
+**Analyse du cycle saisonnier**
+
+L'analyse spectrale permet de mettre en lumière un phénomène particulier. La fréquence de 1 signifique nous permet de confirmer qu'il y a bel et bien un cycle saisonnier. Cependant, le fait que les fréquences de 2 et de 3 soient elles aussi significatives montrent des variations inter-annuelles plus fines et moins marquées. Cela permet de mettre en évidence que notre cycle annuel n'est ni régulier, ni symétrique. En effet, en dehors du cycle annuel, la fréquence de 2 peut par exemple mettre en évidence la forte activité de la population en été avec les vacances scolaires et le beau temps alors que l'activité est plutôt réduite en automne/hiver avec des températures beaucoup plus basses. La fréquence de 3 peut quant à elle mettre en évidence un cycle moins marqué de 4 mois qui se termine toujours généralement par une période de vacances scolaires influençant la population à se rendre dans les commerces et loisirs
+
+**Analyse de la tendance**
+
+Cette courbe met en évidence la reprise graduelle des activités après le premier confinement. Ce reprise n'étant pas stable dû aux différentes vagues de contamination et aux mesures sanitaires variables, de nombreuses fluctuations sont visibles. À long terme, les activités reprennent leur rythme habituel. Ceratines personnes voulant même rattraper le temps perdu après ces nombreuses restrictions font augmenter a'fflence dans les commerces et loisirs à un niveau supérieur à ce qui était observé avant le COVID-19.
+
+**Analyse des résidus**
+
+Les résidus restent quant à eux assez bruités. Ils mettent en évidence les variations ponctuelles et aléatoires comme les anniversaires, la météo, ou atres occasiosn qui influence la population à se rendre dans les commerces et loisirs
 
 ### Évolution de la mobilité dans les parcs et espaces publics
 
