@@ -118,8 +118,6 @@ numeric_cols <- setdiff(numeric_cols, "date")
 mobil_nw[mobil_nw$wday %in% c(1:5), numeric_cols] <- NA
 ```
 
-<<<<<<< HEAD
-=======
 **Définition des périodes de vacances**
 
 ```{r}
@@ -152,7 +150,6 @@ vacances_toussaint <- data.frame(
 
 ```
 
->>>>>>> dc691dc87c0f0aa7ac3111df9d0d418daba1ce7d
 ### Évolution de la mobilité au travail
 
 ### Évolution de la mobilité dans les commerces et loisirs
@@ -385,11 +382,9 @@ Aux alentours de juillet 2021, lorsque la situation redevient plus ou moins à l
 De manière générale, on peut voir que l'affluence en jours de semaine reste beaucoup plus stable que celle des weekends montrant que le COVID-19 impacte principalement cette dernière. En regardant d'un peu plus près les weekends, un pic de décroissante fortement prononcé apparait au début de 2022. Cette chute brutale mais courte est probablement due à la vague Omicron, une vague de recontamination intense qui est apparue après les fêtes de fin d'année. Même si aucun confinement stricte n'a été appliqué, cette hausse de contamination a provoqué plusieurs restrictions sanitaires ainsi qu'une prudence accrue au sein de la population. Vers la moitié de l'année 2022, le retour à la normale de la vie quotidienne donne à la population l'occasion de rattraper le temps perdu pendant cette période difficile, se reflétant par une forte affluence dans les commerces et loisirs les weekends.
 
 #### Analyse du cycle hebdomadaire
-<<<<<<< HEAD
-=======
 
 À travers cette analyse, nous essayons de mettre en évidence à quel point les weekends influence les fréquentations dans ce secteur et essayant de déterminer si nous avons bel et bien un cycle hebdomadaire.
->>>>>>> dc691dc87c0f0aa7ac3111df9d0d418daba1ce7d
+
 
 ```{r}
 # convertir en série temporelle journalière
@@ -732,7 +727,6 @@ Cette tendance permet donc de mettre en lumière l’impact du COVID-19 à long 
 
 **Analyse des résidus :** Les résidus restent quant à eux très bruités. Cela met également en lumière que l'affluence dans les parcs est également aléatoire. En effet, la météo, les jours fériés ou les nouvelles affectent eux aussi, de manière ponctuelle, la population à se rendre dans les parcs et autres espaces publics.
 
-<<<<<<< HEAD
 ### Évolution de la mobilité dans les commerces alimentaires et pharmacies
 
 #### **Série journalière agrégée (avec jours fériés mis en évidence)**
@@ -857,9 +851,9 @@ legend("topright",
        legend = c("Série originale","Série originale aggrégée ", "Série journalière aggrégée sans les week-ends ", "Série journalière aggrégée avec seulement les week-ends" ), 
        col = c("gray", rgb(0, 1, 0, 0.5), "red", "blue"), lty=1, cex = 0.7)
 ```
-=======
+
 ### Évolution de la mobilité dans les pharmacies
->>>>>>> dc691dc87c0f0aa7ac3111df9d0d418daba1ce7d
+
 
 ## Discussion et Conclusion
 
