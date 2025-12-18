@@ -2658,7 +2658,9 @@ abline(v = seq(0, 200, by = 1), col = "grey90")
 
 <!--% Lorsque toutes les analyses sont réalisées, terminez ce bloc-notes avec 3 à 6 phrases de conclusion en rapport avec ce que vous avez observé dans vos analyses. Quels sont les éléments les plus pertinents que vous retenez ? -->
 
-...vos conclusions ici...
+De manière générale, le premier confinement à presque réduit à néant la mobilité dans tous les secteurs étudiés. Aucune autre période de contamination élévée n'a eu un tel impact par la suite. Cependant, le COVID-19 a impacté tous nos secteurs étudiés de manière différente à court et à long terme.
+
+La mobilité vers les lieux de travail n'a jamais repris une activité normale puisque de nombreuses entreprises ont décidées de garder le télétravail à temps partiel. Au niveau des commerces et loisirs, la reprise a été plus lente et fluctuante mais elle a fini par dépasser son activité initiale lorsque la population a voulu rattraper le temps perdu. Au niveau des parcs, on voit clairement que le fait d'enfermer la population chez soi a eu un impact sur leur santé mentale. Dès que le gouvernement le permet, la population profite des espaces extérieurs. Les pharmacies et les commerces alimentaires ont quant à eux beaucoup moins subit cette crise sanitaire puisqu'ils n'ont jamais été fermés.
 
 ## Commentaire
 
