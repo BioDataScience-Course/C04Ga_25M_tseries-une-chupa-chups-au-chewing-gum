@@ -25,7 +25,7 @@ Au début de l’année 2020, la Belgique et le reste du monde furent confronté
 
 <!--% Rédigez le but de ce rapport.-->
 
-Le but de ce rapport est d’analyser l’impact de la pandémie de COVID-19 sur la fréquentation de différents types de lieux en Wallonie (lieux de travail, commerces essentiels et non essentiels, espaces de loisirs et parcs) sur la période 2020–2021. Plus précisément, il s’agit de quantifier et de comparer les évolutions de fréquentation entre les jours de semaine et les week-ends à l’aide d’analyses de séries spatio-temporelles, afin de mettre en évidence les effets des mesures sanitaires et des changements de comportements induits par la pandémie.
+Le but de ce travail est de quantifier et de comparer la fréquentation de ces lieux entre jours de semaine et week-ends en Wallonie durant la pandémie de COVID-19 (et plus précisémment de 2020 à 2021), à l’aide d’analyses de séries spatio-temporelles.
 
 ## Matériel et méthodes
 
@@ -64,15 +64,6 @@ Ces différentes étapes ont été appliquées de manière similaire aux catégo
 <!--% Présentez les analyses les plus pertinents que vous avez sélectionnés. Structurez la section en partie avec des titres explicites de niveau trois.-->
 
 ### Chargement des jeux de données
-
-```{r}
-# Nécessaire pour les tests SDD, ne pas utiliser dans un "vrai" projet
-if (!"tools:tests" %in% search())
-  source(here::here("tests/tools_tests.R"), attach(NULL, name = "tools:tests"))
-# Configuration de l'environnement
-SciViews::R("ts")
-library(zoo)
-```
 
 ```{r}
 # Importation 
@@ -134,6 +125,38 @@ numeric_cols <- setdiff(numeric_cols, "date")
 mobil_nw[mobil_nw$wday %in% c(1:5), numeric_cols] <- NA
 ```
 
+**Définition des périodes de vacances**
+
+```{r}
+# Périodes des vacances pour Wallonie (2020‑2022) (@VacancesScolaires)
+
+vacances_hiver <- data.frame(
+  start = as.Date(c("2020-12-21", "2021-12-27")),
+  end   = as.Date(c("2021-01-01", "2022-01-09"))
+)
+
+vacances_ete <- data.frame(
+  start = as.Date(c("2020-07-01", "2021-07-01", "2022-07-01")),
+  end   = as.Date(c("2020-08-31", "2021-08-31", "2022-08-31"))
+)
+
+vacances_paques <- data.frame(
+  start = as.Date(c("2020-04-06","2021-04-05", "2022-04-04")),
+  end   = as.Date(c("2020-04-19","2021-04-16", "2022-04-15"))
+)
+
+vacances_carnaval <- data.frame(
+  start = as.Date(c("2020-02-24","2021-02-15", "2022-02-28")),
+  end   = as.Date(c("2020-03-01","2021-02-19", "2022-03-04"))
+)
+
+vacances_toussaint <- data.frame(
+  start = as.Date(c("2020-11-02", "2021-11-01")),
+  end   = as.Date(c("2020-11-06", "2021-11-05"))
+)
+
+```
+
 ### Évolution de la mobilité au travail
 
 ### Évolution de la mobilité dans les commerces et loisirs
@@ -143,6 +166,9 @@ Cette section reprend l'analyse de l'influence du COVID-19, notamment des deux c
 #### Analyse générale de la série
 
 ```{r}
+# Conversion en ts de mobil
+mobil_ts2 <- ts(mobil$retail, start = c(2020, 46), frequency = 365)
+
 # Aggrégation par moyenne des valeurs par semaine
 retail_ts2_ag <- aggregate(mobil_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
@@ -258,10 +284,10 @@ plot(mobil_ts2, ylim = c(-95, 200),
      main = "Superposition de séries agrégées", col = rgb(0, 0, 0, alpha = 0.1))
 
 # Convertir la date en position sur l'axe x (fraction de l'année)
-
-abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
-
-abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
+x_vert <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
+abline(v = x_vert, col = "red", lwd = 1, lty = 2)
+x_blue <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
+abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
 
 # Ajouter un encadrement pour les vacances hiver
 ## Ajouter des rectangles pour chaque période
@@ -342,9 +368,22 @@ legend("topleft",
        col = c("grey", "green", "red", "blue"), 
   lty=1, , cex=0.75)
 
+#calcul de la courbe aggrégée sans les semaines 
+retail_nw_ts2 <- ts(mobil_nw$retail,start = c(2020, 46),frequency = 365)
+retail_nw_ts2  <- aggregate(retail_nw_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
+
+#calcul de la courbe aggrégée sans les weekends
+retail_nwe_ts2 <- ts(mobil_nwe$retail,start = c(2020, 46),frequency = 365)
+
+retail_nwe_ts2 <- aggregate(retail_nwe_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
+
+# calcul de la courbe agrégée semaines et weekends
+retail_ts2_ag <- aggregate(mobil_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
+
+
 # Ajouter les lignes
-lines(retail_nwe_ts2b, col = "red")
-lines(retail_nw_ts2b, col = "blue")
+lines(retail_nwe_ts2, col = "red")
+lines(retail_nw_ts2, col = "blue")
 lines(retail_ts2_ag, col = "green") 
 
 ```
@@ -368,7 +407,9 @@ retail_ts2_daily <- ts(mobil_ts2, frequency = 7)
 
 decomp_retail <- tsd(retail_ts2_daily, s.window = 7, trend = TRUE, t.window = 7)
 
-plot(decomp_work, col = 1:4)
+plot(decomp_retail, col = 1:4)
+
+cycle_hebdo_retail <- extract(decomp_retail, components = "seasonal")
 
 spectrum(cycle_hebdo_retail, spans = c(5, 7), col = "aquamarine3")
 abline(v = 1:3, col = "grey90")
@@ -398,6 +439,7 @@ retail_tsd_weekly <- tsd(retail_ts2_ag, s.window = 52,
   trend = TRUE, t.window = 13)
 plot(retail_tsd_weekly, col = 1:4)
 
+cycle_annuel_retail <- extract(retail_tsd_weekly, components = "seasonal")
 
 spectrum(cycle_annuel_retail, spans = c(3,5))
 abline(v = seq(0, 100, by = 1), col = "grey90")
@@ -422,6 +464,9 @@ Cette section reprend l'analyse de l'influence du COVID-19, notamment des deux c
 #### Analyse générale de la série
 
 ```{r}
+# Conversion en ts de mobil
+parks_ts <- ts(mobil$parks, start = c(2020, 46), frequency = 365)
+
 # Aggrégation par moyenne des valeurs par semaine
 parks_ts_agg <- aggregate(parks_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
