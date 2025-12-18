@@ -203,7 +203,7 @@ legend("topleft", c("Série originale","Série journalière aggrégée (weeks + 
 ```
 
 Le premier confinement, avec la fermeture complète des commerces et loisirs, provoque une chute brutale de fréquentation proche de -80 % et empêche tout effet des vacances de Pâques, le maintien des mesures explique donc le plateau observé.\
-Après le déconfinement, l’activité reprend progressivement mais reste inférieure au niveau initial à cause des mesures sanitaires, du télétravail et du chômage technique, malgré une hausse en été 2020. Entre les deux confinements, la fréquentation est plus élevée en semaine qu’en week-end, mais cette tendance s’inverse vers juillet 2021 avec le retour progressif à la normale. \
+Après le déconfinement, l’activité reprend progressivement mais reste inférieure au niveau initial à cause des mesures sanitaires, du télétravail et du chômage technique, malgré une hausse en été 2020. Entre les deux confinements, la fréquentation est plus élevée en semaine qu’en week-end, mais cette tendance s’inverse vers juillet 2021 avec le retour progressif à la normale.\
 Le deuxième confinement, plus souple, provoque une baisse plus modérée d’environ 40 %. Jusqu’à fin 2021, l’affluence reste inférieure à 0 %, puis repasse au-dessus de la référence début 2022, avec un effet positif des vacances scolaires. Une chute brève est observée le week-end au début 2022, liée à la vague Omicron, avant que la fréquentation ne se stabilise à la mi-2022, parfois au-dessus de la normale (+30 %), traduisant un effet de rattrapage.
 
 #### Analyse du cycle hebdomadaire
@@ -334,8 +334,8 @@ legend("topright",
 legend("topleft", legend = c("Série originale","Série originale aggrégée ", "Série journalière aggrégée sans les week-ends ", "Série journalière aggrégée avec seulement les week-ends" ), col = c("gray", rgb(0, 1, 0, 0.5), "red", "blue"), lty=1, cex=0.5, bg = "white")
 ```
 
-L’affluence dans les parcs varie clairement selon les saisons : très faible en hiver, elle augmente avec le réchauffement, atteint un pic en été puis redescend à l’automne. Les vacances scolaires jouent aussi un rôle, surtout quand les enfants et parents ont du temps libre, même si l’automne et l’hiver ont peu d’impact à cause du froid. \
-Le premier confinement entraîne une chute brutale dès mars 2020, liée aux restrictions et à la fermeture des espaces publics, et empêche de voir une vraie différence entre semaine et week-end. Au déconfinement, l’envie de sortir combinée aux beaux jours provoque une hausse rapide, malgré les mesures sanitaires, mais le télétravail et le chômage technique limitent les écarts entre semaine et week-end. \
+L’affluence dans les parcs varie clairement selon les saisons : très faible en hiver, elle augmente avec le réchauffement, atteint un pic en été puis redescend à l’automne. Les vacances scolaires jouent aussi un rôle, surtout quand les enfants et parents ont du temps libre, même si l’automne et l’hiver ont peu d’impact à cause du froid.\
+Le premier confinement entraîne une chute brutale dès mars 2020, liée aux restrictions et à la fermeture des espaces publics, et empêche de voir une vraie différence entre semaine et week-end. Au déconfinement, l’envie de sortir combinée aux beaux jours provoque une hausse rapide, malgré les mesures sanitaires, mais le télétravail et le chômage technique limitent les écarts entre semaine et week-end.\
 Le deuxième confinement, plus souple, a un effet moindre, et après celui-ci, la fréquentation des week-ends augmente progressivement. Avec le retour au travail et des rythmes plus classiques, l’écart entre semaine et week-end se creuse, traduisant un retour à des habitudes de fréquentation plus normales.
 
 #### Analyse du cycle hebdomadaire
@@ -466,7 +466,6 @@ legend("topleft",
 
 Les déplacements vers les lieux de travail montrent une forte chute à partir du premier confinement de mars 2020, avec une baisse très marquée par rapport àau niveau de référence, particulièrement visible en semaine. On observe une reprise avant l’été 2020, mais les niveaux pré-confinement ne sont pas pleinement retrouvés jusqu’à la fin de la période étudiée. Les effets des vacances et des confinements affectent principalement les jours de semaine, tandis que les week-ends apparaissent moins sensibles aux variations saisonnières et aux mesures sanitaires, ce qui se traduit par des écarts plus marqués entre les semaine et les week-ends en été.
 
-
 ```{r}
 work_tsd_weekly <- tsd(work_ts1_ag, s.window = 52, 
   trend = TRUE, t.window = 13)
@@ -479,14 +478,15 @@ abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
 legend("topright", legend = c("Confinement du 18 mars 2020","Confinement du 02 novembre 2020"),col = c("red", "blue"), lty = c(2,2),pt.cex = 1.2,cex = 0.5,bty = "o",bg = "white")
 
 ```
+
 La tendance générale de la mobilité vers les lieux de travail évolue, après une grande baisse suite au premier confinement du 18 mars 2020, vers une augmentation progressive et un retour ver la valeur de références en 2022.
 
 ## Discussion et Conclusion
 
 <!--% En tenant compte du but de votre carnet de notes et de vos résultats, discutez de résultats et proposez des conclusions à votre analyse en 5 à 10 phrases. -->
 
-La pandémie de Covid-19 a eu un effet massif sur les déplacements des gens. Le premier confinement en est le témoin le plus frappant, toutes nos analyses montrent une brusque chute de tous les types déplacements étudiés à partir de ce 18 mars 2020. \
-Les commerces alimentaires et les pharmacies ont assistés à un pic d'affluence juste avant ce confinement, très probablement causé par la crainte de pénurie de ressources premières et de médicaments par le grand public. \
-Les commerces et loisirs apparaissent comme les plus fortement affectés par les fermetures et restrictions successives, tandis que les parcs montrent une dynamique différente, plutôt dépendante de la saisonnalité et des mesures strictes de confinement. \
-Les déplacements vers les lieux de travail diminuent fortement, en particulier en semaine, sous l’effet combiné du télétravail et des confinements. Nos analyses semaine/week-end révèle que les week-ends sont globalement plus sensibles aux mesures sanitaires, aux jours fériés et aux vagues de contamination, alors que les jours de la semaine présentent une fréquentation plus stable surtout chez les commerces (alimentaires) et pharmacies ainsi que les loisirs. \
+La pandémie de Covid-19 a eu un effet massif sur les déplacements des gens. Le premier confinement en est le témoin le plus frappant, toutes nos analyses montrent une brusque chute de tous les types déplacements étudiés à partir de ce 18 mars 2020.\
+Les commerces alimentaires et les pharmacies ont assistés à un pic d'affluence juste avant ce confinement, très probablement causé par la crainte de pénurie de ressources premières et de médicaments par le grand public.\
+Les commerces et loisirs apparaissent comme les plus fortement affectés par les fermetures et restrictions successives, tandis que les parcs montrent une dynamique différente, plutôt dépendante de la saisonnalité et des mesures strictes de confinement.\
+Les déplacements vers les lieux de travail diminuent fortement, en particulier en semaine, sous l’effet combiné du télétravail et des confinements. Nos analyses semaine/week-end révèle que les week-ends sont globalement plus sensibles aux mesures sanitaires, aux jours fériés et aux vagues de contamination, alors que les jours de la semaine présentent une fréquentation plus stable surtout chez les commerces (alimentaires) et pharmacies ainsi que les loisirs.\
 Enfin, à partir de 2020 jusqu'à 2022, la plupart des secteurs montrent une reprise progressive, parfois au-delà de leurs niveaux de référence sûrement dû à un effet de rattrapage.
