@@ -389,7 +389,7 @@ Même après avoir extrait le cycle hebdomadaire de cette série, la tendance re
 
 Les résidus restent quant à eux assez bruités. Ils mettent en évidence les variations ponctuelles et aléatoires comme les anniversaires, la météo, ou atres occasiosn qui influence la population à se rendre dans les commerces et loisirs
 
-#### Analyse du cycle annuel 
+#### Analyse du cycle annuel
 
 À travers cette analyse, nous avons essayé de mettre en évidence si le cycle annuel influençait les fréquentations dans ce secteur
 
