@@ -63,7 +63,78 @@ Ces différentes étapes ont été appliquées de manière similaire aux catégo
 
 <!--% Présentez les analyses les plus pertinents que vous avez sélectionnés. Structurez la section en partie avec des titres explicites de niveau trois.-->
 
-### Impact sur le travail
+### Chargement des jeux de données
+
+```{r}
+# Nécessaire pour les tests SDD, ne pas utiliser dans un "vrai" projet
+if (!"tools:tests" %in% search())
+  source(here::here("tests/tools_tests.R"), attach(NULL, name = "tools:tests"))
+# Configuration de l'environnement
+SciViews::R("ts")
+library(zoo)
+```
+
+```{r}
+# Importation 
+mobility  <- read("data/mobility_wallonia.rds")
+```
+
+```{r}
+# Remomer les colonnes
+mobil <- mobility %>%
+  rename(
+    retail = retail_and_recreation_percent_change_from_baseline,
+    grocery = grocery_and_pharmacy_percent_change_from_baseline,
+    parks = parks_percent_change_from_baseline,
+    transir = transit_stations_percent_change_from_baseline,
+    workplaces = workplaces_percent_change_from_baseline,
+    residential = residential_percent_change_from_baseline)
+```
+
+**Création de la série sans les weekends**
+
+```{r}
+# Copie du data.frame source
+mobil_nwe <- mobil
+
+# S'assurer que la colonne date est de type Date
+mobil_nwe$date <- as.Date(mobil_nwe$date)
+
+# Jour de la semaine (1 = lundi, ..., 7 = dimanche)
+mobil_nwe$wday <- as.integer(format(mobil_nwe$date, "%u"))
+
+# Colonnes numériques à nettoyer
+numeric_cols <- names(mobil_nwe)[vapply(mobil_nwe, is.numeric, logical(1))]
+numeric_cols <- setdiff(numeric_cols, "wday")
+numeric_cols <- setdiff(numeric_cols, "date")
+
+# Remplacement des valeurs des week-ends par NA
+mobil_nwe[mobil_nwe$wday %in% c(6, 7), numeric_cols] <- NA
+
+```
+
+**Création de la série sans la semaine**
+
+```{r}
+# Copie du data.frame source
+mobil_nw <- mobil
+
+# S'assurer que la colonne date est de type Date
+mobil_nw$date <- as.Date(mobil_nw$date)
+
+# Jour de la semaine (1 = lundi, ..., 7 = dimanche)
+mobil_nw$wday <- as.integer(format(mobil_nw$date, "%u"))
+
+# Colonnes numériques à nettoyer
+numeric_cols <- names(mobil_nw)[vapply(mobil_nw, is.numeric, logical(1))]
+numeric_cols <- setdiff(numeric_cols, "wday")
+numeric_cols <- setdiff(numeric_cols, "date")
+
+# Remplacement des valeurs des week par NA
+mobil_nw[mobil_nw$wday %in% c(1:5), numeric_cols] <- NA
+```
+
+### Évolution de la mobilité au travail 
 
 ### Évolution de la mobilité dans les commerces et loisirs
 
@@ -285,6 +356,22 @@ Le premier confinement, avec la fermeture totale des commerces et loisirs, fait 
 Aux alentours de juillet 2021, lorsque la situation redevient plus ou moins à la normale, on observe un retour d'une plus grande fréquentation les weekends plutôt que la semaine.
 
 De manière générale, on peut voir que l'affluence en jours de semaine reste beaucoup plus stable que celle des weekends montrant que le COVID-19 impacte principalement cette dernière. En regardant d'un peu plus près les weekends, un pic de décroissante fortement prononcé apparait au début de 2022. Cette chute brutale mais courte est probablement due à la vague Omicron, une vague de recontamination intense qui est apparue après les fêtes de fin d'année. Même si aucun confinement stricte n'a été appliqué, cette hausse de contamination a provoqué plusieurs restrictions sanitaires ainsi qu'une prudence accrue au sein de la population. Vers la moitié de l'année 2022, le retour à la normale de la vie quotidienne donne à la population l'occasion de rattraper le temps perdu pendant cette période difficile, se reflétant par une forte affluence dans les commerces et loisirs les weekends.
+
+#### Analyse du cycle hebdomadaire 
+
+```{r}
+# convertir en série temporelle journalière
+retail_ts2_daily <- ts(mobil_ts2, frequency = 7)
+
+
+decomp_retail <- tsd(retail_ts2_daily, s.window = 7, trend = TRUE, t.window = 7)
+
+plot(decomp_work, col = 1:4)
+
+spectrum(cycle_hebdo_retail, spans = c(5, 7), col = "aquamarine3")
+abline(v = 1:3, col = "grey90")
+abline(h = c(1e-5, 1e-3, 1e-1, 1e+1), col = "grey80")
+```
 
 ### Évolution de la mobilité dans les parcs et espaces publics
 
@@ -566,7 +653,7 @@ Cette tendance permet donc de mettre en lumière l’impact du COVID-19 à long 
 
 Les résidus restent quant à eux très bruités. Cela met également en lumière que l'affluence dans les parcs est également aléatoire. En effet, la météo, les jours fériés ou les nouvelles affectent eux aussi, de manière ponctuelle, la population à se rendre dans les parcs et autres espaces publics.
 
-### Impact sur les pharmacies
+### Évolution de la mobilité dans les pharmacies 
 
 ## Discussion et Conclusion
 
