@@ -1936,7 +1936,7 @@ legend("topright",
        col = c("gray", rgb(0, 1, 0, 0.5), "red", "blue"), lty=1, cex = 0.7)
 ```
 
-Ce graphique résumé nous permet d'observer que les commerces étudiés semblent légèrement plus fréquentés en semaine que les week-ends mais les deux courbes restent très proches l'une de l'autre. Suite à la première chute de fréquentation due au premier confinement, on observe un regain de mobilité jusqu'à arriver à un plateau (de mai 2020 jusqu'au deuxième confinement) probablement lié au maintien des consignes sanitaires de distanciations et de l'ouverture des commerces jugés essentiels. \
+Ce graphique résumé nous permet d'observer que les commerces étudiés semblent légèrement plus fréquentés en semaine que les week-ends mais les deux courbes restent très proches l'une de l'autre. Suite à la première chute de fréquentation due au premier confinement, on observe un regain de mobilité jusqu'à arriver à un plateau (de mai 2020 jusqu'au deuxième confinement) probablement lié au maintien des consignes sanitaires de distanciations et de l'ouverture des commerces jugés essentiels.\
 Le second confinement provoque une nouvelle chute de mobilité mais celle-ci est bien moindre comparée à celle du premier confinement.\
 La tendance repart ensuite à la hausse, entre-coupée des différents jours fériés qui perturbent l'ouverture des commerces alimentaires et pharmacies.
 
