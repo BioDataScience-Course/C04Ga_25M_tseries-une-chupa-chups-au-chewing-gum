@@ -412,66 +412,6 @@ abline(v = seq(0, 100, by = 1), col = "grey90")
 **Analyse des résidus :** Les résidus restent très bruités, indiquant une part importante de variabilité aléatoire liée notamment à la météo, aux jours fériés et à l’actualité.
 
 ### Évolution de la mobilité dans les commerces alimentaires et pharmacies
-
-#### Série journalière agrégée (avec jours fériés mis en évidence)
-
-```{r}
-grocery_ts <- ts(mobil$grocery, start = c(2020, 46), frequency = 365)
-grocery_ts_ag <- aggregate(grocery_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
-
-plot(grocery_ts_ag, 
-     main = "Série journalière agrégée ", xlab = "Temps [année]",
-     ylab = "Mobilité liée aux magasins d'alimentation et pharmacies (% par rapport à la référence)", ylim = c(-60,70))
-# Ajouter une ligne verticale pour les confinements
-# Convertir la date en position sur l'axe x (fraction de l'année)
-x_conf1 <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
-abline(v = x_conf1, col = "red", lwd = 2, lty = 2)
-x_conf2 <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
-abline(v = x_conf2, col = "red", lwd = 2, lty = 2)
-x_lundpa <- 2021 + as.numeric(as.Date("2021-04-05") - as.Date("2021-01-01"))/365
-abline(v = x_lundpa, col = "green", lwd = 2, lty = 2)
-x_asso <- 2020 + as.numeric(as.Date("2020-08-15") - as.Date("2020-01-01"))/365
-abline(v = x_asso, col = "green", lwd = 2, lty = 2)
-x_asso2 <- 2021 + as.numeric(as.Date("2021-08-15") - as.Date("2021-01-01"))/365
-abline(v = x_asso2, col = "green", lwd = 2, lty = 2)
-x_asso3 <- 2022 + as.numeric(as.Date("2022-08-15") - as.Date("2022-01-01"))/365
-abline(v = x_asso3, col = "green", lwd = 2, lty = 2)
-x_lend <- 2020 + as.numeric(as.Date("2020-12-26") - as.Date("2020-01-01"))/365
-abline(v = x_lend, col = "green", lwd = 2, lty = 2)
-x_asce <- 2021 + as.numeric(as.Date("2021-05-13") - as.Date("2021-01-01"))/365
-abline(v = x_asce, col = "green", lwd = 2, lty = 2)
-x_lundpe <- 2021 + as.numeric(as.Date("2021-05-24") - as.Date("2021-01-01"))/365
-abline(v = x_lundpe, col = "green", lwd = 2, lty = 2)
-x_touss <- 2021 + as.numeric(as.Date("2021-11-01") - as.Date("2021-01-01"))/365
-abline(v = x_touss, col = "green", lwd = 2, lty = 2)
-x_noel21 <- 2021 + as.numeric(as.Date("2021-12-25") - as.Date("2021-01-01"))/365
-abline(v = x_noel21, col = "green", lwd = 2, lty = 2)
-x_na22 <- 2022 + as.numeric(as.Date("2022-01-01") - as.Date("2022-01-01"))/365
-abline(v = x_na22, col = "green", lwd = 2, lty = 2)
-x_lundpa2 <- 2022 + as.numeric(as.Date("2022-04-18") - as.Date("2022-01-01"))/365
-abline(v = x_lundpa2, col = "green", lwd = 2, lty = 2)
-x_asce2 <- 2022 + as.numeric(as.Date("2022-05-26") - as.Date("2022-01-01"))/365
-abline(v = x_asce2, col = "green", lwd = 2, lty = 2)
-x_lundpe2 <- 2022 + as.numeric(as.Date("2022-06-06") - as.Date("2022-01-01"))/365
-abline(v = x_lundpe2, col = "green", lwd = 2, lty = 2)
-x_nati <- 2021 + as.numeric(as.Date("2021-07-21") - as.Date("2021-01-01"))/365
-abline(v = x_nati, col = "blue", lwd = 2, lty = 2)
-x_nati2 <- 2022 + as.numeric(as.Date("2022-07-21") - as.Date("2022-01-01"))/365
-abline(v = x_nati2, col = "blue", lwd = 2, lty = 2)
-x_armi <- 2021 + as.numeric(as.Date("2021-11-11") - as.Date("2021-01-01"))/365
-abline(v = x_armi, col = "black", lwd = 2, lty = 2)
-#legend
-legend("topright", 
-       legend = c("Confinements", "Fêtes religieuses", "Fête nationale belge", "Armistice"),
-       col = c("red", "green", "blue", "black"),
-       lty = c(2,2,2,2),
-       pch = c(NA,NA,NA,NA),
-       pt.cex = 1.2,
-       cex = 0.5,
-       bty = "o",
-       bg = "white")
-```
-
 #### Superposition des séries{r}
 
 ```{r}
@@ -509,32 +449,40 @@ Les commerces alimentaires et pharmacies semblent plus sensibles aux jours féri
 ```{r}
 # Conversion en ts de mobil
 work_ts1 <- ts(mobil$workplaces, start = c(2020, 46), frequency = 365)
-# Aggrégation par moyenne des valeurs par semaine
 work_ts1_ag <- aggregate(work_ts1, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
 work_nwe_ts1 <- ts(mobil_nwe$workplaces,start = c(2020, 46),frequency = 365)
-# Aggrégation par moyenne des valeurs par semaine
 work_nwe_ts1b <- aggregate(work_nwe_ts1, 52, FUN = collapse::fmean, ts.eps = 1/52)
+
 work_nw_ts1 <- ts(mobil_nw$workplaces,start = c(2020, 46),frequency = 365)
 work_nw_ts1b <- aggregate(work_nw_ts1, 52, FUN = collapse::fmean, ts.eps = 1/52)
 # Premier graphique : série originale
 plot(work_ts1, 
-  ylim = c(-95, 65),
+  ylim = c(-95, 200),
      xlab = "Temps [année]", 
-     ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)", 
+     ylab = "Mobilité vers les lieux de travail 
+  (% par rapport à la référence)", 
      main = "Superposition de la séries but et des series aggrégées", col = rgb(0, 0, 0, alpha = 0.1))
 
 # Ajouter la deuxième série : week-ends supprimés
 lines(work_nwe_ts1b, col = "red")
-
 lines(work_nw_ts1b, col = "blue")
-
 lines(work_ts1_ag, col = rgb(0, 1, 0, 0.5))
 
-# Optionnel : ajouter une légende
-legend("topright", 
-       legend = c("Série originale","Série originale aggrégée ", "Série journalière aggrégée sans les week-ends ", "Série journalière aggrégée avec seulement les week-ends" ), 
-       col = c("gray", rgb(0, 1, 0, 0.5), "red", "blue"), lty=1, cex = 0.7)
+# Ajouter une ligne verticale pour le 18 mars 2020
+abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
+abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
+
+# Ajouter un encadrement pour les vacances
+draw_vacances(vacances_hiver,     rgb(0.4,0.6,0.9,0.5))
+draw_vacances(vacances_carnaval,  rgb(0.4,0.8,0.4,0.3))
+draw_vacances(vacances_paques,    rgb(1,0.5,0.5,0.5))
+draw_vacances(vacances_ete,       rgb(1,0.7,0.3,0.5))
+draw_vacances(vacances_toussaint, rgb(0.7,0.4,0.8,0.5))
+#legend
+legend("topright", legend = c("Confinement du 18 mars 2020","Confinement du 02 novembre 2020","Vacances hiver", "Vacances carnaval", "Vacances Pâques", "Vacances été", "Vacances Toussaint"),col = c("red", "blue", rgb(0.4,0.6,0.9,0.5),rgb(0.4,0.8,0.5,0.5),rgb(1,0.5,0.5,0.5),rgb(1,0.7,0.3,0.5),rgb(0.7,0.4,0.8,0.5)),lty = c(2,2, NA, NA, NA, NA, NA),pch = c(NA,NA, 15, 15, 15, 15, 15),pt.cex = 1.2,cex = 0.5,bty = "o",bg = "white")
+legend("topleft", 
+       c("Série originale","Série journalière aggrégée (weeks + week-ends", "Série journalière aggrégée sans les week-ends", "Série journalière aggrégée sans les semaines"), col = c("grey", "green", "red", "blue"), lty=1, , cex=0.5, bg = "white")
 ```
 
 Les déplacements vers les lieux de travail montrent une forte chute à partir du premier confinement de mars 2020, avec une baisse très marquée par rapport à la référence, particulièrement visible en semaine. On observe une reprise avant l’été 2020, mais les niveaux pré-confinement ne sont pas pleinement retrouvés jusqu’à la fin de la période étudiée. Les effets des vacances et des confinements affectent principalement les jours de semaine, tandis que les week-ends apparaissent moins sensibles aux variations saisonnières et aux mesures sanitaires, ce qui se traduit par des écarts plus marqués entre semaine et week-end en été.
