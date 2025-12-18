@@ -25,11 +25,7 @@ Au début de l’année 2020, la Belgique et le reste du monde furent confronté
 
 <!--% Rédigez le but de ce rapport.-->
 
-<<<<<<< HEAD
-Le but de ce rapport est d’analyser l’impact de la pandémie de COVID-19 sur la fréquentation de différents types de lieux en Wallonie  (lieux de travail, commerces essentiels et non essentiels, espaces de loisirs et parcs) sur la période 2020–2021. Plus précisément, il s’agit de quantifier et de comparer les évolutions de fréquentation entre les jours de semaine et les week-ends à l’aide d’analyses de séries spatio-temporelles, afin de mettre en évidence les effets des mesures sanitaires et des changements de comportements induits par la pandémie.
-=======
-Le but de ce travail est de quantifier et de comparer la fréquentation de ces lieux entre jours de semaine et week-ends en Wallonie durant la pandémie de COVID-19 (et plus précisémment de 2020 à 2021), à l’aide d’analyses de séries spatio-temporelles.
->>>>>>> 77d9a6cfb40d52fd8ad796cff047a0b4ba9fe556
+Le but de ce rapport est d’analyser l’impact de la pandémie de COVID-19 sur la fréquentation de différents types de lieux en Wallonie (lieux de travail, commerces essentiels et non essentiels, espaces de loisirs et parcs) sur la période 2020–2021. Plus précisément, il s’agit de quantifier et de comparer les évolutions de fréquentation entre les jours de semaine et les week-ends à l’aide d’analyses de séries spatio-temporelles, afin de mettre en évidence les effets des mesures sanitaires et des changements de comportements induits par la pandémie.
 
 ## Matériel et méthodes
 
@@ -393,7 +389,7 @@ Même après avoir extrait le cycle hebdomadaire de cette série, la tendance re
 
 Les résidus restent quant à eux assez bruités. Ils mettent en évidence les variations ponctuelles et aléatoires comme les anniversaires, la météo, ou atres occasiosn qui influence la population à se rendre dans les commerces et loisirs
 
-#### Analyse du cycle annuel 
+#### Analyse du cycle annuel
 
 À travers cette analyse, nous avons essayé de mettre en évidence si le cycle annuel influençait les fréquentations dans ce secteur
 

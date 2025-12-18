@@ -24,7 +24,7 @@ link-citations: true
 
 La pandémie de COVID-19 en mars 2020 a entraîné la mise en place de mesures exceptionnelles, telles que des confinements et des restrictions au niveau des déplacements afin de limiter la propagation du virus. Ces mesures ont entraîné des répercussions majeures sur la mobilité de la population mondiale et sur l’activité économique à cette échelle.
 
-Dans ce travail, nous nous intéressons aux données concernant la Belgique et plus particulièrement la Wallonie. Afin d’analyser ces impacts, nous exploitons les données issues des *Google COVID-19 Community Mobility Reports* qui décrivent les variations quotidiennes de fréquentation de différents lieux. Ces variations sont exprimées en pourcentage par rapport à une période de référence prépandémique \[google_mobility\].
+Dans ce travail, nous nous intéressons aux données concernant la Belgique et plus particulièrement la Wallonie. Afin d’analyser ces impacts, nous exploitons les données issues des *Google COVID-19 Community Mobility Reports* qui décrivent les variations quotidiennes de fréquentation de différents lieux. Ces variations sont exprimées en pourcentage par rapport à une période de référence prépandémique [@google_mobility].
 
 Notre analyse se concentre principalement sur les années 2020 et 2021, périodes durant lesquelles les mesures sanitaires ont été les plus contraignantes. Quatre catégories de lieux sont étudiées : les commerces et espaces de loisirs, les parcs, les lieux de travail, ainsi que les épiceries et pharmacies (commerces essentiels). Ces catégories permettent d’étudier les différents types de comportements de déplacement allant des activités professionnelles aux loisirs et aux besoins essentiels.
 
