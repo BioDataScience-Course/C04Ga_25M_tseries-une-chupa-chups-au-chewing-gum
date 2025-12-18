@@ -362,7 +362,8 @@ parks_ts_agg <- aggregate(parks_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
 
 plot(parks_ts_agg, 
-     main = "Série journalière aggrégée des parcs et jardins publics", xlab = "Temps [année]",
+     main = "Série journalière aggrégée des parcs 
+  et jardins publics", xlab = "Temps [année]",
      ylab = "% par rapport à la référence", ylim = c(-80,400))
 
 
@@ -433,14 +434,29 @@ legend("topright",
 Ayant remarqués que les vacances scolaires influençaient l'affluence dans les parcs, nous avons voulu mettre en évidence la différence de fréquentation entre la semaine et les weekends.
 
 ```{r}
+# calcul de la courbe aggrégée semaine et weekends
+parks_ts_agg <- aggregate(parks_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
+
+#calcul de la courbe aggrégée de la semaine uniquement
+parks_nwe_ts <- ts(mobil_nwe$parks,start = c(2020, 46),frequency = 365)
+parks_nwe_agg <- aggregate(parks_nwe_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
+
+# calcul de la courbe aggrégée des weekends uniquement
+parks_nw_ts <- ts(mobil_nw$parks,start = c(2020, 46),frequency = 365)
+parks_nw_agg<- aggregate(parks_nw_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
+
 # Premier graphique : série originale
 plot(parks_ts, 
   ylim = c(-95, 450),
      xlab = "Temps [année]", 
      ylab = "% par rapport à la référence", 
-     main = "Superposition des series aggrégées des parcs et jardins publics", col = rgb(0, 0, 0, alpha = 0.1))
+     main = "Superposition des series aggrégées des parcs
+  et jardins publics", col = rgb(0, 0, 0, alpha = 0.1))
 
-
+# Ajouter la deuxième série : week-ends supprimés
+lines(parks_nwe_agg, col = "red")
+lines(parks_nw_agg, col = "blue")
+lines(parks_ts_agg, col = rgb(0, 1, 0, 0.5))
 
 # Ajouter une ligne verticale pour le 18 mars 2020
 abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
@@ -492,40 +508,11 @@ legend("topright",
                rgb(1,0.7,0.3,0.5),
                rgb(0.7,0.4,0.8,0.5)),
        lty = c(2, NA, NA, NA, NA, NA),
-       pch = c(NA, 15, 15, 15, 15, 15),
-       pt.cex = 1.2,
-       cex = 0.75,
-       bty = "o",
-       bg = "white")
+  pch = c(NA, 15, 15, 15, 15, 15),
+  pt.cex = 1.2,cex = 0.5,bty = "o",bg = "white")
 
 # Optionnel : ajouter une légende
-legend("topleft", 
-       legend = c("Série originale","Série originale aggrégée ", "Série journalière aggrégée sans les week-ends ", "Série journalière aggrégée avec seulement les week-ends" ), 
-       col = c("gray", rgb(0, 1, 0, 0.5), "red", "blue"), lty=1, cex=0.75)
-
-# calcul de la courbe aggrégée semaine et weekends
-parks_ts_agg <- aggregate(parks_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
-
-
-#calcul de la courbe aggrégée de la semaine uniquement
-parks_nwe_ts <- ts(mobil_nwe$parks,start = c(2020, 46),frequency = 365)
-
-parks_nwe_agg <- aggregate(parks_nwe_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
-
-
-# calcul de la courbe aggrégée des weekends uniquement
-parks_nw_ts <- ts(mobil_nw$parks,start = c(2020, 46),frequency = 365)
-
-parks_nw_agg<- aggregate(parks_nw_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
-
-
-# Ajouter la deuxième série : week-ends supprimés
-lines(parks_nwe_agg, col = "red")
-
-lines(parks_nw_agg, col = "blue")
-
-lines(parks_ts_agg, col = rgb(0, 1, 0, 0.5))
-#lines(parks_ts_agg, col = "black")
+legend("topleft", legend = c("Série originale","Série originale aggrégée ", "Série journalière aggrégée sans les week-ends ", "Série journalière aggrégée avec seulement les week-ends" ), col = c("gray", rgb(0, 1, 0, 0.5), "red", "blue"), lty=1, cex=0.5, bg = "white")
 ```
 
 De manière générale, les parcs sont plus fréquentés le week-end que la semaine, en lien avec le temps libre de la population. La saisonnalité et les vacances scolaires influencent également la fréquentation.
