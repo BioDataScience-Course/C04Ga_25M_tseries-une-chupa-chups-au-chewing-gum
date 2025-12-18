@@ -51,6 +51,8 @@ Les séries journalières ont ensuite été agrégées à l’échelle hebdomada
 
 Ces analyses ont été appliquées de la même manière aux catégories commerces et loisirs, parcs, lieux de travail et épiceries/pharmacies afin de comparer pour chacun d’eux l’évolution de la mobilité entre jours de semaine et week-ends.
 
+Certaines parties du code liées à la mise en forme graphique (notamment l'ajout d'élément visuels tels que des cadres de couleurs ou des annotations) ont été élaborées avec l'assistance de l'outil ChatGPT (OpenAI) utilisé comme aide pour l'optimisation du script R.
+
 ## Résultats
 
 <!--% Présentez les analyses les plus pertinents que vous avez sélectionnés. Structurez la section en partie avec des titres explicites de niveau trois.-->

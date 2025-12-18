@@ -40,9 +40,11 @@ Les données utilisées proviennent des *Google COVID-19 Community Mobility Repo
 
 Les variations quotidiennes sont exprimées en pourcentage par rapport à une référence propre à chaque jour de la semaine. Cette **référence** correspond à la **médiane calculée sur la période du 3 janvier au 6 février 2020** (@google_documentation).
 
-Nous nous focalisons sur la **période de 2020 et 2021**, a partir du premier confinement ordonnée par le gouvernement belge de l'époque le 18 mars 2020 (@unric_belgique_confinement_2020). Pour suivre periodes des différents confinements, post-confinements ou perturbations de la mobilité directement liées aux restrictions COVID-19 . L’année 2022 servira plutôt de témoin d’une situation stabilisée post-pandémie.
+Nous nous focalisons sur la **période de 2020 et 2021**, à partir du premier confinement ordonnée par le gouvernement belge de l'époque le 18 mars 2020 (@unric_belgique_confinement_2020). Dans le but de suivre les périodes des différents confinements, post-confinements ou perturbations de la mobilité directement liées aux restrictions COVID-19 . L’année 2022 servira plutôt de témoin d’une situation stabilisée post-pandémie.
 
-L’analyse a été effectuée à l’aide de la [SciViews Box 2025](https://www.sciviews.org/software/svbox/) dans l’environnement [Saturn Cloud](https://saturncloud.io)(Linux Ubuntu 22.04), en utilisant le [logiciel R](https://www.r-project.org) (r R.version.string). Les série temporelles ont été étudiée à l’aide du package r packageVersion("pastecs").
+L’analyse a été effectuée à l’aide de la [SciViews Box 2025](https://www.sciviews.org/software/svbox/) dans l’environnement [Saturn Cloud](https://saturncloud.io) (Linux Ubuntu 22.04), en utilisant le [logiciel R](https://www.r-project.org) (r R.version.string). Les séries temporelles ont été étudiées à l’aide du package r packageVersion("pastecs").
+
+Certaines parties du code liées à la mise en forme graphique (notamment l'ajout d'élément visuels tels que des cadres de couleurs ou des annotations) ont été élaborées avec l'assistance de l'outil ChatGPT (OpenAI) utilisé comme aide pour l'optimisation du script R.
 
 <!--% Rappel référence automatique: prendre le lien de la sources, demandé à chat de le mette en format .bib ou faire soit-meme exemple: (voir exemple dans references.bib) , ajouté le code dans fichier references.bib, ajouté in-text @misc, exemple: @google_mobility. -->
 
@@ -270,15 +272,15 @@ abline(v = seq(0, 200, by = 1), col = "grey90")
 
 ```
 
-Le cycle hebdomadaire et une première tendance générale brute ont été extraits. Deux fréquences hebdomadaires, l’une de 7 jours et l’autre de 3,5 jours (possiblement associée au mercredi), sont observées de manière significative (graphique du spectre).
+Le cycle hebdomadaire ainsi qu'une première tendance générale brute ont été extraits. Deux fréquences hebdomadaires, l’une de 7 jours et l’autre de 3,5 jours (possiblement associée au mercredi), sont observées de manière significative (graphique du spectre).
 
 Le cycle semaine / week-end exerce une influence marquée sur la série. Le week-end, les déplacements vers les lieux de travail semblent plus proches de la référence, correspondant à la médiane des cinq semaines du *3 janvier au 6 février 2020* (@google_documentation). Notons la faible échelle temporelle de cette médiane et, par conséquent, son objectivité relative pour une interprétation portant sur 2,5 ans d’analyse. Cette « anomalie » pourrait s’expliquer par plusieurs hypothèses :
 
 -   Si l’on considère que la tendance générale est à la baisse, alors l’observation correspondrait à un artefact. Les individus ne se déplacent pas davantage vers leur lieu de travail le week-end, mais la pandémie de COVID-19 a davantage impacté les déplacements vers les lieux de travail en semaine que durant le week-end. Ainsi, la fréquence apparente des déplacements semble plus élevée le week-end, mais le dépassement de la tendance résulte d’un effet plus faible du COVID-19 sur les week-ends par rapport aux jours de semaine et/ou d’une représentation inadéquate de la référence (référentiel inadapté, probablement soumis à un cycle annuel).
 -   Aménagements liés au COVID-19 : une redistribution des déplacements salariaux sur la semaine afin d’éviter les contacts, associée à une augmentation du télétravail en semaine.
--   Les secteurs de la bureautique travaillent principalement en semaine et se prêtent plus facilement au télétravail. À l’inverse, la charge salariale des week-ends est majoritairement constituée des secteurs du tourisme et des secteurs essentiels ou réguliers, moins dépendants du rythme hebdomadaire. Dans ces secteurs, le télétravail est plus complexe, voire impossible, à mettre en place. A titre d'exemple, cette différences entre classe de travailleurs à été identifier par l'INSEE en 2023 mais sur des données française (@insee2023organisation).
+-   Les secteurs de la bureautique travaillent principalement en semaine et se prêtent plus facilement au télétravail. À l’inverse, la charge salariale des week-ends est majoritairement constituée des secteurs du tourisme et des secteurs essentiels ou réguliers, moins dépendants du rythme hebdomadaire. Dans ces secteurs, le télétravail est plus complexe, voire impossible, à mettre en place. À titre d'exemple, cette différence entre classe de travailleurs a été identifiée par l'INSEE en 2023 mais sur des données françaises (@insee2023organisation).
 
-Les causes sont peut-etre hybrides. Les données fournies par Google ne discriminant pas les classes de travailleurs, elles ne permettent ni de confirmer ni d’infirmer ces hypothèses.
+Les causes sont peut-être hybrides. Les données fournies par Google ne discriminant pas les classes de travailleurs, elles ne permettent ni de confirmer ni d’infirmer ces hypothèses.
 
 Il est donc pertinent d’analyser trois sous-séries distinctes : l’ensemble de la série (tous les jours), uniquement les week-ends, et uniquement les jours de semaine (lundi–vendredi).
 
@@ -290,7 +292,7 @@ work_ts1_ag <- aggregate(work_ts1, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
 
 plot(work_ts1_ag, 
-     main = "Série journalière aggrégée ", xlab = "Temps [année]",
+     main = "Série journalière agrégée", xlab = "Temps [année]",
      ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)", ylim = c(-60, 80))
 # Ajouter une ligne verticale pour le 18 mars 2020
 abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
@@ -342,7 +344,7 @@ plot(work_nw_ts1,
 work_nw_ts1b <- aggregate(work_nw_ts1, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
 plot(work_nw_ts1b, 
-     main = "Série journalière aggrégée sans les jours de la semaines", xlab = "Temps [année]",
+     main = "Série journalière agrégée sans les jours de la semaine", xlab = "Temps [année]",
      ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)", ylim = c(-95, 100))
 # Ajouter une ligne verticale pour le 18 mars 2020
 abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
@@ -384,14 +386,14 @@ Juste après le premier confinement, le déplacement vers les lieux de travail e
 work_nwe_ts1 <- ts(mobil_nwe$workplaces,start = c(2020, 46),frequency = 365)
 
 plot(work_nwe_ts1, 
-     main = "Série journalière sans week-ends", xlab = "Temps [année]",
+     main = "Série journalière sans week-end", xlab = "Temps [année]",
      ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)")
 
 # Aggrégation par moyenne des valeurs par semaine
 work_nwe_ts1b <- aggregate(work_nwe_ts1, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
 plot(work_nwe_ts1b, 
-     main = "Série journalière aggrégée sans week-ends", xlab = "Temps [année]",
+     main = "Série journalière agrégée sans week-end", xlab = "Temps [année]",
      ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)", ylim = c(-95, 100))
  
 #Ajouter une ligne verticale pour les confinements
@@ -428,7 +430,7 @@ legend("topright",
        bg = "white")
 ```
 
-La variation de la fréquentation des lieux de travail en fonction des vacances est beaucoup plus marquée sur la semaine lorsque l’on exclut les week-ends. Les niveaux pré–premier confinement ne semblent pas avoir été totalement retrouvés à la fin de l’année 2022.
+La variation de la fréquentation des lieux de travail en fonction des vacances est beaucoup plus marquée sur la semaine lorsqu'on exclut les week-ends. Les niveaux pré–premier confinement ne semblent pas avoir été totalement retrouvés à la fin de l’année 2022.
 
 ```{r}
 # Premier graphique : série originale
@@ -436,7 +438,7 @@ plot(work_ts1,
   ylim = c(-95, 65),
      xlab = "Temps [année]", 
      ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)", 
-     main = "Superposition de la séries but et des series aggrégées", col = rgb(0, 0, 0, alpha = 0.1))
+     main = "Superposition de la série brut et des series agrégées", col = rgb(0, 0, 0, alpha = 0.1))
 
 # Ajouter la deuxième série : week-ends supprimés
 lines(work_nwe_ts1b, col = "red")
@@ -447,7 +449,7 @@ lines(work_ts1_ag, col = rgb(0, 1, 0, 0.5))
 
 # Optionnel : ajouter une légende
 legend("topright", 
-       legend = c("Série originale","Série originale aggrégée ", "Série journalière aggrégée sans les week-ends ", "Série journalière aggrégée avec seulement les week-ends" ), 
+       legend = c("Série originale","Série originale agrégée ", "Série journalière agrégée sans les week-end", "Série journalière agrégée avec seulement les week-ends" ), 
        col = c("gray", rgb(0, 1, 0, 0.5), "red", "blue"), lty=1)
 ```
 
@@ -457,7 +459,7 @@ Notons qu’avant le premier confinement du 18 mars 2020 et durant les deux à t
 
 #### Extraction du cycle annuelle (vacance)
 
-Nous extrayons le cycle annuelle a partir de la série agrégé.
+Nous extrayons le cycle annuelle à partir de la série agrégée.
 
 ```{r}
 work_tsd_weekly <- tsd(work_ts1_ag, s.window = 52, 
@@ -488,8 +490,8 @@ cycle_annuel_work_b <- extract(work_tsd1_b, components = "seasonal")
 
 work_sl1_b <- stat.slide(time(cycle_annuel_work_b), cycle_annuel_work_b, xmin = 2020, deltat = 1/24)
 # Graphique des statistiques glissantes
-plot(work_sl1_b, main = "Statistiques glissante de 2 semaines
-  sur le cycle annuelle", xlab = "Temps [année]", ylab = "Mobilité vers les lieux de travail 
+plot(work_sl1_b, main = "Statistiques glissantes de 2 semaines
+  sur le cycle annuel", xlab = "Temps [année]", ylab = "Mobilité vers les lieux de travail 
   (% par rapport à la référence)", col = c(rgb(0, 0, 0,0.2),rgb(1, 0, 0,1)),   ylim = c(-35, 45), xlim = c(2020.5, 2022.15))
 
 # Ajouter un encadrement pour les vacances
@@ -501,7 +503,7 @@ draw_vacances(vacances_toussaint, rgb(0.7,0.4,0.8,0.5))
 
 #legend
 legend("topright", 
-       legend = c("Statistique glissantes (2 semaines)", 
+       legend = c("Statistiques glissantes (2 semaines)", 
                   "Vacances hiver", 
                   "Vacances carnaval", 
                   "Vacances Pâques", 
@@ -558,11 +560,11 @@ Avant le premier confinement, la tendance locale était proche de la moyenne de 
 
 #### Conclusion mobilité vers les lieux de travail en 2020-2021 en wallonie
 
-La mobilité vers les lieux de travail en Wallonie durant la pandémie de COVID-19 a été fortement structurée par les confinements, avec une rupture majeure observée lors du premier confinement de mars 2020. Ce dernier a provoqué une baisse brutale et durable de la fréquentation des lieux de travail, dont les niveaux prépandémiques ne semble pas avoir été totalement retrouvés à la fin de l’année 2022 (bien que le choix de la références peut-être remise en question).
+La mobilité vers les lieux de travail en Wallonie durant la pandémie de COVID-19 a été fortement structurée par les confinements, avec une rupture majeure observée lors du premier confinement de mars 2020. Ce dernier a provoqué une baisse brutale et durable de la fréquentation des lieux de travail, dont les niveaux prépandémiques ne semblent pas avoir été totalement retrouvés à la fin de l’année 2022 (bien que le choix de la référence peut-être remise en question).
 
 Le cycle hebdomadaire exerce une influence déterminante sur la série, les week-ends apparaissant globalement moins affectés par les restrictions que les jours de semaine, probablement en raison de la structure sectorielle de l’emploi et des possibilités différenciées de télétravail.
 
-Apres les confinements, les vacances scolaires constituent le principal moteur du cycle annuel de la mobilité professionnelle, leur effet étant particulièrement marqué en semaine..
+Après les confinements, les vacances scolaires constituent le principal moteur du cycle annuel de la mobilité professionnelle, leur effet étant particulièrement marqué en semaine..
 
 Enfin, l’analyse des résidus et de l’autocorrélation indique que, une fois les composantes saisonnières isolées, la dynamique de la mobilité vers les lieux de travail présente une structure relativement stable, dominée par des cycles réguliers et une tendance de fond à la hausse.
 
@@ -600,7 +602,7 @@ La mobilité semble se stabiliser entre 0 et +30 % ce qui suggère un retour com
 
 **Conclusion :**
 
-La mobilité dans les commerces et loisirs chute de façon spectaculaire au début de 2020, periode correspondant aux premiers confinements. Elle reste longtemps inférieure à la référence, avec des fluctuations liées aux différentes mesures sanitaires. À partir de 2022, la mobilité se stabilise et revient autour ou au-dessus du niveau pré-pandémique.
+La mobilité dans les commerces et loisirs chute de façon spectaculaire au début de 2020, période correspondant aux premiers confinements. Elle reste longtemps inférieure à la référence, avec des fluctuations liées aux différentes mesures sanitaires. À partir de 2022, la mobilité se stabilise et revient autour ou au-dessus du niveau prépandémique.
 
 ```{r}
 # Graphique de l'objet ts
@@ -655,11 +657,11 @@ La mobilité reste très basse pendant les semaines suivantes malgré les vacanc
 
 Les plages colorées (été, Toussaint, hiver) montrent une remontée progressive durant l’été 2020 mais un niveau encore négatif et très fluctuant.
 
-Cela montre que la mobilité est encore largement contrainte, mais les vacances produisent déjà un petit rebond, en particulier l’été (orange).
+Cela montre que la mobilité est encore largement contrainte, mais les vacances produisent déjà un petit rebond, en particulier l'été (orange).
 
 **Deuxième confinement (novembre 2020) : baisse nette mais moins brutale qu'en mars 2020**
 
-La ligne bleue (2 novembre 2020) correspond au deuxième confinement. On voit une baisse du niveau de mobilité mais moins spectaculaire que la première (-30 à -40% comparé à -80% ). Cela peut s’expliquer par des restrictions moins générales et une adaptation des comportements (click & collect, commerce essentiel, etc.).
+La ligne bleue (2 novembre 2020) correspond au deuxième confinement. On voit une baisse du niveau de mobilité mais moins spectaculaire que la première (-30 à -40 % comparé à -80 % ). Cela peut s'expliquer par des restrictions moins générales et une adaptation des comportements (click & collect, commerce essentiel, etc.).
 
 **En 2021,un schéma clair apparaît : Les vacances augmentent la mobilité**
 
@@ -671,11 +673,11 @@ Les périodes hors congés reviennent systématiquement vers un niveau plus bas.
 
 **En 2022 : remise à la normale + reprise forte durant l’été**
 
-En 2022, la mobilité oscille autour de 0 % (retour vers les niveaux pré-pandémiques). Les vacances génèrent toujours des hausses très nettes et l’été 2022 correspond à une des plus fortes augmentations de toute la série. Cela montre un effet de rattrapage post-pandémie, les activités de loisirs explosent à nouveau.
+En 2022, la mobilité oscille autour de 0 % (retour vers les niveaux pré-pandémiques). Les vacances génèrent toujours des hausses très nettes et l'été 2022 correspond à une des plus fortes augmentations de toute la série. Cela montre un effet de rattrapage post-pandémie, les activités de loisirs explosent à nouveau.
 
 **Conclusion**
 
-L’ajout des périodes de vacances montre qu’avant 2021, les confinements dominent totalement la mobilité et les vacances n’ont presque aucun effet. À partir de 2021, les vacances deviennent des périodes systématiquement associées à une augmentation de la mobilité dans les commerces et loisirs.
+L'ajout des périodes de vacances montre qu’avant 2021, les confinements dominent totalement la mobilité et les vacances n’ont presque aucun effet. À partir de 2021, les vacances deviennent des périodes systématiquement associées à une augmentation de la mobilité dans les commerces et loisirs.
 
 En 2022, la mobilité revient à la normale et les vacances, en particulier l’été, deviennent les moments clés où la fréquentation dépasse le niveau de référence.
 
@@ -695,13 +697,13 @@ On observe dans la série originale de fortes variations rapides liées au cycle
 
 La composante de tendance met en évidence les grandes phases de baisses et de hausses associées aux restrictions sanitaires liées à la pandémie.
 
-La composante saisonnière révèle un cycle hebdomadaire régulier et stable dans le temps. Cela confirme l’importance de l’analyse différente des comportements selon les jours (week-ends et semaines).
+La composante saisonnière révèle un cycle hebdomadaire régulier et stable dans le temps. Cela confirme l’importance de l'analyse différente des comportements selon les jours (week-ends et semaines).
 
-Enfin, les résidus sont globalement faibles et ne présentent pas de structure marquée ce qui suggère que la décomposition permet d’isoler efficacement un signal hebdomadaire dominant.
+Enfin, les résidus sont globalement faibles et ne présentent pas de structure marquée, ce qui suggère que la décomposition permet d’isoler efficacement un signal hebdomadaire dominant.
 
 #### Extraction des données :
 
-##### Composante saisonnière hebdomadaire extraite de la série Commerces et Loisirs, observée sur environ 50 jours (≈ 7 semaines).
+##### Composante saisonnière hebdomadaire extraite de la série Commerces et Loisirs, observée sur environ 50 jours (+- 7 semaines).
 
 ```{r}
 cycle_hebdo_retail <- extract(decomp_retail, components = "seasonal")
@@ -720,9 +722,9 @@ abline(v = 1:3, col = "grey90")
 abline(h = c(1e-5, 1e-3, 1e-1, 1e+1), col = "grey80")
 ```
 
-Le périodogramme lissé met en évidence un pic dominant associé au cycle hebdomadaire de la fréquentation des commerces et loisirs. On remarque d’autres pics secondaires correspondent à des harmoniques de ce cycle. Cela montre les différences marquées entre les jours de la semaine. Ces résultats confirment que la saisonnalité hebdomadaire constitue la structure principale de la série.
+Le périodogramme lissé met en évidence un pic dominant associé au cycle hebdomadaire de la fréquentation des commerces et loisirs. On remarque d’autres pics secondaires qui correspondent à des harmoniques de ce cycle. Cela montre les différences marquées entre les jours de la semaine. Ces résultats confirment que la saisonnalité hebdomadaire constitue la structure principale de la série.
 
-Les pics observés aux fréquences 1, 2 et 3 correspondent au cycle hebdomadaire dominant et à ses harmoniques. On a à faire à des différences marquées entre les jours de la semaine plutôt qu’à des cycles indépendants.
+Les pics observés aux fréquences 1, 2 et 3 correspondent au cycle hebdomadaire dominant et à ses harmoniques. On a affaire à des différences marquées entre les jours de la semaine plutôt qu’à des cycles indépendants.
 
 ```{r}
 cpgram(cycle_hebdo_retail) 
@@ -741,7 +743,7 @@ retail_ts2_ag <- aggregate(mobil_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
 
 plot(retail_ts2_ag, 
-     main = "Série journalière aggrégée des commerces et loisirs ", xlab = "Temps [année]",
+     main = "Série journalière agrégée des commerces et loisirs ", xlab = "Temps [année]",
      ylab = "Commerces et loisirs (% par rapport à la référence)", ylim = c(-90, 140))
 # Ajouter une ligne verticale pour le 18 mars 2020
 abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
@@ -779,7 +781,7 @@ legend("topright",
 
 ```
 
-Après une importante chute de la courbe liée au confinement de mars 2020, la mobilité vers les commerces et loisirs remonte progressivement mais reste toujours inférieure à la référence et ce, pendant une longue période. Plusieurs périodes de vacances scolaires (été, hiver, Pâques, carnaval) coïncident avec des phases de hausse de la fréquentation. Cela suggère une influence non négligeable de ces périodes sur cette mobilité vers les commerces. À partir de 2022, la tendance se stabilise autour de zéro, traduisant un retour vers des niveaux de mobilité pré-pandémiques. Par conséquence, l’analyse des données agrégées met en évidence l’effet des confinements, des vagues successives de la pandémie et des périodes de vacances sur la dynamique de fréquentation des commerces et loisirs.
+Après une importante chute de la courbe liée au confinement de mars 2020, la mobilité vers les commerces et loisirs remonte progressivement mais reste toujours inférieure à la référence et ce, pendant une longue période. Plusieurs périodes de vacances scolaires (été, hiver, Pâques, carnaval) coïncident avec des phases de hausse de la fréquentation. Cela suggère une influence non négligeable de ces périodes sur cette mobilité vers les commerces. À partir de 2022, la tendance se stabilise autour de zéro, traduisant un retour vers des niveaux de mobilité pré-pandémiques. Par conséquent, l'analyse des données agrégées met en évidence l'effet des confinements, des vagues successives de la pandémie et des périodes de vacances sur la dynamique de fréquentation des commerces et loisirs.
 
 **Séries agrégées: weekend uniquement**
 
@@ -795,7 +797,7 @@ plot(retail_nw_ts2,
 retail_nw_ts2b  <- aggregate(retail_nw_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
 plot(retail_nw_ts2b, 
-     main = "Série journalière aggrégée sans les jours de la semaines", xlab = "Temps [année]",
+     main = "Série journalière agrégée sans les jours de la semaines", xlab = "Temps [année]",
      ylab = "Commerces et loisirs (% par rapport à la référence)", ylim = c(-95, 160))
 # Ajouter une ligne verticale pour le 18 mars 2020
 abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
@@ -833,7 +835,7 @@ legend("topright",
 
 ```
 
-La série agrégée sans les jours de semaine met en évidence l’évolution de la fréquentation des commerces et loisirs durant les week-ends. Cette période est particulièrement sensible aux mesures sanitaires. Après une chute très marquée des déplacements lors du confinement de mars 2020, la courbe de mobilité montre un rebond durant l’été 2020. L’année 2021 est montre par des fluctuations indiquant une situation encore instable liée aux restrictions sanitaires fluctuantes elles aussi. En 2022, même si on aperçoit un léger creux en début d’année, la fréquentation des week-ends retrouve rapidement des niveaux proches à supérieurs à la référence et ce, notamment durant les périodes estivales, suggérant une normalisation progressive des activités de loisir.
+La série agrégée sans les jours de semaine met en évidence l’évolution de la fréquentation des commerces et loisirs durant les week-ends. Cette période est particulièrement sensible aux mesures sanitaires. Après une chute très marquée des déplacements lors du confinement de mars 2020, la courbe de mobilité montre un rebond durant l’été 2020. L'année 2021 est marquée par des fluctuations indiquant une situation encore instable liée aux restrictions sanitaires fluctuantes elles aussi. En 2022, même si on aperçoit un léger creux en début d’année, la fréquentation des week-ends retrouve rapidement des niveaux proches à supérieurs à la référence et ce, notamment durant les périodes estivales, suggérant une normalisation progressive des activités de loisirs.
 
 **Séries agrégées: semaines uniquement**
 
@@ -848,7 +850,7 @@ plot(retail_nwe_ts2,
 retail_nwe_ts2b <- aggregate(retail_nwe_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
 plot(retail_nwe_ts2b, 
-     main = "Série journalière aggrégée sans week-end", xlab = "Temps [année]",
+     main = "Série journalière agrégée sans week-end", xlab = "Temps [année]",
      ylab = "Commerces et loisirs (% par rapport à la référence)", ylim = c(-95, 140))
 # Ajouter une ligne verticale pour le 18 mars 2020
 abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
@@ -882,7 +884,7 @@ legend("topright",
        bg = "white")
 ```
 
-En retirant les week-ends, la série agrégée met plus clairement en évidence la dynamique de la fréquentation des commerces en semaine. Après une chute très marquée liée au confinement de mars 2020, la mobilité remonte progressivement durant l’été 2020 et se maintient autour de valeurs légèrement négatives en 2021. L’année 2022 est marquée par une reprise de la mobilité nette, avec des niveaux de fréquentation en semaine proches, et parfois supérieurs, à la référence pré-pandémique. Les périodes de vacances scolaires semblent influencer la mobilité, mais de manière plus modérée que pour les week-ends, ce qui suggère une normalisation progressive des comportements d’achat en semaine.
+En retirant les week-ends, la série agrégée met plus clairement en évidence la dynamique de la fréquentation des commerces en semaine. Après une chute très marquée liée au confinement de mars 2020, la mobilité remonte progressivement durant l’été 2020 et se maintient autour de valeurs légèrement négatives en 2021. L'année 2022 est marquée par une reprise de la mobilité nette, avec des niveaux de fréquentation en semaine proches, et parfois supérieurs, à la référence pré-pandémique. Les périodes de vacances scolaires semblent influencer la mobilité, mais de manière plus modérée que pour les week-ends, ce qui suggère une normalisation progressive des comportements d’achat en semaine.
 
 ```{r}
 mobil_nwe_ts2 <- ts(mobil_nwe$retail,start = c(2020, 46),frequency = 365)
@@ -896,7 +898,7 @@ plot(mobil_nwe_ts2,
 mobil_nwe_ts2b <- aggregate(mobil_nwe_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
 plot(mobil_nwe_ts2b, 
-     main = "Série journalière aggrégée (week-ends = NA)", xlab = "Temps [année]",
+     main = "Série journalière agrégée (week-ends = NA)", xlab = "Temps [année]",
      ylab = "Commerces et loisirs (% par rapport à la référence)")
 ```
 
@@ -912,7 +914,7 @@ plot(mobil_nw_ts2,
 mobil_nw_ts2b <- aggregate(mobil_nw_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
 plot(mobil_nw_ts2b, 
-     main = "Série journalière aggrégée (weeks = NA)", xlab = "Temps [année]",
+     main = "Série journalière agrégée (weeks = NA)", xlab = "Temps [année]",
      ylab = "Commerces et loisirs (% par rapport à la référence)")
 ```
 
@@ -962,7 +964,7 @@ legend("topright",
 
 # Optionnel : ajouter une légende
 legend("topleft", 
-       c("Série originale","Série journalière aggrégée (weeks + week-ends", "Série journalière aggrégée sans les week-ends", "Série journalière aggrégée sans les semaines"), 
+       c("Série originale","Série journalière agrégée (weeks + week-ends", "Série journalière agrégée sans les week-ends", "Série journalière agrégée sans les semaines"), 
        col = c("grey", "green", "red", "blue"), 
   lty=1, , cex=0.75)
 
@@ -973,11 +975,11 @@ lines(retail_ts2_ag, col = "green")
 
 ```
 
-La superposition des séries met en évidence des différences entre la dynamique globale de la fréquentation des commerces et loisirs et celle observée selon le type de jour (week-ends ou semaines). La série originale (en gris) apparaît très bruitée et varie beaucoup et étant dominée par un cycle hebdomadaire. Cela rend difficile l’identification des tendances à long terme. La série journalière agrégée qui l’ensemble des jours de week-ends et de semaines (en vert) permet de lisser ce bruit et de mieux faire ressortir l’évolution générale de la courbe de fréquentation. La série agrégée sans les week-ends (en rouge) présente un niveau (pics) plus faible et plus stable. Cela montre une fréquentation en semaine moins fluctuante et plus directement contrainte par les mesures sanitaires. À l’inverse, la série agrégée sans les jours de semaine, correspondant aux week-ends (en bleu) est en moyenne plus élevée et nettement plus fluctuante reflétant une fréquentation davantage liée aux comportements de loisirs et aux possibilités de déplacement.
+La superposition des séries met en évidence des différences entre la dynamique globale de la fréquentation des commerces et loisirs et celle observée selon le type de jour (week-ends ou semaines). La série originale (en gris) apparaît très bruitée et varie beaucoup et est dominée par un cycle hebdomadaire. Cela rend difficile l'identification des tendances à long terme. La série journalière agrégée qui inclut l’ensemble des jours de week-ends et de semaines (en vert) permet de lisser ce bruit et de mieux faire ressortir l'évolution générale de la courbe de fréquentation. La série agrégée sans les week-ends (en rouge) présente un niveau (pics) plus faible et plus stable. Cela montre une fréquentation en semaine moins fluctuante et plus directement contrainte par les mesures sanitaires. À l'inverse, la série agrégée sans les jours de semaine, correspondant aux week-ends (en bleu) est en moyenne plus élevée et nettement plus fluctuante reflétant une fréquentation davantage liée aux comportements de loisirs et aux possibilités de déplacement.
 
-L’ajout des périodes de vacances scolaires met en évidence leur rôle au niveau des variations de fréquentation des commerces et loisirs. Cela en particulier lors des vacances d’été qui coïncident avec des hausses marquées de la fréquentation et surtout le week-end. Cette croissance est visible dès l’été 2020, après la chute brutale provoquée par le premier confinement de mars 2020 et devient encore plus marquée à partir de 2021 lorsque les restrictions diminuent. Les vacances de printemps et d’automne montrent également des hausses ponctuelles principalement les week-ends tandis que les jours de semaine sont encore un peu touchés.
+L'ajout des périodes de vacances scolaires met en évidence leur rôle au niveau des variations de fréquentation des commerces et loisirs. Cela en particulier lors des vacances d’été qui coïncident avec des hausses marquées de la fréquentation et surtout le week-end. Cette croissance est visible dès l’été 2020, après la chute brutale provoquée par le premier confinement de mars 2020 et devient encore plus marquée à partir de 2021 lorsque les restrictions diminuent. Les vacances de printemps et d’automne montrent également des hausses ponctuelles principalement les week-ends tandis que les jours de semaine sont encore un peu touchés.
 
-En 2022, la fréquentation durant les week-ends dépasse fréquemment la référence pré-pandémique. On suppose un effet de « rattrapage des activités de loisirs » tandis que alors que la fréquentation en semaine suit une évolution plus progressive et régulière. Dans l’ensemble, cette superposition montre que les week-ends concentrent l’essentiel des pics et de la variation de la série originale, amplifiés lors des périodes de vacances, tandis que les jours de semaine traduisent principalement la tendance lente et évolutive de la fréquentation des commerces et loisirs en Wallonie sur la période étudiée.
+En 2022, la fréquentation durant les week-ends dépasse fréquemment la référence pré-pandémique. On suppose un effet de "rattrapage des activités de loisirs", tandis que alors que la fréquentation en semaine suit une évolution plus progressive et régulière. Dans l'ensemble, cette superposition montre que les week-ends concentrent l'essentiel des pics et de la variation de la série originale, amplifiés lors des périodes de vacances, tandis que les jours de semaine traduisent principalement la tendance lente et évolutive de la fréquentation des commerces et loisirs en Wallonie sur la période étudiée.
 
 #### Extraction du cycle annuelle
 
@@ -998,7 +1000,7 @@ abline(v = seq(0, 100, by = 1), col = "grey90")
 
 Les graphiques montrent que la mobilité vers les commerces est structurée par une saisonnalité annuelle marquée et une tendance à long terme fortement perturbée par la pandémie. Après une chute brutale lors du premier confinement, la reprise s’effectue de manière irrégulière, traduisant des effets durables du contexte sanitaire au-delà des seuls cycles saisonniers.
 
-L’analyse spectrale confirme la dominance du cycle annuel, tandis que les résidus indiquent des variations ponctuelles liées à des événements exceptionnels.
+L'analyse spectrale confirme la dominance du cycle annuel, tandis que les résidus indiquent des variations ponctuelles liées à des événements exceptionnels.
 
 **Statistiques glissantes**
 
@@ -1013,7 +1015,7 @@ cycle_annuel_retail_b <- extract(retail_tsd1_b, components = "seasonal")
 retail_sl1_b <- stat.slide(time(cycle_annuel_retail_b), cycle_annuel_retail_b, xmin = 2020, deltat = 1/24)
 
 # Graphique des statistiques glissantes
-plot(retail_sl1_b, main = "Statistiques glissante de 2 semaines
+plot(retail_sl1_b, main = "Statistiques glissantes de 2 semaines
   sur le cycle annuelle", xlab = "Temps [année]", ylab = "Mobilité vers les commerces et loisirs
   (% par rapport à la référence)", col = c(rgb(0, 0, 0,0.2),rgb(1, 0, 0,1)),   ylim = c(-35, 45))
 
@@ -1026,7 +1028,7 @@ draw_vacances(vacances_toussaint, rgb(0.7,0.4,0.8,0.5))
 
 #legend
 legend("topright", 
-       legend = c("Statistique glissantes (2 semaines)", 
+       legend = c("Statistiques glissantes (2 semaines)", 
                   "Vacances hiver", 
                   "Vacances carnaval", 
                   "Vacances Pâques", 
@@ -1048,7 +1050,7 @@ legend("topright",
 
 La statistique glissante met en évidence des périodes où la composante saisonnière du commerce est diminuée, notamment durant les phases de restrictions sanitaires, tandis que les périodes estivales montrent une réintensification progressive de la saisonnalité.
 
-Les statistiques glissantes calculées sur une fenêtre de deux semaines permettent de suivre l’évolution du cycle annuel du commerce, mais ne permettent pas de distinguer les comportements spécifiques des jours de semaine et des week-ends, ceux-ci étant volontairement lissés à cette échelle temporelle.
+Les statistiques glissantes calculées sur une fenêtre de deux semaines permettent de suivre l'évolution du cycle annuel du commerce, mais ne permettent pas de distinguer les comportements spécifiques des jours de semaine et des week-ends, ceux-ci étant volontairement lissés à cette échelle temporelle.
 
 ```{r}
 y <- as.numeric(cycle_annuel_retail_b)
@@ -1070,11 +1072,11 @@ stats_by_year
 
 Au niveau de la moyenne du cycle annuel, la moyenne de 2021 est proche de 0 comparée à celle de 2020 et 2021 qui ont une saisonnalité plus marquée. La composante saisonnière annuelle du commerce est particulièrement affaiblie en 2021, année où les restrictions sanitaires ont été les plus prolongées.
 
-La comparaison du cycle annuel du commerce montre que la saisonnalité est fortement atténuée en 2021, avec une moyenne proche de zéro, ce qui reflète l’impact prolongé des restrictions liées au COVID-19. En 2020 et surtout en 2022, le cycle annuel est en moyenne plus élevé, indiquant une saisonnalité plus marquée et un retour progressif à un fonctionnement plus normal. L’amplitude et la variabilité du cycle restent globalement similaires d’une année à l’autre, ce qui suggère que le COVID a principalement affecté le niveau moyen de la saisonnalité plutôt que sa structure générale.
+La comparaison du cycle annuel du commerce montre que la saisonnalité est fortement atténuée en 2021, avec une moyenne proche de zéro, ce qui reflète l'impact prolongé des restrictions liées au COVID-19. En 2020 et surtout en 2022, le cycle annuel est en moyenne plus élevé, indiquant une saisonnalité plus marquée et un retour progressif à un fonctionnement plus normal. L'amplitude et la variabilité du cycle restent globalement similaires d’une année à l’autre, ce qui suggère que le COVID a principalement affecté le niveau moyen de la saisonnalité plutôt que sa structure générale.
 
 **Important :**
 
-Des statistiques glissantes ont été appliquées à la série complète afin de caractériser l’impact global du COVID-19. La comparaison entre jours de semaine et week-ends repose ensuite sur des séries agrégées distinctes, cette approche étant plus adaptée pour mettre en évidence les différences de comportement selon le type de jour. Par conséquent les statistiques glissantes à cette échelle n'apporterait pas grand chose car les statistiques glissantes sont sur 2 semaines et lissent déjà nos résultats.
+Des statistiques glissantes ont été appliquées à la série complète afin de caractériser l’impact global du COVID-19. La comparaison entre jours de semaine et week-ends repose ensuite sur des séries agrégées distinctes, cette approche étant plus adaptée pour mettre en évidence les différences de comportement selon le type de jour. Par conséquent les statistiques glissantes à cette échelle n'apporteraient pas grand-chose car les statistiques glissantes sont sur 2 semaines et lissent déjà nos résultats.
 
 #### Analyse de la tendance locale
 
@@ -1087,13 +1089,9 @@ legend("topright",
        col = c("black", "red", "red", "blue"), lty = c(3, 1, 2,2), cex = 0.5)
 ```
 
-Le graphique de la tendance locale met en évidence un changement majeur à partir de mars 2020, marquée par une chute traduisant des valeurs inférieures à la moyenne de référence et ce, en lien avec le premier confinement. Au cours du printemps et de l’été 2020, une reprise partielle des déplacements vers les commerces et loisirs commence mais sans retourer aux niveaux avant la pandémie. Le second confinement de novembre 2020 se manifeste par une diminution bien plus progressive, suggérant un impact moins soudain. Le minimum global observé début 2021 indique un effet prolongé de la crise sanitaire avec une fréquentation inférieure à la moyenne pendant un long moment. À partir de mi-2021, la tendance s’inverse progressivement traduisant une reprise lente et séquencée (graduelle) des activités laissant apparaître des effets de la pandémie de 2020.
+Le graphique de la tendance locale met en évidence un changement majeur à partir de mars 2020, marqué par une chute traduisant des valeurs inférieures à la moyenne de référence et ce, en lien avec le premier confinement. Au cours du printemps et de l’été 2020, une reprise partielle des déplacements vers les commerces et loisirs commence mais sans retourner aux niveaux avant la pandémie. Le second confinement de novembre 2020 se manifeste par une diminution bien plus progressive, suggérant un impact moins soudain. Le minimum global observé début 2021 indique un effet prolongé de la crise sanitaire avec une fréquentation inférieure à la moyenne pendant un long moment. À partir de mi-2021, la tendance s’inverse progressivement traduisant une reprise lente et séquencée (graduelle) des activités laissant apparaître des effets de la pandémie de 2020.
 
-```{r}
-# Pendant la pandémie de COVID-19, la fréquentation des commerces a été beaucoup plus affectée les week-ends et les jours fériés que durant la semaine. 
-# Les confinements ont provoqué une chute très marquée de la fréquentation des commerces pendant ces périodes. Elles sont cependant suivies de fortes variations (augmentation et diminution) au fil des différentes restrictions. 
-# À partir de 2022, la fréquentation des commerces les week-ends et jours fériés est progressivement revenue à des niveaux proches, voire parfois supérieurs, à ceux d’avant la pandémie, ce qui suggère un rattrapage des activités de loisir.
-```
+En conclusion, pendant la pandémie de COVID-19, la fréquentation des commerces a été beaucoup plus affectée les week-ends et les jours fériés que durant la semaine. Les confinements ont provoqué une chute très marquée de la fréquentation des commerces pendant ces périodes. Elles sont cependant suivies de fortes variations (augmentation et diminution) au fil des différentes restrictions. À partir de 2022, la fréquentation des commerces les week-ends et jours fériés est progressivement revenue à des niveaux proches, voire parfois supérieurs, à ceux d’avant la pandémie, ce qui suggère un rattrapage des activités de loisirs.
 
 ### Évolution de la mobilité dans les parcs nationaux, plages et jardins publics (code Amazone)
 
@@ -1106,13 +1104,13 @@ plot(parks_ts, xlab = "Temps [année]", ylab = "Mobilité vers les parcs, plages
 
 ```
 
-À première vue, il n'y a pas de tendance générale croissante ou décroissante. Nous vérifierons cependant que ce n'es pas le cas dans la suite de l'analyse
+À première vue, il n'y a pas de tendance générale croissante ou décroissante. Nous vérifierons cependant que ce n'est pas le cas dans la suite de l'analyse.
 
 Par contre, une forte saisonnalité annuelle est clairement présente de manière plus ou moins régulière. Les pics sont présents vers le milieu de l'année, correspondant à la période de beau temps où les parcs sont généralement beaucoup plus fréquentés.
 
-Des perturbations brutales et régulières sont visibles au début du graphique, en 2020 dû à la pandémie de COVID-19. On observe nottament une grosse chute de fréquentation aux environs de mars 2020, date du premier confinement. Ces variations sont surement dûes aux mesures sanitaires appliquées ainsi qu'à la crainte de certains citoyens d'être contaminés évitant ainsi les lieux publics. Nous allons mettre en évidance les différents confinements dans la suite de l'analyse pour essayer de voir leur influence sur la fréquentation des parcs et autres espace publics
+Des perturbations brutales et régulières sont visibles au début du graphique, en 2020 dues à la pandémie de COVID-19. On observe notament une grosse chute de fréquentation aux environs de mars 2020, date du premier confinement. Ces variations sont sûrement dues aux mesures sanitaires appliquées ainsi qu'à la crainte de certains citoyens d'être contaminés évitant ainsi les lieux publics. Nous allons mettre en évidence les différents confinements dans la suite de l'analyse pour essayer de voir leur influence sur la fréquentation des parcs et autres espaces publics
 
-De manière générale, la série est très bruitée. Il doit y avoir une variation journalière assez importante pouvant correspondre aux variations de la météorologie, aux weekends et vacances scolaires influancant également la fréquentation des parcs et autres espaces publics. Nous allons également essayer de mettre ceci en évidence dans la suite de l'analyse.
+De manière générale, la série est très bruitée. Il doit y avoir une variation journalière assez importante pouvant correspondre aux variations de la météorologie, aux week-ends et vacances scolaires influançant également la fréquentation des parcs et autres espaces publics. Nous allons également essayer de mettre ceci en évidence dans la suite de l'analyse.
 
 **Graphique de l'objet ts : allure générale de la série**
 
@@ -1159,17 +1157,17 @@ legend("topright",
 
 ```
 
-Ce graphique confirme la description ci dessus avec un cycle annuel bien marqué.
+Ce graphique confirme la description ci-dessus avec un cycle annuel bien marqué.
 
 Au niveau des vacances scolaires:
 
 \- un maximum de fréquentation pendant les vacances d'été. Les enfants sont en vacances scolaires et la météo est bonne.
 
-\- légère augmentation des fréquentations pendant les vacances de Paques, surement dû à la météo également (plus net en 2022)
+\- légère augmentation des fréquentations pendant les vacances de Pâques, sûrement dûe à la météo également (plus net en 2022)
 
-\- les autres vacances scolaires n'ont pas l'air d'influencer n'ont pas l'air d'influencer la fréquentation aux périodes plus froides de l'année.
+\- les autres vacances scolaires n'ont pas l'air d'influencer la fréquentation aux périodes plus froides de l'année.
 
-Au niveau des confinements: on observe une nette diminution de l'occupation des parcs au premier confinement (18 mars 2020) alors que le deuxième confinement n'a pas l'air d'avoir réellement influencé l'affluence dans les parcs. Ce résultat est probablement dû à la date du deuxième confinement qui eu lieu à la fin de l'automne où les parcs sont moins fréquentés.
+Au niveau des confinements: on observe une nette diminution de l'occupation des parcs au premier confinement (18 mars 2020) alors que le deuxième confinement n'a pas l'air d'avoir réellement influencé l'affluence dans les parcs. Ce résultat est probablement dû à la date du deuxième confinement qui a eu lieu à la fin de l'automne où les parcs sont moins fréquentés.
 
 ```{r}
 # convertir en série temporelle journalière
@@ -1200,13 +1198,13 @@ cpgram(cycle_hebdo_parks)
 abline(v = seq(0, 200, by = 1), col = "grey90")
 ```
 
-Ces graphiques nous montrent que la semaine n'est pas seulement structurée en semaine vs week-end. En effet, l'analyse spectrale révèle l'existence d'un cycle hebdomadaire mais selon différente fréquences:
+Ces graphiques nous montrent que la semaine n'est pas seulement structurée en semaine vs week-end. En effet, l'analyse spectrale révèle l'existence d'un cycle hebdomadaire mais selon différentes fréquences:
 
 -   fréquence de 1: cycle hebdomadaire classique d'une semaine montrant un pic de fréquentation dans les parcs en fin de semaine, pendant les week-ends avec une période de creux en début de semaine lorsque tout le monde travaille et que les enfants sont à l'école.
 
--   fréquence de 2: indique deux cycles par semaine, soit une période de 3,5 jours. Ce résultat est dû au fait que le cycle hebdomadaire n'est pas bien lisse; les fréquentations augmentent et diminuent brutalement. En effet, en général, les espaces publics subissent une forte aygmentation de l'affluence dès le samedi matin et subissent une grosse chute le lundi matin avec le retour du travail.
+-   fréquence de 2: indique deux cycles par semaine, soit une période de 3,5 jours. Ce résultat est dû au fait que le cycle hebdomadaire n'est pas bien lisse; les fréquentations augmentent et diminuent brutalement. En effet, en général, les espaces publics subissent une forte augmentation de l'affluence dès le samedi matin et subissent une grosse chute le lundi matin avec le retour du travail.
 
--   fréquence de 3: indique trois cycles par semaine soit une période de plus ou moins 2,3 jours qui met en différences intra-semaines plus fines. Cela est surement dû à une plus forte affluence les mercredis après midi lorsque les jeunes ne sont pas à l'école, à une augmentation de l'affluence le vendredi soir en début de week-end ou à une baisse de fréquentation le dimanche soir avant le début de la semaine.
+-   fréquence de 3: indique trois cycles par semaine soit une période de plus ou moins 2,3 jours qui met en évidence des différences intra-semaines plus fines. Cela est surement dû à une plus forte affluence les mercredis après-midi lorsque les jeunes ne sont pas à l'école, à une augmentation de l'affluence le vendredi soir en début de week-end ou à une baisse de fréquentation le dimanche soir avant le début de la semaine.
 
 Ces différentes fréquences renforcent la preuve du cycle hebdomadaire et mettent en évidence que ce cycle est asymétrique. La fréquence la plus marquée sur le spectrum reste la fréquence de 1.
 
@@ -1216,9 +1214,9 @@ En ce qui concerne le COVID-19, on peut clairement voir son influence sur la fr�
 
 De manière générale, on observe un pic beaucoup plus marqué au niveau de la tendance générale à la période covid (année 2020).
 
--   premier confinement (mars 2020): on observe une grosse chute de fréquentations. En effet, au premier confinement, les mesures étaient très strictes. Il fallait une raison valable pour être autorisé à sortir de chez soi et la majorité des parcs ont été fermés. De plus, toute la popuation était touchée par une forte incertitude et une peur sanitaire. Après le premier confinement, les fréquentations ont fortement augmentés. La population a surement eu un besoin d'extérieur plus fréquent qu'habituellement à cause du confinement.
+-   Premier confinement (mars 2020): on observe une grosse chute de fréquentation. En effet, au premier confinement, les mesures étaient très strictes. Il fallait une raison valable pour être autorisé à sortir de chez soi et la majorité des parcs ont été fermés. De plus, toute la population était touchée par une forte incertitude et une peur sanitaire. Après le premier confinement, les fréquentations ont fortement augmenté. La population a sûrement eu un besoin d'extérieur plus fréquent qu'habituellement à cause du confinement.
 
--   deuxième confinement (novembre 2020): on observe une chute plus legère et à nouveau une forte augmentation quelques semaines plus tard. Cette fois-ci, les mesures sont plus souples, les parcs sont majoritairement toujours ouverts meme si les distances de sécurités et les mesures sanitaires sont toujours de vigueur. Cela explique une chute beaucoup moins importante des fréquentations.
+-   Deuxième confinement (novembre 2020): on observe une chute plus legère et à nouveau une forte augmentation quelques semaines plus tard. Cette fois-ci, les mesures sont plus souples, les parcs sont majoritairement toujours ouverts meme si les distances de sécurité et les mesures sanitaires sont toujours en vigueur. Cela explique une chute beaucoup moins importante des fréquentations.
 
 **Séries agrégées générales: semaine + week-end**
 
@@ -1228,7 +1226,7 @@ parks_ts_agg <- aggregate(parks_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
 
 plot(parks_ts_agg, 
-     main = "Série journalière aggrégée ", xlab = "Temps [année]",
+     main = "Série journalière agrégée ", xlab = "Temps [année]",
      ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", ylim = c(-80,400))
 
 # Convertir la date en position sur l'axe x (fraction de l'année)
@@ -1267,17 +1265,17 @@ legend("topright",
        bg = "white")
 ```
 
-Cette série aggrégée nous permet de voir l'influnce de nos différentes périodes de manière beaucoup plus lisible:
+Cette série agrégée nous permet de voir l'influence de nos différentes périodes de manière beaucoup plus lisible:
 
-L'influence des vacances scolaires a déjà été décrite ci dessus. Rien de particulier à ajouter ici.
+L'influence des vacances scolaires a déjà été décrite ci-dessus. Rien de particulier à ajouter ici.
 
--   premier confinement: grosse chute des fréquentations dans les espaces publics dû aux mesures très strictes appliquées (besoin de justificatif valable pour avoir l' autorisation de sortir de chez soi, fermeture de la majorité des parcs, formation de "bulles" de personnes autorisées à voir,...)
+-   Premier confinement: grosse chute des fréquentations dans les espaces publics dus aux mesures très strictes appliquées (besoin de justificatif valable pour avoir l'autorisation de sortir de chez soi, fermeture de la majorité des parcs, formation de "bulles" de personnes autorisées à voir,...)
 
--   post premier confinement: très forte hausse de fréquentation des espaces publics. La population a besoin de profiter de l'air extérieur après en avoir été inderdit sur une longue période. Les nouvelles mesures, impliquant le port du masque obligatoire et les distances de sécurités permettent de profiter des espaces extérieurs sans se sentir menacés.
+-   Post premier confinement: très forte hausse de fréquentation des espaces publics. La population a besoin de profiter de l'air extérieur après en avoir été interdit sur une longue période. Les nouvelles mesures, impliquant le port du masque obligatoire et les distances de sécurités permettent de profiter des espaces extérieurs sans se sentir menacés.
 
--   deuxième confinement: très faible influence. Les mesures en vigueur sont tout à fait différentes, beaucoup plus souples. Elles permettent de se déplacer de manière beaucoup moins strictes du moment que le port du masque et que les distances de sécurités sont respectées. Cette fois, la majorité des espaces publics restent ouverts également. Cependant, le manque d'influence sur la fréquentation des parcs doit probablement être dû à la période où ce confinement à lieu. En effet, en novembre, puisque le temps est généralement beaucoup plus froid et pluvieux, les parcs sont beaucoup moins fréquentés.
+-   deuxième confinement: très faible influence. Les mesures en vigueur sont tout à fait différentes, beaucoup plus souples. Elles permettent de se déplacer de manière beaucoup moins strictes du moment que le port du masque et que les distances de sécurité sont respectées. Cette fois, la majorité des espaces publics restent ouverts également. Cependant, le manque d'influence sur la fréquentation des parcs doit probablement être dû à la période où ce confinement a lieu. En effet, en novembre, puisque le temps est généralement beaucoup plus froid et pluvieux, les parcs sont beaucoup moins fréquentés.
 
--   post deuxième confinement: on observe malgrés tout un léger pic à la fin du confinement qui est probablement dû au besoin de sortir de chez soi après avoir été forcé a y rester enfermer.
+-   post deuxième confinement: on observe malgré tout un léger pic à la fin du confinement qui est probablement dû au besoin de sortir de chez soi après avoir été forcé à y rester enfermé.
 
 **Séries agrégées: weekend uniquement**
 
@@ -1286,14 +1284,14 @@ parks_nw_ts <- ts(mobil_nw$parks,start = c(2020, 46),frequency = 365)
 
 #graphique avec NA
 plot(parks_nw_ts, 
-     main = "Série journalière sans les jours de la semaines (lundi-vendredi)", xlab = "Temps [année]",
+     main = "Série journalière sans les jours de la semaine (lundi-vendredi)", xlab = "Temps [année]",
      ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)")
 
 # Aggrégation par moyenne des valeurs par semaine et suppression des NA
 parks_nw_agg<- aggregate(parks_nw_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
 plot(parks_nw_agg, 
-     main = "Série journalière aggrégée sans les jours de la semaines", xlab = "Temps [année]",
+     main = "Série journalière agrégée sans les jours de la semaine", xlab = "Temps [année]",
      ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", ylim = c(-95, 450))
 
 # Convertir la date en position sur l'axe x (fraction de l'année)
@@ -1332,7 +1330,7 @@ legend("topright",
        bg = "white")
 ```
 
-(voir graphique des séries aggrégées superposées)
+(voir graphique des séries agrégées superposées)
 
 **Séries agrégées: semaine sans weekend**
 
@@ -1347,7 +1345,7 @@ parks_nwe_ts <- ts(mobil_nwe$parks,start = c(2020, 46),frequency = 365)
 parks_nwe_agg <- aggregate(parks_nwe_ts, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
 plot(parks_nwe_agg, 
-     main = "Série journalière aggrégée sans week-ends", xlab = "Temps [année]",
+     main = "Série journalière agrégée sans week-end", xlab = "Temps [année]",
      ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", ylim = c(-95, 450))
 
 # Convertir la date en position sur l'axe x (fraction de l'année)
@@ -1385,7 +1383,7 @@ legend("topright",
        bg = "white")
 ```
 
-(voir graphique des séries aggrégées superposées)
+(voir graphique des séries agrégées superposées)
 
 Comparaison séries agrégées: vue globale des 3 graphiques
 
@@ -1393,7 +1391,7 @@ Comparaison séries agrégées: vue globale des 3 graphiques
 par(mfrow = c(3, 1))  # 3 lignes, 1 colonne
 
 plot(parks_ts_agg, 
-     main = "Série journalière aggrégée ", xlab = "Temps [année]",
+     main = "Série journalière agrégée ", xlab = "Temps [année]",
      ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", ylim = c(-80,400))
 
 # Convertir la date en position sur l'axe x (fraction de l'année)
@@ -1432,7 +1430,7 @@ legend("topright",
        bg = "white")
 
 plot(parks_nw_agg, 
-     main = "Série journalière aggrégée sans les jours de la semaines", xlab = "Temps [année]",
+     main = "Série journalière agrégée sans les jours de la semaine", xlab = "Temps [année]",
      ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", ylim = c(-95, 450))
 # Ajouter une ligne verticale pour le 18 mars 2020
 abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
@@ -1466,7 +1464,7 @@ legend("topright",
        bg = "white")
 
 plot(parks_nwe_agg, 
-     main = "Série journalière aggrégée sans week-ends", xlab = "Temps [année]",
+     main = "Série journalière agrégée sans week-end", xlab = "Temps [année]",
      ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", ylim = c(-95, 450))
 # Ajouter une ligne verticale pour le 18 mars 2020
 abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
@@ -1511,7 +1509,7 @@ plot(parks_ts,
   ylim = c(-95, 450),
      xlab = "Temps [année]", 
      ylab = "Mobilité vers les parcs, plages et jardins publics (% par rapport à la référence)", 
-     main = "Superposition de la séries but et des series aggrégées", col = rgb(0, 0, 0, alpha = 0.1))
+     main = "Superposition de la séries but et des series agrégées", col = rgb(0, 0, 0, alpha = 0.1))
 
 
 # Convertir la date en position sur l'axe x (fraction de l'année)
@@ -1551,7 +1549,7 @@ legend("topright",
 
 # Optionnel : ajouter une légende
 legend("topleft", 
-       legend = c("Série originale","Série originale aggrégée ", "Série journalière aggrégée sans les week-ends ", "Série journalière aggrégée avec seulement les week-ends" ), 
+       legend = c("Série originale","Série originale agrégée ", "Série journalière agrégée sans les week-ends ", "Série journalière agrégée avec seulement les week-ends" ), 
        col = c("gray", rgb(0, 1, 0, 0.5), "red", "blue"), lty=1, cex=0.75)
 
 # Ajouter la deuxième série : week-ends supprimés
@@ -1563,13 +1561,13 @@ lines(parks_ts_agg, col = rgb(0, 1, 0, 0.5))
 #lines(parks_ts_agg, col = "black")
 ```
 
--   premier confinement: grosse chute de fréquentation des parcs comme expliqué précédement.
+-   Premier confinement: grosse chute de fréquentation des parcs comme expliqué précédemment.
 
--   Post premier confinement: la différence de fréquentations entre la semaine est les weekend est très mince. Cela est dû aux mesures covid et post-covid comme l'augmentation des chomages techniques et du télétravail donnant en général plus de temps libre et des semaines plus réparties. Au fil du temps, l'écart de fréquentation entre la semaine et les week-ends se creuse, montrant que la situation redevient petit à petit à la normale (visible sur l'ensemble du graphique) Cependant, en période vacances scolaires les différences de fréquentations entre la semaine et les weekends sont beaucoup moins marquées voire totalement aléatoire puisque les jeunes ne sont pas à l'école et que souvent les parents prennent également congé à cette période.
+-   Post premier confinement: la différence de fréquentations entre la semaine et les weekend est très mince. Cela est dû aux mesures COVID et post-covid comme l'augmentation des chômages techniques et du télétravail donnant en général plus de temps libre et des semaines plus réparties. Au fil du temps, l'écart de fréquentation entre la semaine et les week-ends se creuse, montrant que la situation redevient petit à petit à la normale (visible sur l'ensemble du graphique). Cependant, en période de vacances scolaires les différences de fréquentations entre la semaine et les week-ends sont beaucoup moins marquées voire totalement aléatoires puisque les jeunes ne sont pas à l'école et que souvent les parents prennent également congé à cette période.
 
--   deuxieme confinement: très peu d'influence
+-   Deuxieme confinement: très peu d'influence
 
--   post deuxième confinement: on observe un pic de fréquentation les weekends suivant ce confinement. Cela est surement dû à la reprise du travail. La population, était habituée à avoir beaucoup plus de temps libre ou des semaines plus légères a besoin de profiter d'avantage des espaces publics les weekends.
+-   Post deuxième confinement: on observe un pic de fréquentation les weekends suivant ce confinement. Cela est sûrement dû à la reprise du travail. La population, était habituée à avoir beaucoup plus de temps libre ou des semaines plus légères a besoin de profiter davantage des espaces publics les weekends.
 
 **Extraction du cycle annuel**
 
@@ -1591,13 +1589,13 @@ abline(v = seq(0, 100, by = 1), col = "grey90")
 
 Ce premier graphique nous permet d'avoir un point de vue global de notre série.
 
--   seasonal: nous pouvons tout d'abord observer un cycle saisonnier fortement marqué, montrant l'influence des saisons sur le nombre de fréquentations des parcs et espaces publics comme prévus.
+-   seasonal: nous pouvons tout d'abord observer un cycle saisonnier fortement marqué, montrant l'influence des saisons sur le nombre de fréquentations des parcs et espaces publics comme prévu.
 
--   trend: très forte baisse initiale en mars 2020 dû aux mesures strictes du premier confinement suivie d'une augmentation fortement marquée du nombre de fréquentations à la fin du confinement ainsi qu'avec l'arrivée des beaux jours. La suite du graphique est particulièrement interessante puisque qu'elle nous montre que meme lorsqu'on extrait la composante régulière saisonnière la tendant n'est pas droite comme nous aurions pu l'imaginer. En effet, le covid a laissé des traces. Les annonces politiques sur l'évolution de la pandémie, la peur du virus ainsi le télétravail qui est resté fréquent dans certaines entreprises influencent la population à long terme, bien après les confinements. La population s'adapte aux nouvelles et ce de manière ni saisonnière, ni régulière.
+-   trend: très forte baisse initiale en mars 2020 due aux mesures strictes du premier confinement suivie d'une augmentation fortement marquée du nombre de fréquentations à la fin du confinement ainsi qu'avec l'arrivée des beaux jours. La suite du graphique est particulièrement intéressante, puisque qu'elle nous montre que même lorsqu'on extrait la composante régulière saisonnière la tendance n'est pas droite comme nous aurions pu l'imaginer. En effet, le covid a laissé des traces. Les annonces politiques sur l'évolution de la pandémie, la peur du virus ainsi le télétravail qui est resté fréquent dans certaines entreprises influencent la population à long terme, bien après les confinements. La population s'adapte aux nouvelles et ce de manière ni saisonnière, ni régulière.
 
--   résiduals: les résidus restent assez bruités montrant une variations aléatoire de la fréquentation dû aux changements de météos et aux différentes nouvelles sur l'évolution de la pandémie.
+-   résiduals: les résidus restent assez bruités montrant une variation aléatoire de la fréquentation due aux changements de météo et aux différentes nouvelles sur l'évolution de la pandémie.
 
-analyse spectrale: elle permet de mettre en évidence le fait que nous avons bel et bien un cycle annuel bien marqué.
+Analyse spectrale: elle permet de mettre en évidence le fait que nous avons bel et bien un cycle annuel bien marqué.
 
 **Analyse de la tendance locale**
 
@@ -1615,13 +1613,13 @@ legend("topright",
        cex = 0.5)
 ```
 
--   premier confinement: chute brutale de la courbe noire dû à une accumulation rapide de valeurs inférieurs à la normale montrant l'effet immédiat du confinement.
+-   premier confinement: chute brutale de la courbe noire due à une accumulation rapide de valeurs inférieures à la normale montrant l'effet immédiat du confinement.
 
--   poste premier confinement: la courbe commence à remonter suite au déconfinement et au retour des beaux jours. La tendance locale suit avec un léger retard. Il est également observable que la fréquentation reste négative, on ne rattrape pas totalement la perte cumulée du confinement.
+-   post premier confinement: la courbe commence à remonter suite au déconfinement et au retour des beaux jours. La tendance locale suit avec un léger retard. Il est également observable que la fréquentation reste négative, on ne rattrape pas totalement la perte cumulée du confinement.
 
--   deuxième confinement: très faible influence comparé au premier confinement
+-   deuxième confinement: très faible influence comparée au premier confinement
 
--   post confinements: la tendance locale montre de larges vagues mais celles-ci n'ont pas une période fixe. Cela montre que ces variations ne sont pas uniquement dûes au cycle saisonnier mais aussi aux différents impacts que le covid a pu avoir à long terme comme le télétravail, les restrictions variables etc
+-   post confinements: la tendance locale montre de larges vagues mais celles-ci n'ont pas une période fixe. Cela montre que ces variations ne sont pas uniquement dûes au cycle saisonnier mais aussi aux différents impacts que le covid a pu avoir à long terme comme le télétravail, les restrictions variables, etc.
 
 ### Évolution de la mobilité liée aux magasins alimentaires et aux pharmacies (Hugo)
 
@@ -1632,8 +1630,7 @@ grocery_ts <- ts(mobil$grocery, start = c(2020, 46), frequency = 365)
 plot(grocery_ts, xlab = "Temps [année]", ylab = "Mobilité liée aux supermarchés et pharmacies (% par rapport à la référence)")
 ```
 
-On devine un cycle annuel avec quelques valeurs extrêmes de mobilité aux alentours des fêtes de fin d'années et d'autres plus ou moins régulières dispersées au sein des années (probablement liées aux jours fériés).\
-On remarque néanmoins une tendance globable à la hausse par rapport au début de la série
+On devine un cycle annuel avec quelques valeurs extrêmes de mobilité aux alentours des fêtes de fin d'année et d'autres plus ou moins régulières dispersées au sein des années (probablement liées aux jours fériés). On remarque néanmoins une tendance globale à la hausse par rapport au début de la série
 
 #### **Exploration des différentes séries**
 
@@ -1682,7 +1679,7 @@ legend("topright",
 ```
 
 On observe ici que notre première grosse baisse de fréquentation des magasins alimentaires et des pharmacies correspond au premier confinement de mars 2020, le léger pic qui le précède peut être lié à une panique de pénurie de denrées alimentaires et médicaments de la population qui engendre une surfréquentation des commerces de première importance.\
-On pourrait globalement attitrer les valeurs extrêmes aux jours fériés de l'année mais la série est encore trop bruitée pour pouvoir commenter d'avantage.
+On pourrait globalement attribuer les valeurs extrêmes aux jours fériés de l'année mais la série est encore trop bruitée pour pouvoir commenter davantage.
 
 ##### **Série journalière agrégée (avec jours fériés mis en évidence)**
 
@@ -1807,7 +1804,7 @@ legend("topright",
        bg = "white")
 ```
 
-Le premier confinement apparaît toujours bien sur ce graphique avec simplement les weekends. Les différents jours fériés qui tombaient des samedis ont été mis en avant (les dimanches ayant souvent le même impact qu'un jour férié). La grosse chute de la fin d'année 2021 correspond aux week-ends de Noël et du nouvel an 2022 où les deux jours fériés sont tombés des samedis.
+Le premier confinement apparaît toujours bien sûr ce graphique avec simplement les week-ends. Les différents jours fériés qui tombaient des samedis ont été mis en avant (les dimanches ayant souvent le même impact qu'un jour férié). La grosse chute de la fin d'année 2021 correspond aux week-ends de Noël et du Nouvel An 2022 où les deux jours fériés sont tombés le samedi.
 
 ##### **Série journalière agrégée sans weekend (avec jours fériés mis en évidence)**
 
@@ -1864,10 +1861,10 @@ legend("topright",
        bg = "white")
 ```
 
-On note différentes chutes ponctuelles de mobilités aux moments des différents jours fériés (fêtes religieuses / nationales belge) avec des intensités différentes (certains commerces restent ouverts avec des horaires restreints malgré le jour férié).\
-Le pic de mobilité le plus notable pré-Noël 2022 probablement dû aux affluences de courses pour le repas du réveillon de Noël et celui du Nouvel-An tombaient tous les deux un vendredi (24 décembre et 31 décembre) pour cette année.
+On note différentes chutes ponctuelles de mobilité aux moments des différents jours fériés (fêtes religieuses / nationales belges) avec des intensités différentes (certains commerces restent ouverts avec des horaires restreints malgré le jour férié).\
+Le pic de mobilité le plus notable pré-Noël 2022 probablement dû à l'affluence de courses pour le repas du réveillon de Noël et celui du Nouvel An tombaient tous les deux un vendredi (24 décembre et 31 décembre) pour cette année.
 
-On note deux baisses importantes de mobilité dues confinements nationaux de 2020. Une première reprise de cette mobilité apparait aux alentours de mai 2020 jusqu'à atteindre un plateau en juin/juillet 2020 coïncidant avec le déconfinement progressif et le relâchement des mesures de distanciations. La rechute qui suit, pas aussi brutale que la première, est liée à la ressurgence des cas de Covid-19 commençant mi-septembre auxquelles on ajoute les annonces alarmantes de possibles saturations hospitalières et la reprise progressive de mesures de distanciations qui vont globalement limiter les mouvements des gens pour ensuite arriver au 2e confinement de novembre 2020.
+On note deux baisses importantes de mobilité dues confinements nationaux de 2020. Une première reprise de cette mobilité apparaît aux alentours de mai 2020 jusqu'à atteindre un plateau en juin/juillet 2020 coïncidant avec le déconfinement progressif et le relâchement des mesures de distanciation. La rechute qui suit, pas aussi brutale que la première, est liée à la ressurgence des cas de Covid-19 commençant mi-septembre auxquelles s'ajoutent les annonces alarmantes de possibles saturations hospitalières et la reprise progressive de mesures de distanciations qui vont globalement limiter les mouvements des gens pour ensuite arriver au 2e confinement de novembre 2020.
 
 #### Superposition des séries
 
@@ -1888,11 +1885,11 @@ lines(grocery_ts_ag, col = rgb(0, 1, 0, 0.5))
 
 # Optionnel : ajouter une légende
 legend("topright", 
-       legend = c("Série originale","Série originale aggrégée ", "Série journalière aggrégée sans les week-ends ", "Série journalière aggrégée avec seulement les week-ends" ), 
+       legend = c("Série originale","Série originale agrégée ", "Série journalière agrégée sans les week-ends ", "Série journalière agrégée avec seulement les week-ends" ), 
        col = c("gray", rgb(0, 1, 0, 0.5), "red", "blue"), lty=1, cex = 0.7)
 ```
 
-Ce graphique résumé nous permet d'observer que les commerces étudiés semblent plus sensibles aux jours fériés qui tombent des week-ends plutôt qu'en semaine. Suite à la première chute de fréquentation due au premier confinement, on observe un regain de mobilité jusqu'à arriver à un plateau (de mai 2020 jusqu'au deuxième confinement) probablement lié au maintien des consignes sanitaires de distanciations et de l'ouverture des commerces jugés essentiels Le second confinement provoque une nouvelle chute de mobilité mais celle-ci est bien moindre comparée à celle du premier confinement La tendance repart ensuite à la hausse, entre-coupée des différents jours fériés qui perturbent l'ouverture des commerces alimentaires et pharmacies.
+Ce graphique résume nous permet d'observer que les commerces étudiés semblent plus sensibles aux jours fériés qui tombent les week-ends plutôt qu'en semaine. Suite à la première chute de fréquentation due au premier confinement, on observe un regain de mobilité jusqu'à arriver à un plateau (de mai 2020 jusqu'au deuxième confinement) probablement lié au maintien des consignes sanitaires de distanciation et de l'ouverture des commerces jugés essentiels Le second confinement provoque une nouvelle chute de mobilité mais celle-ci est bien moindre comparée à celle du premier confinement La tendance repart ensuite à la hausse, entrecoupée des différents jours fériés qui perturbent l'ouverture des commerces alimentaires et pharmacies.
 
 #### Extraction des cycles
 
@@ -1911,8 +1908,7 @@ cpgram(cycle_annuel_grocery)
 abline(v = seq(0, 100, by = 1), col = "grey90")
 ```
 
-On constate toujours une très nette tendance à la hausse post premier confinement qui va carrément dépasser la référence. Un cycle annuel est bien mis en évidence mais les résidus du premier confinement montre qu'il est encore nécessaire de purifier la série.\
-L'analyse spectrale confirme l'existence de ce cycle annuel (fréquence de 1) mais les pics plus irréguliers et faibles du graphique sont sûrement dus aux jours fériés dont certaines dates varient d'une année à l'autre.
+On constate toujours une très nette tendance à la hausse post-premier confinement qui va carrément dépasser la référence. Un cycle annuel est bien mis en évidence mais les résidus du premier confinement montrent qu'il est encore nécessaire de purifier la série. L'analyse spectrale confirme l'existence de ce cycle annuel (fréquence de 1) mais les pics plus irréguliers et faibles du graphique sont sûrement dus aux jours fériés dont certaines dates varient d'une année à l'autre.
 
 ```{r}
 grocery_ts1_nona_b <- window(grocery_ts_ag, start = c(2020, 27), end = c(2022,39))
@@ -1924,12 +1920,12 @@ cycle_annuel_grocery_b <- extract(grocery_tsd1_b, components = "seasonal")
 
 grocery_sl1_b <- stat.slide(time(cycle_annuel_grocery_b), cycle_annuel_grocery_b, xmin = 2020, deltat = 1/24)
 # Graphique des statistiques glissantes
-plot(grocery_sl1_b, main = "Statistiques glissante de 2 semaines
+plot(grocery_sl1_b, main = "Statistiques glissantes de 2 semaines
   sur le cycle annuelle", xlab = "Temps [année]", ylab = "Mobilité vers les commerces alimentaires et pharmacies 
   (% par rapport à la référence)", col = c(rgb(0, 0, 0,0.2),rgb(1, 0, 0,1)),   ylim = c(-35, 45), xlim = c(2020.5, 2022.15))
 ```
 
-Un cycle annuel a pu être isolé mais celui ci est assez furtifs. Les extrêmes des fêtes de fin d'années sont toujours présents et les fluctuations présentes dans le cours de l'année sont majoritairement attribuables aux jours fériés, ceux-ci ne sont d'ailleurs pas toujours fixes et à des dates régulières, la date de Pâques et du lundi de Pâques fluctuant parfois jusqu'à 20 jours, ce qui peut expliquer certaines asymétries dans le cycle d'une année à l'autre.
+Un cycle annuel a pu être isolé mais celui ci est assez furtif. Les extrêmes des fêtes de fin d'années sont toujours présents et les fluctuations présentes dans le cours de l'année sont majoritairement attribuables aux jours fériés, ceux-ci ne sont d'ailleurs pas toujours fixes et à des dates régulières, la date de Pâques et du lundi de Pâques fluctuant parfois jusqu'à 20 jours, ce qui peut expliquer certaines asymétries dans le cycle d'une année à l'autre.
 
 #### Analyse des tendance locales
 
@@ -1948,9 +1944,9 @@ On observe bien la baisse de fréquentation des commerces alimentaires et des ph
 
 <!--% Lorsque toutes les analyses sont réalisées, terminez ce bloc-notes avec 3 à 6 phrases de conclusion en rapport avec ce que vous avez observé dans vos analyses. Quels sont les éléments les plus pertinents que vous retenez ? -->
 
-De manière générale, le premier confinement à presque réduit à néant la mobilité dans tous les secteurs étudiés. Aucune autre période de contamination élévée n'a eu un tel impact par la suite. Cependant, le COVID-19 a impacté tous nos secteurs étudiés de manière différente à court et à long terme.
+De manière générale, le premier confinement a presque réduit à néant la mobilité dans tous les secteurs étudiés. Aucune autre période de contamination élevée n'a eu un tel impact par la suite. Cependant, le COVID-19 a impacté tous nos secteurs étudiés de manière différente à court et à long terme.
 
-La mobilité vers les lieux de travail n'a jamais repris une activité normale puisque de nombreuses entreprises ont décidées de garder le télétravail à temps partiel. Au niveau des commerces et loisirs, la reprise a été plus lente et fluctuante mais elle a fini par dépasser son activité initiale lorsque la population a voulu rattraper le temps perdu. Au niveau des parcs, on voit clairement que le fait d'enfermer la population chez soi a eu un impact sur leur santé mentale. Dès que le gouvernement le permet, la population profite des espaces extérieurs. Les pharmacies et les commerces alimentaires ont quant à eux beaucoup moins subit cette crise sanitaire puisqu'ils n'ont jamais été fermés.
+La mobilité vers les lieux de travail n'a jamais repris une activité normale puisque de nombreuses entreprises ont décidé de garder le télétravail à temps partiel. Au niveau des commerces et loisirs, la reprise a été plus lente et fluctuante mais elle a fini par dépasser son activité initiale lorsque la population a voulu rattraper le temps perdu. Au niveau des parcs, on voit clairement que le fait d'enfermer la population chez soi a eu un impact sur leur santé mentale. Dès que le gouvernement le permet, la population profite des espaces extérieurs. Les pharmacies et les commerces alimentaires ont quant à eux beaucoup moins subi cette crise sanitaire puisqu'ils n'ont jamais été fermés.
 
 ## Commentaire
 
