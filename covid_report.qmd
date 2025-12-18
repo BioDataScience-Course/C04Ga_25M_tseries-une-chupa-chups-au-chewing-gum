@@ -25,7 +25,7 @@ Au début de l’année 2020, la Belgique et le reste du monde furent confronté
 
 <!--% Rédigez le but de ce rapport.-->
 
-Le but de ce travail est de quantifier et de comparer la fréquentation de ces lieux entre jours de semaine et week-ends en Wallonie durant la pandémie de COVID-19 (et plus précisémment de 2020 à 2021), à l’aide d’analyses de séries spatio-temporelles.
+Le but de ce rapport est d’analyser l’impact de la pandémie de COVID-19 sur la fréquentation de différents types de lieux en Wallonie (lieux de travail, commerces essentiels et non essentiels, espaces de loisirs et parcs) sur la période 2020–2021. Plus précisément, il s’agit de quantifier et de comparer les évolutions de fréquentation entre les jours de semaine et les week-ends à l’aide d’analyses de séries spatio-temporelles afin de mettre en évidence les effets des mesures sanitaires et des changements de comportements induits par la pandémie.
 
 ## Matériel et méthodes
 
@@ -226,9 +226,7 @@ legend("topright",
 
 **Influence du deuxième confinement :** Les fermetures sont partielles et les mesures plus souples (événements en plein air, click&collect), ce qui limite l’impact sur la fréquentation, avec une baisse plus modérée d’environ −40 %.
 
-**Influence post deuxième confinement :** 
-La fréquentation demeure inférieure à 0 % jusqu’à fin 2021 en raison de mesures sanitaires fluctuantes. La réouverture progressive fin 2021–début 2022 fait repasser la fréquentation au-dessus de 0 %, avec une influence à nouveau positive des vacances scolaires. Fin 2022, la situation se stabilise à un niveau proche, voire supérieur à la normale (+30 %), probablement lié à un effet de rattrapage.
-
+**Influence post deuxième confinement :** La fréquentation demeure inférieure à 0 % jusqu’à fin 2021 en raison de mesures sanitaires fluctuantes. La réouverture progressive fin 2021–début 2022 fait repasser la fréquentation au-dessus de 0 %, avec une influence à nouveau positive des vacances scolaires. Fin 2022, la situation se stabilise à un niveau proche, voire supérieur à la normale (+30 %), probablement lié à un effet de rattrapage.
 
 #### Analyse de la différence de fréquentation entre la semaine et les weekends
 
@@ -354,7 +352,6 @@ De manière générale, on peut voir que l'affluence en jours de semaine reste b
 L’influence du COVID-19 sur ce secteur est très marquée. Le premier confinement, avec la fermeture totale des commerces et loisirs, entraîne une chute de fréquentation supérieure à 80 %. Lors du déconfinement, les mesures sanitaires (COVID pass, distanciation), ainsi que l’augmentation du chômage technique et du télétravail, continuent de limiter l’activité. Contrairement aux attentes, la fréquentation est alors plus élevée en semaine que le week-end entre les deux confinements, tendance qui persiste quelque temps après. À partir de l’été 2020, les vacances scolaires recommencent toutefois à avoir un effet positif. Vers juillet 2021, avec un retour progressif à une situation plus normale, la fréquentation du week-end redevient supérieure à celle de la semaine. Globalement, l’affluence en semaine reste plus stable, indiquant que l’impact du COVID-19 touche principalement les week-ends. Début 2022, une chute brutale mais brève est observée le week-end, probablement liée à la vague Omicron. À partir de la mi-2022, un effet de rattrapage se traduit par une forte affluence des commerces et loisirs le week-end.
 
 L’influence du COVID-19 sur ce secteur est très marquée. Le premier confinement, avec la fermeture totale des commerces et loisirs, entraîne une chute de fréquentation supérieure à 80 %. Lors du déconfinement, les mesures sanitaires (COVID pass, distanciation), ainsi que l’augmentation du chômage technique et du télétravail, continuent de limiter l’activité. Contrairement aux attentes, la fréquentation est alors plus élevée en semaine que le week-end entre les deux confinements, tendance qui persiste quelque temps après. À partir de l’été 2020, les vacances scolaires recommencent toutefois à avoir un effet positif. Vers juillet 2021, avec un retour progressif à une situation plus normale, la fréquentation du week-end redevient supérieure à celle de la semaine. Globalement, l’affluence en semaine reste plus stable, indiquant que l’impact du COVID-19 touche principalement les week-ends. Début 2022, une chute brutale mais brève est observée le week-end, probablement liée à la vague Omicron. À partir de la mi-2022, un effet de rattrapage se traduit par une forte affluence des commerces et loisirs le week-end.
-
 
 #### Analyse du cycle hebdomadaire
 
@@ -677,7 +674,6 @@ legend("topright",
 ```
 
 #### Superposition des séries
-
 
 ```{r}
 ```
