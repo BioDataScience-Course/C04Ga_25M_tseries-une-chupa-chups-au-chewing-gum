@@ -552,7 +552,11 @@ legend("topright",
 
 **L'influence de la saisonnalité sur l'affluence dans les parcs :** Comme imaginé, l'affluence dans les parcs varie tout d'abord selon les saisons. Au début d'année, lorsque les températures sont au plus bas, le nombre de fréquentations est au plus bas. Ensuite, au fur et à mesure que les températures s'adoucissent, les parcs se remplissent petit à petit jusqu'à avoir une fréquentation maximum en plein été. Au début de l'automne, les températures diminuent à nouveau et les parcs se vident petit à petit.
 
+===\> L’affluence dans les parcs varie fortement selon les saisons : elle est minimale en hiver, augmente progressivement avec le réchauffement des températures, atteint un maximum en été, puis diminue à l’automne
+
 **L'influence des vacances scolaires sur l'affluence dans les parcs :** En période de vacances scolaires, les parcs sont généralements plus remplis. En effet, les jeunes ne sont pas à l'école de la journée et les parents prennent parfois congés également à ces memes périodes pour profiter en famille de moments en extérieur. Evidemment, toutes les vacances scolaires n'ont pas le même impact. Même si les enfants et parents disposent de plus de temps libre, les vacances d'automne/hiver ne permettent pas une réelle augmentation de l'affluence dans les parcs puisque les températures ne le permettent pas.
+
+===\> Les périodes de vacances scolaires sont généralement associées à une fréquentation plus élevée, les enfants et parents disposant de plus de temps libre. Toutefois, les vacances d’automne et d’hiver ont un impact limité en raison de conditions météorologiques moins favorables.
 
 **L'influence du COVID-19 sur l'affluence dans les parcs :** Le premier confinement a marqué un tournant majeurs dans la vie quotidienne des habitants. A partir de mars 2020, dès l'annonce du confinement, une importante chute est visible sur le graphique. En effet, les mesures ont été strictes: il était nécéssaire d'avoir une raison valable pour être autorisé à sortir de chez soi et surtout, la majorité des espaces publics ont été fermés pour des mesures sanitaires.
 
@@ -561,6 +565,8 @@ Au déconfinement, l'arrivée des beaux jours et l'envie de sortir de chez soi a
 En novembre 2020, le deuxième confinement a lieu. De nouvelles mesures sont prises mais elles sont beaucoup plus souples cette fois: les distances de sécurités doivent toujours être respectées, les masques doivent toujours être portés mais les espaces publics extérieurs restent ouverts pour la plupart. Les mesures de déplacement sont également moins strictes, la population profite de son heure de déplacement à moins d'un kilomètre de chez soi pour profiter des espaces publics à proximité lorsqu'il y en a ou lorsque c'est possible. L'impact de ce confinement est donc moindre.
 
 Après ce deuxième confinement, on observe une légère hausse de fréquentation, montrant que malgré tout, la population est contente de retrouver pleinement sa liberté.
+
+===\> Le premier confinement entraîne une chute brutale de la fréquentation dès mars 2020, liée aux restrictions strictes de déplacement et à la fermeture de nombreux espaces publics. Le déconfinement, combiné aux beaux jours et à l’envie de sortir après une longue période d’isolement, provoque une hausse rapide de l’affluence, malgré le maintien de certaines mesures sanitaires. Le deuxième confinement, plus souple et laissant la plupart des espaces extérieurs ouverts, a un impact plus modéré. Par la suite, une légère augmentation de la fréquentation est observée, traduisant le retour progressif à une plus grande liberté de déplacement.
 
 #### Analyse de la différence de fréquentation entre la semaine et les weekends
 
@@ -691,6 +697,12 @@ Au déconfinement, certaines mesures restent en place pour éviter que la pandé
 
 Le deuxième confinement a eu très peu d'impact sur l'affluence dans les parcs. Cependant, après celui-ci, une hausse de fréquentation des parcs est visibles les weekends. Le retour au travail, à la routine, incite à profiter d'avantage de son temps libre les weekends. Au fur et à mesure que les mois passent, on observe que l'écart entre la semaine et les weekends se creuse montrant un retour à la normale. Le travail reprend pour ceratins, le télétravail diminue, et la population se repose la semaine en rentrant du travail et profite des espaces publics le weekend.
 
+===\> De manière générale, les parcs sont plus fréquentés le week-end que la semaine, en lien avec le temps libre de la population. La saisonnalité et les vacances scolaires influencent également la fréquentation.
+
+Lors du premier confinement, la fermeture des parcs entraîne une affluence minimale, rendant toute différence entre semaine et week-end difficile à observer. Au déconfinement, le télétravail, le chômage technique et les modifications des rythmes de travail atténuent la distinction entre ces périodes.
+
+Le deuxième confinement a peu d’impact sur la fréquentation des parcs. En revanche, après celui-ci, une hausse de fréquentation le week-end apparaît progressivement. Avec le retour au travail et à une organisation plus classique, l’écart entre semaine et week-end se creuse, traduisant un retour à des comportements de fréquentation plus habituels.
+
 #### Analyse du cycle hebdomadaire
 
 La différence d'affluence entre la semaine et les weekends doit probablement impliquer qu'il y ait un cycle hebdomadaire, c'est ce que nous allons vérifier ici.
@@ -724,6 +736,10 @@ L'analyse spectrale permet non seulement de confirmer la présence d'un cycle he
 
 La fréquence de 1 montre que nous avons un cycle hebdomadaire classique. Cependant, la fréquence de 2, correspondant à un cycle de trois jours et demi, met en évidence le fait que ce cycle n’est pas lisse. Les variations du cycle sont brutales, alors que, lorsqu’un cycle est lisse et symétrique, les valeurs augmentent et diminuent de manière progressive. En effet, alors que la semaine est calme, on observe une augmentation rapide dès le samedi matin et une diminution importante le dimanche soir. La fréquence 3, quant à elle, indique des variations intra-hebdomadaires plus fines. Avec des cycles d’environ 2,3 jours, elle met en évidence une augmentation de l’affluence le mercredi après-midi, lorsque les jeunes n’ont souvent pas cours.
 
+===\> Les effets du COVID-19 sur la fréquentation des parcs sont globalement similaires à ceux décrits précédemment. L’analyse spectrale confirme la présence d’un cycle hebdomadaire asymétrique, avec des fréquences significatives à 1, 2 et 3.
+
+La fréquence 1 correspond au cycle hebdomadaire classique. La fréquence 2 (≈ 3,5 jours) met en évidence un cycle non lisse, caractérisé par une hausse rapide de la fréquentation le samedi et une forte baisse le dimanche soir. La fréquence 3 (≈ 2,3 jours) révèle des variations intra-hebdomadaires plus fines, notamment une augmentation de l’affluence le mercredi après-midi.
+
 #### Analyse du cycle annuel
 
 De part nos différentes analyses, il est évident qu'un cycle annuel est présent ici. Nous allons malgré tout faire une analyse spectrale pour le vérifier. Dans cette partie, nous allons principalement extraire ce cycle annuel pour voir s'il est réellement le seul à influencer nos données.
@@ -742,11 +758,18 @@ abline(v = seq(0, 100, by = 1), col = "grey90")
 
 **Analyse du cycle saisonnier :** L'analyse spectrale permet de confirmer qu'il y a un cycle annuel. La fréquence de 1 signifique nous permet de confirmer qu'il y a bel et bien un cycle saisonnier. Cependant, le fait que la fréquence de 2 soit elle aussi significative montre des variations inter-annuelles plus fines et moins marquées. Cela permet de mettre en évidence que notre cycle annuel n'est ni régulier, ni symétrique. En effet, en dehors du cycle annuel, la fréquence de 2 peut par exemple mettre en évidence la forte activité de la population en été avec les vacances scolaires et le beau temps alors que l'activité est plutôt réduite en automne/hiver avec des températures beaucoup plus basses.
 
+===\> L’analyse spectrale confirme la présence d’un cycle annuel (fréquence 1). La significativité de la fréquence 2 révèle des variations interannuelles plus fines, montrant que le cycle n’est ni régulier ni symétrique, avec une activité plus élevée en été et plus faible en automne–hiver.
+
 **Analyse de la tendance :** Après extraction de ce cycle, regardons la tendance. Une chute brutale en début de 2020 marque le début du premier confinement. Au déconfinement, la tendance évolue petit à petit. Bien que nous nous attendions à ce que la tendance soit plane après avoir désaisonnaliser, ce n'est pas le cas.
 
 Cette tendance permet donc de mettre en lumière l’impact du COVID-19 à long terme. Lors du déconfinement, on observe une croissance très rapide, montrant le besoin de la population de sortir de chez elle et de profiter du plein air. Ensuite, une alternance de phases d’augmentation et de diminution apparaît. Cette période montre que le COVID-19 ne s’est pas arrêté avec la fin des confinements. L’utilisation variable du télétravail, l’évolution des mesures sanitaires d’une semaine à l’autre, ainsi que les informations sur l’évolution de la pandémie ont continué à influencer le quotidien de la population pendant plusieurs mois après la crise sanitaire proprement dite.
 
+===\> Après extraction du cycle saisonnier, la tendance met en évidence une chute brutale début 2020 liée au premier confinement, suivie d’une reprise progressive mais non stable. Contrairement aux attentes, la tendance n’est pas plane, traduisant un impact durable du COVID-19. La forte croissance au déconfinement reflète le besoin de profiter des espaces extérieurs, puis une alternance de phases de hausse et de baisse persiste en lien avec l’évolution des mesures sanitaires, du télétravail et de la situation épidémiologique.
+
 **Analyse des résidus :** Les résidus restent quant à eux très bruités. Cela met également en lumière que l'affluence dans les parcs est également aléatoire. En effet, la météo, les jours fériés ou les nouvelles affectent eux aussi, de manière ponctuelle, la population à se rendre dans les parcs et autres espaces publics.
+
+===\> Les résidus restent très bruités, indiquant une part importante de variabilité
+aléatoire liée notamment à la météo, aux jours fériés et à l’actualité.
 
 ### Évolution de la mobilité dans les commerces alimentaires et pharmacies
 
