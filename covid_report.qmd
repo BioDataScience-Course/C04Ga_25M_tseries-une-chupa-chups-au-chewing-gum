@@ -148,6 +148,24 @@ vacances_toussaint <- data.frame(
   end   = as.Date(c("2020-11-06", "2021-11-05"))
 )
 
+# fonction pour les vacances
+draw_vacances <- function(vacances, col){
+  for(i in seq_len(nrow(vacances))){
+    x_start <- 2020 + as.numeric(vacances$start[i] - as.Date("2020-01-01"))/365
+    x_end   <- 2020 + as.numeric(vacances$end[i]   - as.Date("2020-01-01"))/365
+
+    rect(
+      xleft   = x_start,
+      xright  = x_end,
+      ybottom = par("usr")[3],
+      ytop    = par("usr")[4],
+      col     = col,
+      border  = NA
+    )
+  }
+}
+
+
 ```
 
 ### Évolution de la mobilité dans les commerces et loisirs
@@ -172,6 +190,7 @@ plot(retail_ts2_ag,
 abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
 abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
 
+<<<<<<< HEAD
 draw_vacances <- function(vacances, col){
   for(i in seq_len(nrow(vacances))){
     x_start <- 2020 + as.numeric(vacances$start[i] - as.Date("2020-01-01"))/365
@@ -188,6 +207,8 @@ draw_vacances <- function(vacances, col){
   }
 }
 
+=======
+>>>>>>> 0782814e7c7f8028462203ebe604db22f0a9fbc2
 # Ajouter un encadrement pour les vacances
 draw_vacances(vacances_hiver,     rgb(0.4,0.6,0.9,0.5))
 draw_vacances(vacances_carnaval,  rgb(0.4,0.8,0.4,0.3))
@@ -245,6 +266,7 @@ plot(mobil_ts2, ylim = c(-95, 200),
      ylab = "% par rapport à la référence", 
      main = "Superposition de séries agrégées pour les commerces et loisirs", col = rgb(0, 0, 0, alpha = 0.1))
 
+<<<<<<< HEAD
 # Ajouter une ligne verticale pour le 18 mars 2020
 abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
 abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
@@ -265,12 +287,21 @@ draw_vacances <- function(vacances, col){
   }
 }
 
+=======
+# Convertir la date en position sur l'axe x (fraction de l'année)
+
+abline(v = x_vert, col = "red", lwd = 1, lty = 2)
+
+abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
+
+>>>>>>> 0782814e7c7f8028462203ebe604db22f0a9fbc2
 # Ajouter un encadrement pour les vacances
 draw_vacances(vacances_hiver,     rgb(0.4,0.6,0.9,0.5))
 draw_vacances(vacances_carnaval,  rgb(0.4,0.8,0.4,0.3))
 draw_vacances(vacances_paques,    rgb(1,0.5,0.5,0.5))
 draw_vacances(vacances_ete,       rgb(1,0.7,0.3,0.5))
 draw_vacances(vacances_toussaint, rgb(0.7,0.4,0.8,0.5))
+<<<<<<< HEAD
 
 #legend
 legend("topright", 
@@ -293,6 +324,8 @@ legend("topright",
        cex = 0.75,
        bty = "o",
        bg = "white")
+=======
+>>>>>>> 0782814e7c7f8028462203ebe604db22f0a9fbc2
 
 # Optionnel : ajouter une légende
 legend("topleft", 
@@ -409,6 +442,7 @@ plot(parks_ts_agg,
      main = "Série journalière aggrégée des parcs et jardins publics", xlab = "Temps [année]",
      ylab = "% par rapport à la référence", ylim = c(-80,400))
 
+<<<<<<< HEAD
 # Ajouter une ligne verticale pour le 18 mars 2020
 abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
 abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
@@ -429,6 +463,12 @@ draw_vacances <- function(vacances, col){
   }
 }
 
+=======
+# Convertir la date en position sur l'axe x (fraction de l'année)
+abline(v = x_vert, col = "red", lwd = 1, lty = 2)
+abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
+
+>>>>>>> 0782814e7c7f8028462203ebe604db22f0a9fbc2
 # Ajouter un encadrement pour les vacances
 draw_vacances(vacances_hiver,     rgb(0.4,0.6,0.9,0.5))
 draw_vacances(vacances_carnaval,  rgb(0.4,0.8,0.4,0.3))
@@ -484,6 +524,7 @@ plot(parks_ts,
      main = "Superposition des series aggrégées des parcs et jardins publics", col = rgb(0, 0, 0, alpha = 0.1))
 
 
+<<<<<<< HEAD
 # Ajouter une ligne verticale pour le 18 mars 2020
 abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
 abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
@@ -504,6 +545,14 @@ draw_vacances <- function(vacances, col){
   }
 }
 
+=======
+# Convertir la date en position sur l'axe x (fraction de l'année)
+
+abline(v = x_vert, col = "red", lwd = 1, lty = 2)
+
+abline(v = x_blue, col = "blue", lwd = 1, lty = 2)
+
+>>>>>>> 0782814e7c7f8028462203ebe604db22f0a9fbc2
 # Ajouter un encadrement pour les vacances
 draw_vacances(vacances_hiver,     rgb(0.4,0.6,0.9,0.5))
 draw_vacances(vacances_carnaval,  rgb(0.4,0.8,0.4,0.3))
