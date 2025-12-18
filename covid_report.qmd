@@ -25,7 +25,7 @@ Au début de l’année 2020, la Belgique et le reste du monde furent confronté
 
 <!--% Rédigez le but de ce rapport.-->
 
-Le but de ce rapport est de quantifier et de comparer la fréquentation de ces lieux entre jours de semaine et week-ends en Wallonie durant la pandémie (et plus précisémment de 2020 à 2021), à l’aide d’analyses de séries spatio-temporelles.
+Le but de ce travail est de quantifier et de comparer la fréquentation de ces lieux entre jours de semaine et week-ends en Wallonie durant la pandémie de COVID-19 (et plus précisémment de 2020 à 2021), à l’aide d’analyses de séries spatio-temporelles.
 
 ## Matériel et méthodes
 

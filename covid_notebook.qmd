@@ -122,7 +122,7 @@ numeric_cols <- setdiff(numeric_cols, "date")
 mobil_nw[mobil_nw$wday %in% c(1:5), numeric_cols] <- NA
 ```
 
-### Mobilité vers les lieux de travail (% par rapport à la référence): Richard code
+### Évolution de la mobilité vers les lieux de travail (% par rapport à la référence): Richard code
 
 ```{r}
 # Conversion en ts de mobil
@@ -132,15 +132,15 @@ work_ts1 <- ts(mobil$workplaces, start = c(2020, 46), frequency = 365)
 plot(work_ts1, xlab = "Temps [année]", ylab = "Mobilité vers les lieux de travail (% par rapport à la référence)")
 ```
 
-Une tendance, un cycle hebdomadaire et annuelle sont deviné, ceux-ci doives être isolée.
+Une tendance, un cycle hebdomadaire et annuel sont devinés ; ceux-ci doivent être isolés.
 
-On met en évidences :
+On met en évidence :
 
 -   Le 1er confinement du 18 mars 2020 (@unric_belgique_confinement_2020)
 
--   le 2ème confinement du 02 novembre 2020 (@rtbf_reconfinement_2020)
+-   Le 2ᵉ confinement du 2 novembre 2020 (@rtbf_reconfinement_2020)
 
--   Les vacances d'hiver, de carnaval, de pâque, d'été et de Toussaint (@VacancesScolaires).
+-   Les vacances d’hiver, de carnaval, de Pâques, d’été et de Toussaint (@VacancesScolaires).
 
 ```{r}
 # Graphique de l'objet ts
@@ -256,21 +256,21 @@ legend("topright",
 
 ```
 
-On voit clairement une forte baisse de la fréquentation du lieux de travail juste après le 1er confinement de mars 2020.
+On voit clairement une forte baisse de la fréquentation des lieux de travail juste après le premier confinement de mars 2020.
 
-On voit une diminution juste avant le 2ème confinement mais elle est masquée par les vacances de Toussaint. Elle est surtout identifiable en la comparant à octobre-novembre 2021. N'etant pas aussi importante que cellui de mars nous ne la travaillerons pas d'avantage.
+On observe une diminution juste avant le deuxième confinement, mais celle-ci est masquée par les vacances de Toussaint. Elle est surtout identifiable lorsqu’on la compare à octobre–novembre 2021. N’étant pas aussi importante que celle de mars, nous ne la travaillerons pas davantage.
 
-On voit également un cycle hebdomadaires avec un hausse de fréquentation les weekend par rapport a la références. (note: l'amplitude de ce cycle semble moins marqué avant le 1er confinement)
+On observe également un cycle hebdomadaire avec une hausse de la fréquentation les week-ends par rapport à la référence. (Note : l’amplitude de ce cycle semble moins marquée avant le premier confinement.)
 
-La fréquentation sur le lieu de travail diminue lors des différentes vacances scolaire, cependant la fortes amplitudes du cycles semaine-week-ends cache la tendances générales.
+La fréquentation des lieux de travail diminue lors des différentes vacances scolaires ; cependant, la forte amplitude du cycle semaine–week-end masque les tendances générales.
 
-Nous allons donc divisé notre analyses en 3 courbes:
+Nous allons donc diviser notre analyse en trois courbes :
 
--   une agrégé sur toutes les données
+-   une agrégée sur l’ensemble des données
 
--   une agrégées sur les week-ends
+-   une agrégée sur les week-ends
 
--   une agrégé sur la semaine
+-   une agrégée sur la semaine
 
 #### Mise en évidences du cycle hebdomadaire
 
@@ -310,7 +310,7 @@ Les causes sont peut-etre hybrides. Les données fournies par Google ne discrimi
 
 Il est donc pertinent d’analyser trois sous-séries distinctes : l’ensemble de la série (tous les jours), uniquement les week-ends, et uniquement les jours de semaine (lundi–vendredi).
 
-#### Découpages en séries agrégées général, semaine et weekend
+#### Découpages et analyse de la séries agrégées général, agrégées semaine et agrégées weekend
 
 ```{r}
 # Aggrégation par moyenne des valeurs par semaine
@@ -399,8 +399,7 @@ legend("topright",
        bg = "white")
 ```
 
-La courbe agrégé permet un lisage et la suppression du bruit de fond de la série.
-
+La courbe agrégée permet un lissage et la suppression du bruit de fond de la série.
 
 ```{r}
 work_nw_ts1 <- ts(mobil_nw$workplaces,start = c(2020, 46),frequency = 365)
@@ -494,7 +493,7 @@ legend("topright",
        bg = "white")
 ```
 
-Juste aprés le 1er confinement, le déplacement vers le lieux de travail est netement diminuer par rapport à celui de la référence. Par contre, quelque semaine après le confinement total du 18 mars 2020, le deplaement est legerement supérieur à la references jsustes avant les vacances d'été de 2020. Si l'on prend les vacances de toussaint de  2021, le confinement du 02 novembre 2020 semble avoir un impacte negatif sur les deplavcement sur le lieux de travail le weekend avant et aprés.  Sans conptée les confinement et les vacances d'hiver, les weekends semble plus proche de la references. La variation en fonction des vacance de la fréquentation du lieu de travail est beaucoup moins marqué sur les week-ends, mais visible.
+Juste après le premier confinement, le déplacement vers les lieux de travail est nettement diminué par rapport à la référence. En revanche, quelques semaines après le confinement total du 18 mars 2020, le déplacement est légèrement supérieur à la référence juste avant les vacances d’été 2020. Si l’on considère les vacances de Toussaint 2021, le confinement du 2 novembre 2020 semble avoir un impact négatif sur les déplacements vers les lieux de travail le week-end, avant et après cette période. Sans compter les confinements et les vacances d’hiver, les week-ends semblent plus proches de la référence. La variation de la fréquentation des lieux de travail en fonction des vacances est beaucoup moins marquée le week-end, mais reste visible.
 
 ```{r}
 work_nwe_ts1 <- ts(mobil_nwe$workplaces,start = c(2020, 46),frequency = 365)
@@ -585,7 +584,7 @@ legend("topright",
        bg = "white")
 ```
 
-La variation en fonction des vacance de la fréquentation du lieu de travail est beaucoup plus marqué sur la semaine sans prendre en compte les week-ends. La niveaux pré-1er confinement ne sembles pas avoir etait totalement retrouvé en fin 2022.
+La variation de la fréquentation des lieux de travail en fonction des vacances est beaucoup plus marquée sur la semaine lorsque l’on exclut les week-ends. Les niveaux pré–premier confinement ne semblent pas avoir été totalement retrouvés à la fin de l’année 2022.
 
 ```{r}
 
@@ -609,9 +608,9 @@ legend("topright",
        col = c("gray", rgb(0, 1, 0, 0.5), "red", "blue"), lty=1)
 ```
 
-La courbes des semaines (sans week-end) suit assez bien la courbes générale agrégées bien quelle soit a la baisse par rapport a celle-ci.
+La courbe des semaines (sans week-end) suit assez bien la courbe générale agrégée, bien qu’elle soit globalement plus basse que celle-ci.
 
-Notons qu'avant le premier confinement du 18 mars 2020 et 2-3 semaines après celui-ci, les courbes sont assez proche (une différences de seulement max 20% entre la courbe week-end et semaines sans week-end ). C'est en été que la différences entre les deux courbes est la plus marquantes. Les week-ends sont moins sujets a une diminution du déplacement sur le lieux de travail.
+Notons qu’avant le premier confinement du 18 mars 2020 et durant les deux à trois semaines qui ont suivi, les courbes sont assez proches (une différence maximale d’environ 20 % entre la courbe week-end et celle des semaines sans week-end). C’est en été que la différence entre les deux courbes est la plus marquée. Les week-ends sont moins sujets à une diminution des déplacements vers les lieux de travail.
 
 #### Extraction du cycle annuelle (vacance)
 
@@ -633,7 +632,7 @@ abline(v = seq(0, 100, by = 1), col = "grey90")
 
 ```
 
-La tendance générale de la mobilité au travail va vers une augmentation, après le confinement du 18 mars 2020. Un cycles annuels à bien été extrait mais le premier confinement a un trop grand effet sur le cycles durant la fin hiver et printemps (comme le montre les résidus) il faut donc isolée celui-ci pour avoir un cycles annuels de références.
+La tendance générale de la mobilité vers les lieux de travail évolue vers une augmentation après le confinement du 18 mars 2020. Un cycle annuel a bien été extrait, mais le premier confinement exerce un effet trop important sur le cycle durant la fin de l’hiver et le printemps (comme le montrent les résidus). Il est donc nécessaire d’isoler cet événement afin d’obtenir un cycle annuel de référence.
 
 ```{r}
 # commence en juillet 2020
@@ -723,14 +722,27 @@ legend("topright",
        bg = "white")
 ```
 
-Le faible signal dans les residuts nous indique que le cycle annuel à été relativement bien extrait, bien qu'une composante cyclique annuelle semble toujours être identifiables dans les residuts mais nettement moins importantes que précédemment.
+Le faible signal présent dans les résidus indique que le cycle annuel a été relativement bien extrait, bien qu’une composante cyclique annuelle demeure identifiable dans les résidus, mais de manière nettement moins importante qu’auparavant.
 
-On voit que c'est clairement les vacances scolaires qui dirige le cycle annuels de la fréquentation des deplacement sur les lieux de travail.
+On observe clairement que ce sont les vacances scolaires qui structurent le cycle annuel de la fréquentation des déplacements vers les lieux de travail.
 
+#### Autocorrelation et bootstrap
+
+La série étant désormais stationnarisée, nous pouvons tester son autocorrélation.
 
 ```{r}
 acf <- acf(cycle_annuel_work_b)
 ```
+
+L’ACF révèle un cycle saisonnier clair et une forte autocorrélation à court terme. Les lags négatifs (anticorrélations) correspondent aux phases opposées du cycle. À long terme, les lags restent à l’intérieur de l’intervalle de confiance, indiquant que la corrélation devient négligeable.
+
+```{r}
+set.seed(1313)
+boot_work <- trend.test(cycle_annuel_work_b, R = 999)
+plot(boot_work)
+```
+
+Il existe une tendance générale à l’augmentation de la série.
 
 #### Analyse de la tendance local
 
@@ -742,6 +754,18 @@ legend("topright",
        legend = c("Courbe", "Tendance local", "Confinement du 18 mars 2020", "Confinement du 02 novembre 2020"),
        col = c("black", "red", "red", "blue"), lty = c(3, 1, 2,2), cex = 0.5)
 ```
+
+Avant le premier confinement, la tendance locale était proche de la moyenne de la série. Du premier confinement à janvier 2021, la tendance locale était inférieure à la moyenne de la série. De janvier 2021 à avril 2021, la tendance locale était de nouveau proche de la moyenne de la série. D’avril 2021 à octobre 2022, la tendance locale était supérieure à la moyenne de la série. Ce comportement est typique d’une série présentant une tendance générale à l’augmentation.
+
+#### Conclusion mobilité vers les lieux de travail en 2020-2021 en wallonie
+
+La mobilité vers les lieux de travail en Wallonie durant la pandémie de COVID-19 a été fortement structurée par les confinements, avec une rupture majeure observée lors du premier confinement de mars 2020. Ce dernier a provoqué une baisse brutale et durable de la fréquentation des lieux de travail, dont les niveaux prépandémiques ne semble pas avoir été totalement retrouvés à la fin de l’année 2022 (bien que le choix de la références peut-être remise en question).
+
+Le cycle hebdomadaire exerce une influence déterminante sur la série, les week-ends apparaissant globalement moins affectés par les restrictions que les jours de semaine, probablement en raison de la structure sectorielle de l’emploi et des possibilités différenciées de télétravail.
+
+Apres les confinements, les vacances scolaires constituent le principal moteur du cycle annuel de la mobilité professionnelle, leur effet étant particulièrement marqué en semaine..
+
+Enfin, l’analyse des résidus et de l’autocorrélation indique que, une fois les composantes saisonnières isolées, la dynamique de la mobilité vers les lieux de travail présente une structure relativement stable, dominée par des cycles réguliers et une tendance de fond à la hausse.
 
 ### Évolution de la mobilité dans les commerces et loisirs (Solene)
 
@@ -898,7 +922,7 @@ L’ajout des périodes de vacances montre qu’avant 2021, les confinements dom
 
 En 2022, la mobilité revient à la normale et les vacances, en particulier l’été, deviennent les moments clés où la fréquentation dépasse le niveau de référence.
 
-### Cycle hebdomadaire
+#### Cycle hebdomadaire
 
 ```{r}
 # convertir en série temporelle journalière
@@ -952,9 +976,9 @@ abline(v = 1:3, col = "grey90")
 
 Le périodogramme cumulatif montre des ruptures nettes dépassant l’enveloppe du bruit blanc indiquant la présence de fréquences dominantes. Ces ruptures correspondent au cycle hebdomadaire et à ses harmoniques confirmant que la saisonnalité hebdomadaire structure fortement la série.
 
-### Aggrégation des jours en semaine :
+#### Aggrégation des jours en semaine :
 
-#### Semaine + week-end
+##### Semaine + week-end
 
 ```{r}
 # Aggrégation par moyenne des valeurs par semaine
@@ -1042,7 +1066,7 @@ legend("topright",
 
 Après une importante chute de la courbe liée au confinement de mars 2020, la mobilité vers les commerces et loisirs remonte progressivement mais reste toujours inférieure à la référence et ce, pendant une longue période. Plusieurs périodes de vacances scolaires (été, hiver, Pâques, carnaval) coïncident avec des phases de hausse de la fréquentation. Cela suggère une influence non négligeable de ces périodes sur cette mobilité vers les commerces. À partir de 2022, la tendance se stabilise autour de zéro, traduisant un retour vers des niveaux de mobilité pré-pandémiques. Par conséquence, l’analyse des données agrégées met en évidence l’effet des confinements, des vagues successives de la pandémie et des périodes de vacances sur la dynamique de fréquentation des commerces et loisirs.
 
-#### Weekend seuls
+##### Weekend seuls
 
 ```{r}
 retail_nw_ts2 <- ts(mobil_nw$retail,start = c(2020, 46),frequency = 365)
@@ -1136,7 +1160,7 @@ legend("topright",
 
 La série agrégée sans les jours de semaine met en évidence l’évolution de la fréquentation des commerces et loisirs durant les week-ends. Cette période est particulièrement sensible aux mesures sanitaires et aux rythmes de loisirs. Après une chute très marquée des déplacements vers les commerces lors du confinement de mars 2020, la mobilité augmente durant l’été 2020 et ensuite, présente d’importantes fluctuations en 2021. Ces fluctuations sont en lien avec les différentes vagues de COVID-19 et les restrictions associées à ces vagues. En 2022, malgré un creux en début d’année, la fréquentation des week-ends retrouve rapidement des niveaux proches à supérieurs à la référence. Cela se passe notamment durant les périodes d’été suggérant une normalisation progressive des activités de loisir.
 
-#### Semaine seule
+##### Semaine seule
 
 ```{r}
 retail_nwe_ts2 <- ts(mobil_nwe$retail,start = c(2020, 46),frequency = 365)
@@ -2403,7 +2427,7 @@ legend("topright",
 
 -   post confinements: la tendance locale montre de larges vagues mais celles-ci n'ont pas une période fixe. Cela montre que ces variations ne sont pas uniquement dûes au cycle saisonnier mais aussi aux différents impacts que le covid a pu avoir à long terme comme le télétravail, les restrictions variables etc
 
-### **Mobilité liée aux magasins alimentaires et aux pharmacies (Hugo)**
+### Évolution de la mobilité **liée aux magasins alimentaires et aux pharmacies (Hugo)**
 
 ```{r}
 grocery_ts <- ts(mobil$grocery, start = c(2020, 46), frequency = 365)
