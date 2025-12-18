@@ -512,11 +512,11 @@ plot(work_tsd_weekly, col = 1:4)
 cycle_annuel_work <- extract(work_tsd_weekly, components = "seasonal")
 plot(cycle_annuel_work, col = "blue")
 spectrum(cycle_annuel_work, spans = c(3,5))
-abline(v = seq(0, 100, by = 1), col = "grey90")
-abline(h = seq(0, 100, by = 1), col = "grey80")
+abline(v = seq(0, 100, by = 1), col = rgb(0, 0, 0, alpha = 0.1))
+abline(h = seq(0, 100, by = 1), col = rgb(0, 0, 0, alpha = 0.1))
 
 cpgram(cycle_annuel_work)
-abline(v = seq(0, 100, by = 1), col = "grey90")
+abline(v = seq(0, 100, by = 1), col = rgb(0, 0, 0, alpha = 0.1))
 
 ```
 
