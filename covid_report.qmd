@@ -118,183 +118,60 @@ numeric_cols <- setdiff(numeric_cols, "date")
 mobil_nw[mobil_nw$wday %in% c(1:5), numeric_cols] <- NA
 ```
 
-**Définition des périodes de vacances**
+**Définition des périodes de vacances et confinements**
 
 ```{r}
 # Périodes des vacances pour Wallonie (2020‑2022) (@VacancesScolaires)
 
 vacances_hiver <- data.frame(
   start = as.Date(c("2020-12-21", "2021-12-27")),
-  end   = as.Date(c("2021-01-01", "2022-01-09"))
-)
+  end   = as.Date(c("2021-01-01", "2022-01-09")))
 
 vacances_ete <- data.frame(
   start = as.Date(c("2020-07-01", "2021-07-01", "2022-07-01")),
-  end   = as.Date(c("2020-08-31", "2021-08-31", "2022-08-31"))
-)
+  end   = as.Date(c("2020-08-31", "2021-08-31", "2022-08-31")))
 
 vacances_paques <- data.frame(
   start = as.Date(c("2020-04-06","2021-04-05", "2022-04-04")),
-  end   = as.Date(c("2020-04-19","2021-04-16", "2022-04-15"))
-)
+  end   = as.Date(c("2020-04-19","2021-04-16", "2022-04-15")))
 
 vacances_carnaval <- data.frame(
   start = as.Date(c("2020-02-24","2021-02-15", "2022-02-28")),
-  end   = as.Date(c("2020-03-01","2021-02-19", "2022-03-04"))
-)
+  end   = as.Date(c("2020-03-01","2021-02-19", "2022-03-04")))
 
 vacances_toussaint <- data.frame(
   start = as.Date(c("2020-11-02", "2021-11-01")),
-  end   = as.Date(c("2020-11-06", "2021-11-05"))
-)
+  end   = as.Date(c("2020-11-06", "2021-11-05")))
 
+# vecteurs confinements
+x_conf1 <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
+x_conf2 <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
+
+draw_vacances <- function(vacances, col){
+  for(i in seq_len(nrow(vacances))){
+    x_start <- 2020 + as.numeric(vacances$start[i] - as.Date("2020-01-01"))/365
+    x_end   <- 2020 + as.numeric(vacances$end[i]   - as.Date("2020-01-01"))/365
+
+    rect(
+      xleft   = x_start,
+      xright  = x_end,
+      ybottom = par("usr")[3],
+      ytop    = par("usr")[4],
+      col     = col,
+      border  = NA)}}
 ```
 
 ### Évolution de la mobilité dans les commerces et loisirs
 
 Cette section reprend l'analyse de l'influence du COVID-19, notamment des deux confinements ainsi que celle des vacances scolaires sur les commecres tels que les restaurants, les cafés, les parcs à thèmes, les musées, les bibliothèques et les cinémas.
 
-#### Analyse générale de la série
-
-```{r}
-# Conversion en ts de mobil
-mobil_ts2 <- ts(mobil$retail, start = c(2020, 46), frequency = 365)
-
-# Aggrégation par moyenne des valeurs par semaine
-retail_ts2_ag <- aggregate(mobil_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
-
-
-plot(retail_ts2_ag, 
-     main = "Série journalière aggrégée des commerces et loisirs", xlab = "Temps [année]",
-     ylab = "% par rapport à la référence", ylim = c(-90, 140))
-
-# Ajouter une ligne verticale pour le 18 mars 2020
-x_conf1 <- 2020 + as.numeric(as.Date("2020-03-18") - as.Date("2020-01-01"))/365
-x_conf2 <- 2020 + as.numeric(as.Date("2020-11-02") - as.Date("2020-01-01"))/365
-abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
-abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
-
-draw_vacances <- function(vacances, col){
-  for(i in seq_len(nrow(vacances))){
-    x_start <- 2020 + as.numeric(vacances$start[i] - as.Date("2020-01-01"))/365
-    x_end   <- 2020 + as.numeric(vacances$end[i]   - as.Date("2020-01-01"))/365
-
-    rect(
-      xleft   = x_start,
-      xright  = x_end,
-      ybottom = par("usr")[3],
-      ytop    = par("usr")[4],
-      col     = col,
-      border  = NA
-    )
-  }
-}
-
-# Ajouter un encadrement pour les vacances
-draw_vacances(vacances_hiver,     rgb(0.4,0.6,0.9,0.5))
-draw_vacances(vacances_carnaval,  rgb(0.4,0.8,0.4,0.3))
-draw_vacances(vacances_paques,    rgb(1,0.5,0.5,0.5))
-draw_vacances(vacances_ete,       rgb(1,0.7,0.3,0.5))
-draw_vacances(vacances_toussaint, rgb(0.7,0.4,0.8,0.5))
-
-#legend
-legend("topright", 
-       legend = c("Confinement du 18 mars 2020",
-         "Confinement du 02 novembre 2020",
-                  "Vacances hiver", 
-                  "Vacances carnaval", 
-                  "Vacances Pâques", 
-                  "Vacances été", 
-                  "Vacances Toussaint"),
-       col = c("red", "blue",
-                 rgb(0.4,0.6,0.9,0.5),
-               rgb(0.4,0.8,0.5,0.5),
-               rgb(1,0.5,0.5,0.5),
-               rgb(1,0.7,0.3,0.5),
-               rgb(0.7,0.4,0.8,0.5)),
-       lty = c(2,2, NA, NA, NA, NA, NA),
-       pch = c(NA,NA, 15, 15, 15, 15, 15),
-       pt.cex = 1.2,
-       cex = 0.5,
-       bty = "o",
-       bg = "white")
-```
-
-**Influence du premier confinement :** La fermeture complète des commerces et loisirs entraîne une chute brutale de la fréquentation, proche de −80 %. Le maintien de ces mesures explique le plateau observé et l’absence d’effet des vacances de Pâques.
-
-**Influence post premier confinement :**Lors du déconfinement, l’activité reprend progressivement mais reste inférieure au niveau initial en raison des mesures sanitaires (masque, distanciation). Une hausse est néanmoins observée durant l’été 2020.
-
-**Influence du deuxième confinement :** Les fermetures sont partielles et les mesures plus souples (événements en plein air, click&collect), ce qui limite l’impact sur la fréquentation, avec une baisse plus modérée d’environ −40 %.
-
-**Influence post deuxième confinement :** La fréquentation demeure inférieure à 0 % jusqu’à fin 2021 en raison de mesures sanitaires fluctuantes. La réouverture progressive fin 2021–début 2022 fait repasser la fréquentation au-dessus de 0 %, avec une influence à nouveau positive des vacances scolaires. Fin 2022, la situation se stabilise à un niveau proche, voire supérieur à la normale (+30 %), probablement lié à un effet de rattrapage.
-
 #### Analyse de la différence de fréquentation entre la semaine et les weekends
 
 À priori, la population dispose de plus de temps libre les weekends. Ce temps, sert souvent à profiter avec ses proches dans les différents commerces et loisirs. C'est ce que nous allons vérifier ici.
 
 ```{r}
-
-# Premier graphique : série originale
-plot(mobil_ts2, ylim = c(-95, 200),
-     xlab = "Temps [année]", 
-     ylab = "% par rapport à la référence", 
-     main = "Superposition de séries agrégées pour les commerces et loisirs", col = rgb(0, 0, 0, alpha = 0.1))
-
-# Ajouter une ligne verticale pour le 18 mars 2020
-abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
-abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
-
-draw_vacances <- function(vacances, col){
-  for(i in seq_len(nrow(vacances))){
-    x_start <- 2020 + as.numeric(vacances$start[i] - as.Date("2020-01-01"))/365
-    x_end   <- 2020 + as.numeric(vacances$end[i]   - as.Date("2020-01-01"))/365
-
-    rect(
-      xleft   = x_start,
-      xright  = x_end,
-      ybottom = par("usr")[3],
-      ytop    = par("usr")[4],
-      col     = col,
-      border  = NA
-    )
-  }
-}
-
-# Ajouter un encadrement pour les vacances
-draw_vacances(vacances_hiver,     rgb(0.4,0.6,0.9,0.5))
-draw_vacances(vacances_carnaval,  rgb(0.4,0.8,0.4,0.3))
-draw_vacances(vacances_paques,    rgb(1,0.5,0.5,0.5))
-draw_vacances(vacances_ete,       rgb(1,0.7,0.3,0.5))
-draw_vacances(vacances_toussaint, rgb(0.7,0.4,0.8,0.5))
-
-#legend
-legend("topright", 
-       legend = c("Confinement du 18 mars 2020",
-         "Confinement du 02 novembre 2020",
-                  "Vacances hiver", 
-                  "Vacances carnaval", 
-                  "Vacances Pâques", 
-                  "Vacances été", 
-                  "Vacances Toussaint"),
-       col = c("red", "blue",
-                 rgb(0.4,0.6,0.9,0.5),
-               rgb(0.4,0.8,0.5,0.5),
-               rgb(1,0.5,0.5,0.5),
-               rgb(1,0.7,0.3,0.5),
-               rgb(0.7,0.4,0.8,0.5)),
-       lty = c(2,2, NA, NA, NA, NA, NA),
-       pch = c(NA,NA, 15, 15, 15, 15, 15),
-       pt.cex = 1.2,
-       cex = 0.5,
-       bty = "o",
-       bg = "white")
-
-# Optionnel : ajouter une légende
-legend("topleft", 
-       c("Série originale","Série journalière aggrégée (weeks + week-ends", "Série journalière aggrégée sans les week-ends", "Série journalière aggrégée sans les semaines"), 
-       col = c("grey", "green", "red", "blue"), 
-  lty=1, , cex=0.5, bg = "white")
-
+# Conversion en ts de mobil
+mobil_ts2 <- ts(mobil$retail, start = c(2020, 46), frequency = 365)
 
 #calcul de la courbe aggrégée sans les semaines 
 retail_nw_ts2 <- ts(mobil_nw$retail,start = c(2020, 46),frequency = 365)
@@ -308,7 +185,7 @@ retail_nwe_ts2 <- aggregate(retail_nwe_ts2, 52, FUN = collapse::fmean, ts.eps = 
 # calcul de la courbe agrégée semaines et weekends
 retail_ts2_ag <- aggregate(mobil_ts2, 52, FUN = collapse::fmean, ts.eps = 1/52)
 
-# Premier graphique : série originale
+# graphique 
 plot(mobil_ts2, ylim = c(-95, 200),xlab = "Temps [année]", ylab = "% par rapport à la référence",main = "Superposition de séries agrégées pour les commerces et loisirs", col = rgb(0, 0, 0, alpha = 0.1))
 
 # Ajouter les lignes
@@ -320,15 +197,6 @@ lines(retail_ts2_ag, col = "green")
 abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
 abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
 
-#crée fonction vacances
-draw_vacances <- function(vacances, col){
-for(i in seq_len(nrow(vacances))){
-x_start <- 2020 + as.numeric(vacances$start[i] - as.Date("2020-01-01"))/365
-x_end<- 2020 + as.numeric(vacances$end[i]- as.Date("2020-01-01"))/365
-rect(xleft= x_start,xright  = x_end,ybottom = par("usr")[3],ytop= par("usr")[4],col= col,border  = NA)}}
-# Convertir la date en position sur l'axe x (fraction de l'année)
-abline(v = x_conf1, col = "red", lwd = 1, lty = 2)
-abline(v = x_conf2, col = "blue", lwd = 1, lty = 2)
 # Ajouter un encadrement pour les vacances
 draw_vacances(vacances_hiver,     rgb(0.4,0.6,0.9,0.5))
 draw_vacances(vacances_carnaval,  rgb(0.4,0.8,0.4,0.3))
@@ -340,6 +208,16 @@ legend("topright", legend = c("Confinement du 18 mars 2020","Confinement du 02 n
 legend("topleft", 
        c("Série originale","Série journalière aggrégée (weeks + week-ends", "Série journalière aggrégée sans les week-ends", "Série journalière aggrégée sans les semaines"), col = c("grey", "green", "red", "blue"), lty=1, , cex=0.5, bg = "white")
 ```
+
+Tendance général agrégé pour supprimé le bruit de fond:
+
+**Influence du premier confinement :** La fermeture complète des commerces et loisirs entraîne une chute brutale de la fréquentation, proche de −80 %. Le maintien de ces mesures explique le plateau observé et l’absence d’effet des vacances de Pâques.
+
+**Influence post premier confinement :**Lors du déconfinement, l’activité reprend progressivement mais reste inférieure au niveau initial en raison des mesures sanitaires (masque, distanciation). Une hausse est néanmoins observée durant l’été 2020.
+
+**Influence du deuxième confinement :** Les fermetures sont partielles et les mesures plus souples (événements en plein air, click&collect), ce qui limite l’impact sur la fréquentation, avec une baisse plus modérée d’environ −40 %.
+
+**Influence post deuxième confinement :** La fréquentation demeure inférieure à 0 % jusqu’à fin 2021 en raison de mesures sanitaires fluctuantes. La réouverture progressive fin 2021–début 2022 fait repasser la fréquentation au-dessus de 0 %, avec une influence à nouveau positive des vacances scolaires. Fin 2022, la situation se stabilise à un niveau proche, voire supérieur à la normale (+30 %), probablement lié à un effet de rattrapage.
 
 L’influence du COVID-19 sur ce secteur est très marquée. Le premier confinement, avec la fermeture totale des commerces et loisirs entraîne une chute de fréquentation supérieure à 80 %. Lors du déconfinement, les mesures sanitaires (COVID pass, distanciation) ainsi que l’augmentation du chômage technique et du télétravail continuent de limiter l’activité. Contrairement aux attentes, la fréquentation est alors plus élevée en semaine que le week-end entre les deux confinements et c'est une tendance qui persiste quelque temps après. À partir de l’été 2020, les vacances scolaires recommencent toutefois à avoir un effet positif. Vers juillet 2021, avec un retour progressif à une situation plus normale, la fréquentation du week-end redevient supérieure à celle de la semaine. Globalement, l’affluence en semaine reste plus stable indiquant que l’impact du COVID-19 touche principalement les week-ends. Début 2022, une chute brutale mais brève est observée le week-end, probablement liée à la vague Omicron (variante du covid-19). À partir de la mi-2022, un effet de rattrapage se traduit par une forte affluence des commerces et loisirs le week-end.
 
